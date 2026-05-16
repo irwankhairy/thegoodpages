@@ -1,1 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Weekly Habit Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --bg: #F7F5F0;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE6;
+  --ink: #1C1917;
+  --ink2: #6B6860;
+  --ink3: #A8A59E;
+  --accent: #1C1917;
+  --accent-light: #E8E5DE;
+  --border: rgba(28,25,23,0.10);
+  --border-strong: rgba(28,25,23,0.22);
+  --shadow-sm: 0 1px 3px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
+  --shadow-md: 0 4px 16px rgba(28,25,23,0.08), 0 2px 6px rgba(28,25,23,0.05);
+  --shadow-lg: 0 12px 40px rgba(28,25,23,0.12), 0 4px 12px rgba(28,25,23,0.06);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --font: 'Work Sans', system-ui, sans-serif;
+
+  /* priority colors */
+  --top-color: #1C1917;
+  --top-bg: #E8E5DE;
+  --mid-color: #6B6860;
+  --mid-bg: #F0EDE6;
+  --low-color: #A8A59E;
+  --low-bg: #F7F5F0;
+}
+
+[data-theme="dark"] {
+  --bg: #0F0E0D;
+  --surface: #1A1917;
+  --surface2: #242220;
+  --ink: #F5F3EF;
+  --ink2: #A8A59E;
+  --ink3: #6B6860;
+  --accent: #F5F3EF;
+  --accent-light: #2A2825;
+  --border: rgba(245,243,239,0.08);
+  --border-strong: rgba(245,243,239,0.16);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.35);
+  --top-bg: #2A2825;
+  --mid-bg: #242220;
+  --low-bg: #1A1917;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+  background: rgba(247,245,240,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s, border-color 0.3s;
+}
+[data-theme="dark"] nav { background: rgba(15,14,13,0.88); }
+
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-brand { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.nav-week {
+  font-size: 12px; font-weight: 400; color: var(--ink3);
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--surface2);
+}
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-progress {
+  font-size: 12px; font-weight: 500;
+  padding: 4px 12px; border-radius: 99px;
+  background: var(--ink); color: var(--surface);
+  transition: all var(--transition);
+  min-width: 72px; text-align: center;
+}
+.theme-toggle {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.theme-toggle:hover { background: var(--surface2); }
+
+/* ── LAYOUT ── */
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+}
+.page-title {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+.page-title span { font-weight: 300; font-style: italic; }
+.week-nav {
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+}
+.week-nav-btn {
+  width: 34px; height: 34px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.week-nav-btn:hover { background: var(--surface2); }
+.week-label {
+  font-size: 13px; font-weight: 500; color: var(--ink2);
+  min-width: 160px; text-align: center;
+}
+
+/* ── SUMMARY CARDS ── */
+.summary-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 2rem;
+}
+.summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.4rem;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.3s, border-color 0.3s;
+}
+.summary-icon { font-size: 18px; margin-bottom: 10px; display: block; }
+.summary-val {
+  font-size: 2rem; font-weight: 600;
+  letter-spacing: -0.04em; line-height: 1;
+  margin-bottom: 4px;
+  transition: all 0.4s ease;
+}
+.summary-lbl { font-size: 11.5px; color: var(--ink2); font-weight: 400; }
+
+/* ── PROGRESS BAR (weekly) ── */
+.week-progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.3s, border-color 0.3s;
+}
+.wpc-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 14px;
+}
+.wpc-pct {
+  font-size: 3rem; font-weight: 600;
+  letter-spacing: -0.05em; line-height: 1;
+  transition: all 0.4s ease;
+}
+.wpc-sub { font-size: 12px; color: var(--ink2); font-weight: 400; }
+.progress-track {
+  height: 6px; background: var(--surface2);
+  border-radius: 99px; overflow: hidden; margin-bottom: 12px;
+  transition: background 0.3s;
+}
+.progress-fill {
+  height: 100%; background: var(--ink); border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1), background 0.3s;
+  min-width: 0;
+}
+.day-mini-row {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+}
+.day-mini {
+  text-align: center;
+}
+.day-mini-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--ink3); margin-bottom: 5px; text-transform: uppercase;
+}
+.day-mini-bar {
+  height: 4px; border-radius: 99px;
+  background: var(--surface2); overflow: hidden;
+  transition: background 0.3s;
+}
+.day-mini-fill {
+  height: 100%; border-radius: 99px; background: var(--ink);
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.3s;
+}
+.day-mini-count {
+  font-size: 10px; color: var(--ink3); margin-top: 4px;
+}
+
+/* ── SECTION ── */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: background 0.3s, border-color 0.3s;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--transition);
+}
+.section-header:hover { background: var(--surface2); }
+.section-left { display: flex; align-items: center; gap: 12px; }
+.priority-badge {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 10px;
+  border-radius: 99px;
+}
+.badge-top { background: var(--top-bg); color: var(--top-color); }
+.badge-mid { background: var(--mid-bg); color: var(--mid-color); }
+.badge-low { background: var(--low-bg); color: var(--low-color); border: 1px solid var(--border); }
+.section-title { font-size: 14px; font-weight: 600; }
+.section-meta { font-size: 12px; color: var(--ink3); font-weight: 400; }
+.section-chevron {
+  font-size: 12px; color: var(--ink3);
+  transition: transform var(--transition);
+}
+.section.collapsed .section-chevron { transform: rotate(-90deg); }
+.section-body { padding: 0 1.75rem 1.25rem; }
+.section.collapsed .section-body { display: none; }
+
+/* ── TABLE HEADER ── */
+.table-head {
+  display: grid;
+  grid-template-columns: 1fr repeat(7, 36px);
+  gap: 4px;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.th-habit { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink3); text-transform: uppercase; }
+.th-day {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--ink3); text-transform: uppercase;
+  text-align: center;
+}
+.th-day.is-today { color: var(--ink); }
+
+/* ── HABIT ROW ── */
+.habit-row {
+  display: grid;
+  grid-template-columns: 1fr repeat(7, 36px);
+  gap: 4px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+  border-radius: var(--radius-sm);
+}
+.habit-row:last-child { border-bottom: none; }
+.habit-row:hover { background: var(--surface2); }
+
+.habit-name-wrap {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+}
+.habit-name-input {
+  font-family: var(--font);
+  font-size: 13.5px; font-weight: 400;
+  color: var(--ink);
+  background: transparent; border: none; outline: none;
+  width: 100%;
+  padding: 2px 0;
+  border-bottom: 1px dashed transparent;
+  transition: border-color var(--transition);
+}
+.habit-name-input:focus { border-bottom-color: var(--border-strong); }
+.habit-name-input::placeholder { color: var(--ink3); font-style: italic; }
+
+.habit-check {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+  font-size: 13px; color: transparent;
+  transition: all var(--transition);
+  flex-shrink: 0;
+  user-select: none;
+}
+.habit-check:hover:not(.checked) {
+  border-color: var(--ink); background: var(--surface2);
+}
+.habit-check.checked {
+  background: var(--ink); border-color: var(--ink); color: #fff;
+}
+.habit-check.today-col:not(.checked) {
+  border-color: var(--ink); border-width: 2px;
+}
+
+/* ── ADD HABIT BTN ── */
+.add-habit-btn {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 13px; font-weight: 400;
+  color: var(--ink3); cursor: pointer;
+  width: 100%;
+  transition: all var(--transition);
+}
+.add-habit-btn:hover { background: var(--surface2); color: var(--ink); border-color: var(--ink3); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.fade-up { animation: fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.10s; }
+.d3 { animation-delay: 0.15s; }
+.d4 { animation-delay: 0.20s; }
+.d5 { animation-delay: 0.25s; }
+.d6 { animation-delay: 0.30s; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--ink); color: var(--surface);
+  padding: 11px 22px; border-radius: 99px;
+  font-size: 13.5px; font-weight: 500;
+  opacity: 0; pointer-events: none; z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: var(--shadow-lg); white-space: nowrap;
+  max-width: 90vw; text-align: center;
+}
+.toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 2rem 1rem;
+  color: var(--ink3); font-size: 13px; font-weight: 300;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .wrap { padding: 1.5rem 1rem 4rem; }
+  nav { padding: 0 1rem; }
+  .summary-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .summary-val { font-size: 1.5rem; }
+  .table-head { grid-template-columns: 1fr repeat(7, 28px); gap: 2px; }
+  .habit-row { grid-template-columns: 1fr repeat(7, 28px); gap: 2px; }
+  .habit-check { width: 24px; height: 24px; font-size: 11px; }
+  .section-body { padding: 0 1rem 1rem; }
+  .section-header { padding: 1rem 1.25rem; }
+  .page-header { flex-direction: column; gap: 1rem; }
+  .week-label { min-width: 120px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <span class="nav-brand">Habit Tracker</span>
+    <span class="nav-week" id="navWeek">Week —</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-progress" id="navProgress">0%</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header fade-up">
+    <div>
+      <div class="page-title">Weekly <span>Habit Tracker</span></div>
+    </div>
+    <div class="week-nav">
+      <button class="week-nav-btn" id="prevWeek" title="Previous week">←</button>
+      <span class="week-label" id="weekLabel">—</span>
+      <button class="week-nav-btn" id="nextWeek" title="Next week">→</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-row fade-up d1">
+    <div class="summary-card">
+      <span class="summary-icon">✅</span>
+      <div class="summary-val" id="sumDone">0</div>
+      <div class="summary-lbl">Completed today</div>
+    </div>
+    <div class="summary-card">
+      <span class="summary-icon">🔥</span>
+      <div class="summary-val" id="sumStreak">0</div>
+      <div class="summary-lbl">Day streak</div>
+    </div>
+    <div class="summary-card">
+      <span class="summary-icon">📊</span>
+      <div class="summary-val" id="sumRate">0%</div>
+      <div class="summary-lbl">Week rate</div>
+    </div>
+  </div>
+
+  <!-- WEEK PROGRESS -->
+  <div class="week-progress-card fade-up d2">
+    <div class="wpc-header">
+      <div class="wpc-pct" id="wpcPct">0%</div>
+      <div class="wpc-sub">weekly completion</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="wpcBar" style="width:0%"></div></div>
+    <div class="day-mini-row" id="dayMiniRow"></div>
+  </div>
+
+  <!-- TOP PRIORITY -->
+  <div class="section fade-up d3" id="sec-top">
+    <div class="section-header" onclick="toggleSection('top')">
+      <div class="section-left">
+        <span class="priority-badge badge-top">Top Priority</span>
+        <span class="section-meta" id="meta-top">0 / 0 habits</span>
+      </div>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="table-head" id="thead-top"></div>
+      <div id="rows-top"></div>
+      <button class="add-habit-btn" onclick="addHabit('top')">+ Add habit</button>
+    </div>
+  </div>
+
+  <!-- MEDIUM PRIORITY -->
+  <div class="section fade-up d4" id="sec-mid">
+    <div class="section-header" onclick="toggleSection('mid')">
+      <div class="section-left">
+        <span class="priority-badge badge-mid">Medium Priority</span>
+        <span class="section-meta" id="meta-mid">0 / 0 habits</span>
+      </div>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="table-head" id="thead-mid"></div>
+      <div id="rows-mid"></div>
+      <button class="add-habit-btn" onclick="addHabit('mid')">+ Add habit</button>
+    </div>
+  </div>
+
+  <!-- LOW PRIORITY -->
+  <div class="section fade-up d5" id="sec-low">
+    <div class="section-header" onclick="toggleSection('low')">
+      <div class="section-left">
+        <span class="priority-badge badge-low">Low Priority</span>
+        <span class="section-meta" id="meta-low">0 / 0 habits</span>
+      </div>
+      <span class="section-chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="table-head" id="thead-low"></div>
+      <div id="rows-low"></div>
+      <button class="add-habit-btn" onclick="addHabit('low')">+ Add habit</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SK = 'tgp_habit_v1';
+const THEME_KEY = 'tgp_theme';
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const PRIORITIES = ['top','mid','low'];
+const DEFAULT_HABITS = {
+  top: ['Morning workout','Read 30 min','Meditate','Drink 8 glasses of water','Sleep by 11pm','No social media before 9am','Journal'],
+  mid: ['Stretch','Cook at home','Take vitamins','Walk 10k steps','Review goals','Gratitude list','Learn something new'],
+  low: ['Clean desk','Water plants','Call a friend','Limit screen time','Practice a hobby','Unsubscribe from emails','Plan next day']
+};
+
+let currentWeekOffset = 0;
+let data = {};
+
+/* ── THEME ── */
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeToggle').textContent = t === 'dark' ? '🌙' : '☀️';
+  try { localStorage.setItem(THEME_KEY, t); } catch(e){}
+}
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+});
+(function() {
+  try { const t = localStorage.getItem(THEME_KEY); if(t) applyTheme(t); } catch(e){}
+})();
+
+/* ── WEEK UTILS ── */
+function getWeekStart(offset = 0) {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() - day + (offset * 7));
+  sunday.setHours(0,0,0,0);
+  return sunday;
+}
+function weekKey(offset = 0) {
+  const d = getWeekStart(offset);
+  return d.toISOString().slice(0,10);
+}
+function weekDates(offset = 0) {
+  const start = getWeekStart(offset);
+  return Array.from({length:7}, (_,i) => {
+    const d = new Date(start); d.setDate(start.getDate()+i); return d;
+  });
+}
+function isToday(date) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  const d = new Date(date); d.setHours(0,0,0,0);
+  return t.getTime() === d.getTime();
+}
+function fmtWeekLabel(offset=0) {
+  const dates = weekDates(offset);
+  const opts = {month:'short', day:'numeric'};
+  return dates[0].toLocaleDateString('en-US',opts) + ' – ' + dates[6].toLocaleDateString('en-US',opts);
+}
+
+/* ── STORAGE ── */
+function save() {
+  try { localStorage.setItem(SK, JSON.stringify(data)); } catch(e){}
+}
+function load() {
+  try {
+    const r = localStorage.getItem(SK);
+    if(r) { data = JSON.parse(r); return; }
+  } catch(e){}
+  // init default
+  data = {};
+}
+function ensureWeek(wk) {
+  if(!data[wk]) data[wk] = { top:[], mid:[], low:[] };
+  PRIORITIES.forEach(p => {
+    if(!data[wk][p]) data[wk][p] = [];
+  });
+}
+function getWeek(offset=0) {
+  const wk = weekKey(offset);
+  ensureWeek(wk);
+  // If current week and empty, seed defaults
+  if(offset === 0 && PRIORITIES.every(p => data[wk][p].length === 0)) {
+    PRIORITIES.forEach(p => {
+      data[wk][p] = DEFAULT_HABITS[p].map(name => ({ name, days: [false,false,false,false,false,false,false] }));
+    });
+    save();
+  }
+  return data[wk];
+}
+
+/* ── TOAST ── */
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/* ── STREAK CALC ── */
+function calcStreak() {
+  // count how many consecutive days (going backwards from today) all top habits were completed
+  let streak = 0;
+  const today = new Date(); today.setHours(0,0,0,0);
+  for(let offset=0; offset>=-52; offset--) {
+    const wk = weekKey(offset);
+    if(!data[wk]) break;
+    const habits = data[wk].top || [];
+    if(habits.length === 0) break;
+    // figure out which day index to check
+    const dates = weekDates(offset);
+    let allDone = false;
+    for(let di=0;di<7;di++){
+      const d = new Date(dates[di]); d.setHours(0,0,0,0);
+      if(d <= today){
+        const dayDone = habits.every(h => h.days[di]);
+        if(dayDone && habits.length > 0){ allDone = true; streak++; }
+        else if(d < today) { allDone = false; }
+      }
+    }
+    if(!allDone && offset < 0) break;
+  }
+  return streak;
+}
+
+/* ── RENDER ── */
+function render() {
+  const wk = weekKey(currentWeekOffset);
+  const week = getWeek(currentWeekOffset);
+  const dates = weekDates(currentWeekOffset);
+
+  // Nav / header
+  document.getElementById('navWeek').textContent = 'Week of ' + dates[0].toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  document.getElementById('weekLabel').textContent = fmtWeekLabel(currentWeekOffset);
+
+  // Build sections
+  PRIORITIES.forEach(p => renderSection(p, week[p], dates));
+
+  // Stats
+  updateStats(week, dates);
+}
+
+function renderSection(priority, habits, dates) {
+  const theadEl = document.getElementById('thead-' + priority);
+  const rowsEl = document.getElementById('rows-' + priority);
+  const metaEl = document.getElementById('meta-' + priority);
+
+  // thead
+  theadEl.innerHTML = `<div class="th-habit">Habit</div>` +
+    dates.map((d,i) => `<div class="th-day${isToday(d)?' is-today':''}">${DAYS[i]}</div>`).join('');
+
+  // rows
+  rowsEl.innerHTML = '';
+  if(habits.length === 0) {
+    rowsEl.innerHTML = `<div class="empty-state">No habits yet. Add one below.</div>`;
+  } else {
+    habits.forEach((habit, hi) => {
+      const row = document.createElement('div');
+      row.className = 'habit-row';
+      row.innerHTML = `
+        <div class="habit-name-wrap">
+          <input class="habit-name-input" value="${escHtml(habit.name)}" placeholder="Habit name…" data-p="${priority}" data-hi="${hi}" />
+        </div>
+        ${dates.map((_,di) => `
+          <div class="habit-check${habit.days[di]?' checked':''}${isToday(dates[di])?' today-col':''}"
+               data-p="${priority}" data-hi="${hi}" data-di="${di}">
+            ${habit.days[di] ? '✓' : ''}
+          </div>
+        `).join('')}
+      `;
+      rowsEl.appendChild(row);
+    });
+  }
+
+  // meta count: completed today
+  const todayIdx = new Date().getDay();
+  const doneToday = habits.filter(h => h.days[todayIdx]).length;
+  metaEl.textContent = `${doneToday} / ${habits.length} today`;
+}
+
+function updateStats(week, dates) {
+  const allHabits = [...week.top, ...week.mid, ...week.low];
+  const todayIdx = new Date().getDay();
+  const totalHabits = allHabits.length;
+
+  // Today done
+  const todayDone = allHabits.filter(h => h.days[todayIdx]).length;
+  document.getElementById('sumDone').textContent = todayDone;
+
+  // Week rate
+  let totalChecks = 0, maxChecks = 0;
+  allHabits.forEach(h => {
+    h.days.forEach((d,di) => {
+      const date = dates[di];
+      const t = new Date(); t.setHours(0,0,0,0);
+      const dt = new Date(date); dt.setHours(0,0,0,0);
+      if(dt <= t) { maxChecks++; if(d) totalChecks++; }
+    });
+  });
+  const rate = maxChecks > 0 ? Math.round((totalChecks/maxChecks)*100) : 0;
+  document.getElementById('sumRate').textContent = rate + '%';
+  document.getElementById('wpcPct').textContent = rate + '%';
+  document.getElementById('wpcBar').style.width = rate + '%';
+  document.getElementById('navProgress').textContent = rate + '%';
+
+  // Streak (simplified: consecutive days this week all top habits done)
+  let streak = 0;
+  const today = new Date(); today.setHours(0,0,0,0);
+  for(let di = todayIdx; di >= 0; di--) {
+    const d = new Date(dates[di]); d.setHours(0,0,0,0);
+    if(d > today) continue;
+    if(week.top.length > 0 && week.top.every(h => h.days[di])) streak++;
+    else if(di < todayIdx) break;
+  }
+  document.getElementById('sumStreak').textContent = streak;
+
+  // Day mini bars
+  const miniRow = document.getElementById('dayMiniRow');
+  miniRow.innerHTML = dates.map((date, di) => {
+    const t = new Date(); t.setHours(0,0,0,0);
+    const dt = new Date(date); dt.setHours(0,0,0,0);
+    const isPast = dt <= t;
+    const done = isPast ? allHabits.filter(h => h.days[di]).length : 0;
+    const pct = (isPast && totalHabits > 0) ? Math.round((done/totalHabits)*100) : 0;
+    return `
+      <div class="day-mini">
+        <div class="day-mini-label${isToday(date)?' is-today':''}">${DAYS[di]}</div>
+        <div class="day-mini-bar"><div class="day-mini-fill" style="width:${pct}%"></div></div>
+        <div class="day-mini-count">${isPast && totalHabits>0 ? done+'/'+totalHabits : '—'}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── EVENTS (delegated) ── */
+document.addEventListener('click', e => {
+  const check = e.target.closest('.habit-check');
+  if(check) {
+    const p = check.dataset.p, hi = parseInt(check.dataset.hi), di = parseInt(check.dataset.di);
+    const wk = weekKey(currentWeekOffset);
+    ensureWeek(wk);
+    const was = data[wk][p][hi].days[di];
+    data[wk][p][hi].days[di] = !was;
+    save();
+    if(!was) toast('✓ ' + (data[wk][p][hi].name || 'Habit') + ' completed!');
+    else toast('Unchecked.');
+    render();
+  }
+});
+
+document.addEventListener('change', e => {
+  const input = e.target.closest('.habit-name-input');
+  if(input) {
+    const p = input.dataset.p, hi = parseInt(input.dataset.hi);
+    const wk = weekKey(currentWeekOffset);
+    ensureWeek(wk);
+    data[wk][p][hi].name = input.value.trim() || 'Unnamed';
+    save();
+  }
+});
+
+/* ── SECTION TOGGLE ── */
+function toggleSection(id) {
+  document.getElementById('sec-' + id).classList.toggle('collapsed');
+}
+
+/* ── ADD HABIT ── */
+function addHabit(priority) {
+  const wk = weekKey(currentWeekOffset);
+  ensureWeek(wk);
+  data[wk][priority].push({ name: '', days: [false,false,false,false,false,false,false] });
+  save();
+  render();
+  // focus new input
+  setTimeout(() => {
+    const rows = document.querySelectorAll(`#rows-${priority} .habit-name-input`);
+    if(rows.length) rows[rows.length-1].focus();
+  }, 50);
+  toast('New habit added — give it a name!');
+}
+
+/* ── WEEK NAV ── */
+document.getElementById('prevWeek').addEventListener('click', () => {
+  currentWeekOffset--;
+  render();
+});
+document.getElementById('nextWeek').addEventListener('click', () => {
+  currentWeekOffset++;
+  render();
+});
+
+/* ── INIT ── */
+load();
+render();
+</script>
+</body>
+</html>
