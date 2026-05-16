@@ -1,14 +1,12 @@
-// The Good Pages — Habit Tracker Service Worker v2
+// The Good Pages — Habit Tracker Service Worker v3
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(clients.claim()));
 
-// Basic offline fetch
 self.addEventListener('fetch', e => {
   e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
 });
 
-// Notification click — open/focus tab
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   if (e.action === 'dismiss') return;
@@ -22,7 +20,6 @@ self.addEventListener('notificationclick', e => {
   );
 });
 
-// Schedule / cancel reminder
 self.addEventListener('message', e => {
   if (e.data?.type === 'SCHEDULE_REMINDER') {
     if (self._rt) clearTimeout(self._rt);
@@ -52,7 +49,6 @@ self.addEventListener('message', e => {
       });
     }, delayMs);
   }
-
   if (e.data?.type === 'CANCEL_REMINDER') {
     if (self._rt) { clearTimeout(self._rt); self._rt = null; }
   }
