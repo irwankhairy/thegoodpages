@@ -4,6 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Weekly Habit Tracker</title>
+<meta name="description" content="Track your weekly habits by priority — Top, Medium, Low." />
+<meta name="theme-color" content="#F7F5F0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Habit Tracker" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
@@ -11,355 +15,299 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #F7F5F0;
-  --surface: #FFFFFF;
-  --surface2: #F0EDE6;
-  --ink: #1C1917;
-  --ink2: #6B6860;
-  --ink3: #A8A59E;
-  --accent: #1C1917;
-  --accent-light: #E8E5DE;
-  --border: rgba(28,25,23,0.10);
-  --border-strong: rgba(28,25,23,0.22);
+  --bg: #F7F5F0; --surface: #FFFFFF; --surface2: #F0EDE6;
+  --ink: #1C1917; --ink2: #6B6860; --ink3: #A8A59E;
+  --accent: #1C1917; --accent-light: #E8E5DE;
+  --border: rgba(28,25,23,0.10); --border-strong: rgba(28,25,23,0.22);
   --shadow-sm: 0 1px 3px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
   --shadow-md: 0 4px 16px rgba(28,25,23,0.08), 0 2px 6px rgba(28,25,23,0.05);
   --shadow-lg: 0 12px 40px rgba(28,25,23,0.12), 0 4px 12px rgba(28,25,23,0.06);
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 28px;
   --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   --font: 'Work Sans', system-ui, sans-serif;
-
-  /* priority colors */
-  --top-color: #1C1917;
-  --top-bg: #E8E5DE;
-  --mid-color: #6B6860;
-  --mid-bg: #F0EDE6;
-  --low-color: #A8A59E;
-  --low-bg: #F7F5F0;
+  --top-color: #1C1917; --top-bg: #E8E5DE;
+  --mid-color: #6B6860; --mid-bg: #F0EDE6;
+  --low-color: #A8A59E; --low-bg: #F7F5F0;
 }
-
 [data-theme="dark"] {
-  --bg: #0F0E0D;
-  --surface: #1A1917;
-  --surface2: #242220;
-  --ink: #F5F3EF;
-  --ink2: #A8A59E;
-  --ink3: #6B6860;
-  --accent: #F5F3EF;
-  --accent-light: #2A2825;
-  --border: rgba(245,243,239,0.08);
-  --border-strong: rgba(245,243,239,0.16);
+  --bg: #0F0E0D; --surface: #1A1917; --surface2: #242220;
+  --ink: #F5F3EF; --ink2: #A8A59E; --ink3: #6B6860;
+  --accent: #F5F3EF; --accent-light: #2A2825;
+  --border: rgba(245,243,239,0.08); --border-strong: rgba(245,243,239,0.16);
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.35);
-  --top-bg: #2A2825;
-  --mid-bg: #242220;
-  --low-bg: #1A1917;
+  --top-bg: #2A2825; --mid-bg: #242220; --low-bg: #1A1917;
 }
 
 html { font-size: 16px; }
 body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--ink);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--font); background: var(--bg); color: var(--ink);
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
   transition: background 0.3s, color 0.3s;
 }
 
 /* ── NAV ── */
 nav {
-  position: sticky; top: 0; z-index: 100;
-  height: 60px;
+  position: sticky; top: 0; z-index: 100; height: 60px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 2rem;
-  background: rgba(247,245,240,0.88);
-  backdrop-filter: blur(16px);
+  background: rgba(247,245,240,0.88); backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   transition: background 0.3s, border-color 0.3s;
 }
 [data-theme="dark"] nav { background: rgba(15,14,13,0.88); }
-
 .nav-left { display: flex; align-items: center; gap: 12px; }
-.nav-brand { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.nav-brand { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
 .nav-week {
-  font-size: 12px; font-weight: 400; color: var(--ink3);
-  padding: 3px 10px;
-  border: 1px solid var(--border);
-  border-radius: 99px;
-  background: var(--surface2);
+  font-size: 12px; color: var(--ink3); padding: 3px 10px;
+  border: 1px solid var(--border); border-radius: 99px; background: var(--surface2);
 }
-
-.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
 .nav-progress {
-  font-size: 12px; font-weight: 500;
-  padding: 4px 12px; border-radius: 99px;
+  font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 99px;
   background: var(--ink); color: var(--surface);
-  transition: all var(--transition);
-  min-width: 72px; text-align: center;
+  min-width: 72px; text-align: center; transition: all var(--transition);
 }
-.theme-toggle {
-  width: 36px; height: 36px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
+.icon-btn {
+  width: 36px; height: 36px; border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm); background: var(--surface);
   cursor: pointer; font-size: 16px;
   display: flex; align-items: center; justify-content: center;
-  transition: all var(--transition);
+  transition: all var(--transition); position: relative;
 }
-.theme-toggle:hover { background: var(--surface2); }
+.icon-btn:hover { background: var(--surface2); }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px; width: 7px; height: 7px;
+  border-radius: 50%; background: #E05A2B; border: 1.5px solid var(--surface); display: none;
+}
+.notif-dot.active { display: block; }
 
 /* ── LAYOUT ── */
-.wrap {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 5rem;
-}
+.wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
 
 /* ── PAGE HEADER ── */
 .page-header {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;
 }
-.page-title {
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-}
+.page-title { font-size: clamp(1.8rem,4vw,2.4rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.1; }
 .page-title span { font-weight: 300; font-style: italic; }
-.week-nav {
-  display: flex; align-items: center; gap: 10px;
-  flex-shrink: 0;
-}
+.week-nav { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .week-nav-btn {
-  width: 34px; height: 34px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--ink); font-size: 16px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm); background: var(--surface); color: var(--ink);
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   transition: all var(--transition);
 }
 .week-nav-btn:hover { background: var(--surface2); }
-.week-label {
-  font-size: 13px; font-weight: 500; color: var(--ink2);
-  min-width: 160px; text-align: center;
-}
+.week-label { font-size: 13px; font-weight: 500; color: var(--ink2); min-width: 160px; text-align: center; }
 
-/* ── SUMMARY CARDS ── */
-.summary-row {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 12px; margin-bottom: 2rem;
-}
+/* ── SUMMARY ── */
+.summary-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 2rem; }
 .summary-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.4rem;
-  box-shadow: var(--shadow-sm);
-  transition: background 0.3s, border-color 0.3s;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.25rem 1.4rem;
+  box-shadow: var(--shadow-sm); transition: background 0.3s, border-color 0.3s;
 }
 .summary-icon { font-size: 18px; margin-bottom: 10px; display: block; }
-.summary-val {
-  font-size: 2rem; font-weight: 600;
-  letter-spacing: -0.04em; line-height: 1;
-  margin-bottom: 4px;
-  transition: all 0.4s ease;
-}
-.summary-lbl { font-size: 11.5px; color: var(--ink2); font-weight: 400; }
+.summary-val { font-size: 2rem; font-weight: 600; letter-spacing: -0.04em; line-height: 1; margin-bottom: 4px; transition: all 0.4s; }
+.summary-lbl { font-size: 11.5px; color: var(--ink2); }
 
-/* ── PROGRESS BAR (weekly) ── */
+/* ── WEEK PROGRESS ── */
 .week-progress-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 1.75rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-sm);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 1.75rem 2rem;
+  margin-bottom: 2rem; box-shadow: var(--shadow-sm);
   transition: background 0.3s, border-color 0.3s;
 }
-.wpc-header {
-  display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 14px;
-}
-.wpc-pct {
-  font-size: 3rem; font-weight: 600;
-  letter-spacing: -0.05em; line-height: 1;
-  transition: all 0.4s ease;
-}
-.wpc-sub { font-size: 12px; color: var(--ink2); font-weight: 400; }
-.progress-track {
-  height: 6px; background: var(--surface2);
-  border-radius: 99px; overflow: hidden; margin-bottom: 12px;
-  transition: background 0.3s;
-}
-.progress-fill {
-  height: 100%; background: var(--ink); border-radius: 99px;
-  transition: width 0.6s cubic-bezier(0.4,0,0.2,1), background 0.3s;
-  min-width: 0;
-}
-.day-mini-row {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
-}
-.day-mini {
-  text-align: center;
-}
-.day-mini-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
-  color: var(--ink3); margin-bottom: 5px; text-transform: uppercase;
-}
-.day-mini-bar {
-  height: 4px; border-radius: 99px;
-  background: var(--surface2); overflow: hidden;
-  transition: background 0.3s;
-}
-.day-mini-fill {
-  height: 100%; border-radius: 99px; background: var(--ink);
-  transition: width 0.5s cubic-bezier(0.4,0,0.2,1), background 0.3s;
-}
-.day-mini-count {
-  font-size: 10px; color: var(--ink3); margin-top: 4px;
-}
+.wpc-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+.wpc-pct { font-size: 3rem; font-weight: 600; letter-spacing: -0.05em; line-height: 1; transition: all 0.4s; }
+.wpc-sub { font-size: 12px; color: var(--ink2); }
+.progress-track { height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; margin-bottom: 12px; }
+.progress-fill { height: 100%; background: var(--ink); border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.day-mini-row { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+.day-mini { text-align: center; }
+.day-mini-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--ink3); margin-bottom: 5px; text-transform: uppercase; }
+.day-mini-label.is-today { color: var(--ink); }
+.day-mini-bar { height: 4px; border-radius: 99px; background: var(--surface2); overflow: hidden; }
+.day-mini-fill { height: 100%; border-radius: 99px; background: var(--ink); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+.day-mini-count { font-size: 10px; color: var(--ink3); margin-top: 4px; }
 
-/* ── SECTION ── */
+/* ── REMINDER CARD ── */
+.notif-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 1.5rem 2rem;
+  margin-bottom: 2rem; box-shadow: var(--shadow-sm);
+  transition: background 0.3s, border-color 0.3s;
+}
+.notif-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.notif-card-title { font-size: 14px; font-weight: 600; }
+.notif-status-badge {
+  font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px;
+  border: 1px solid var(--border); background: var(--surface2); color: var(--ink2);
+  transition: all var(--transition);
+}
+.notif-status-badge.on { background: #D1FAE5; color: #065F46; border-color: #A7F3D0; }
+[data-theme="dark"] .notif-status-badge.on { background: #064E3B; color: #6EE7B7; border-color: #065F46; }
+.notif-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.notif-label { font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink3); white-space: nowrap; }
+.time-input {
+  font-family: var(--font); font-size: 1.4rem; font-weight: 600; color: var(--ink);
+  background: var(--surface2); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm); padding: 8px 14px; outline: none;
+  transition: border-color var(--transition); width: 130px;
+}
+.time-input:focus { border-color: var(--ink); }
+.time-input:disabled { opacity: 0.45; cursor: not-allowed; }
+.notif-actions { display: flex; gap: 8px; margin-left: auto; }
+.btn-primary {
+  padding: 9px 20px; background: var(--ink); color: var(--surface);
+  border: none; border-radius: var(--radius-sm);
+  font-family: var(--font); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: opacity var(--transition); white-space: nowrap;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-ghost-sm {
+  padding: 9px 16px; background: transparent;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  font-family: var(--font); font-size: 13px; font-weight: 500;
+  color: var(--ink2); cursor: pointer; transition: all var(--transition); white-space: nowrap;
+}
+.btn-ghost-sm:hover { background: var(--surface2); color: var(--ink); }
+.notif-hint { margin-top: 10px; font-size: 12px; color: var(--ink3); font-weight: 300; line-height: 1.6; }
+.notif-hint a { color: var(--ink2); text-decoration: underline; cursor: pointer; }
+.notif-blocked {
+  font-size: 13px; color: #B45309; background: #FEF3C7;
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  margin-top: 10px; display: none; line-height: 1.6;
+}
+[data-theme="dark"] .notif-blocked { background: #451A03; color: #FCD34D; }
+.notif-blocked.show { display: block; }
+
+/* ── HABIT SECTIONS ── */
 .section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  margin-bottom: 1.25rem;
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm); overflow: hidden;
   transition: background 0.3s, border-color 0.3s;
 }
 .section-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1.25rem 1.75rem;
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  user-select: none;
-  transition: background var(--transition);
+  padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border);
+  cursor: pointer; user-select: none; transition: background var(--transition);
 }
 .section-header:hover { background: var(--surface2); }
 .section-left { display: flex; align-items: center; gap: 12px; }
-.priority-badge {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 3px 10px;
-  border-radius: 99px;
-}
+.priority-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; }
 .badge-top { background: var(--top-bg); color: var(--top-color); }
 .badge-mid { background: var(--mid-bg); color: var(--mid-color); }
 .badge-low { background: var(--low-bg); color: var(--low-color); border: 1px solid var(--border); }
-.section-title { font-size: 14px; font-weight: 600; }
-.section-meta { font-size: 12px; color: var(--ink3); font-weight: 400; }
-.section-chevron {
-  font-size: 12px; color: var(--ink3);
-  transition: transform var(--transition);
-}
+.section-meta { font-size: 12px; color: var(--ink3); }
+.section-chevron { font-size: 12px; color: var(--ink3); transition: transform var(--transition); }
 .section.collapsed .section-chevron { transform: rotate(-90deg); }
 .section-body { padding: 0 1.75rem 1.25rem; }
 .section.collapsed .section-body { display: none; }
 
-/* ── TABLE HEADER ── */
+/* ── TABLE ── */
 .table-head {
-  display: grid;
-  grid-template-columns: 1fr repeat(7, 36px);
-  gap: 4px;
-  padding: 10px 0 6px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
+  display: grid; grid-template-columns: 1fr repeat(7,36px); gap: 4px;
+  padding: 10px 0 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px;
 }
 .th-habit { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink3); text-transform: uppercase; }
-.th-day {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
-  color: var(--ink3); text-transform: uppercase;
-  text-align: center;
-}
+.th-day { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--ink3); text-transform: uppercase; text-align: center; }
 .th-day.is-today { color: var(--ink); }
-
-/* ── HABIT ROW ── */
 .habit-row {
-  display: grid;
-  grid-template-columns: 1fr repeat(7, 36px);
-  gap: 4px;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border);
-  transition: background var(--transition);
-  border-radius: var(--radius-sm);
+  display: grid; grid-template-columns: 1fr repeat(7,36px); gap: 4px;
+  align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border);
+  transition: background var(--transition); border-radius: var(--radius-sm);
 }
 .habit-row:last-child { border-bottom: none; }
 .habit-row:hover { background: var(--surface2); }
-
-.habit-name-wrap {
-  display: flex; align-items: center; gap: 8px; min-width: 0;
-}
+.habit-name-wrap { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .habit-name-input {
-  font-family: var(--font);
-  font-size: 13.5px; font-weight: 400;
-  color: var(--ink);
-  background: transparent; border: none; outline: none;
-  width: 100%;
-  padding: 2px 0;
-  border-bottom: 1px dashed transparent;
+  font-family: var(--font); font-size: 13.5px; font-weight: 400; color: var(--ink);
+  background: transparent; border: none; outline: none; width: 100%;
+  padding: 2px 0; border-bottom: 1px dashed transparent;
   transition: border-color var(--transition);
 }
 .habit-name-input:focus { border-bottom-color: var(--border-strong); }
 .habit-name-input::placeholder { color: var(--ink3); font-style: italic; }
-
 .habit-check {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border-strong);
-  background: transparent;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto;
-  font-size: 13px; color: transparent;
-  transition: all var(--transition);
-  flex-shrink: 0;
-  user-select: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid var(--border-strong); background: transparent;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto; font-size: 13px; color: transparent;
+  transition: all var(--transition); flex-shrink: 0; user-select: none;
 }
-.habit-check:hover:not(.checked) {
-  border-color: var(--ink); background: var(--surface2);
-}
-.habit-check.checked {
-  background: var(--ink); border-color: var(--ink); color: #fff;
-}
-.habit-check.today-col:not(.checked) {
-  border-color: var(--ink); border-width: 2px;
-}
-
-/* ── ADD HABIT BTN ── */
+.habit-check:hover:not(.checked) { border-color: var(--ink); background: var(--surface2); }
+.habit-check.checked { background: var(--ink); border-color: var(--ink); color: #fff; }
+.habit-check.today-col:not(.checked) { border-color: var(--ink); border-width: 2px; }
 .add-habit-btn {
-  display: flex; align-items: center; gap: 8px;
-  margin-top: 10px;
-  padding: 8px 12px;
-  background: transparent;
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 13px; font-weight: 400;
-  color: var(--ink3); cursor: pointer;
-  width: 100%;
-  transition: all var(--transition);
+  display: flex; align-items: center; gap: 8px; margin-top: 10px;
+  padding: 8px 12px; background: transparent;
+  border: 1px dashed var(--border-strong); border-radius: var(--radius-sm);
+  font-family: var(--font); font-size: 13px; color: var(--ink3);
+  cursor: pointer; width: 100%; transition: all var(--transition);
 }
 .add-habit-btn:hover { background: var(--surface2); color: var(--ink); border-color: var(--ink3); }
+.empty-state { text-align: center; padding: 2rem 1rem; color: var(--ink3); font-size: 13px; font-weight: 300; }
+
+/* ── CELEBRATION OVERLAY ── */
+.celebrate-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(15,14,13,0.82);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.celebrate-overlay.show { opacity: 1; pointer-events: all; }
+.celebrate-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); padding: 3rem 2.5rem;
+  max-width: 400px; width: 90%; text-align: center;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.92) translateY(16px);
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.celebrate-overlay.show .celebrate-box { transform: scale(1) translateY(0); }
+.celebrate-icon { font-size: 4rem; margin-bottom: 1.25rem; display: block; animation: iconBounce 0.6s 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+@keyframes iconBounce { from{transform:scale(0.5);opacity:0} 70%{transform:scale(1.15)} to{transform:scale(1);opacity:1} }
+.celebrate-title { font-size: 2rem; font-weight: 600; letter-spacing: -0.04em; margin-bottom: 0.5rem; }
+.celebrate-sub { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.6; margin-bottom: 2rem; }
+.celebrate-stats {
+  display: flex; justify-content: center; gap: 2rem;
+  margin-bottom: 2rem; padding: 1.25rem;
+  background: var(--surface2); border-radius: var(--radius-lg);
+}
+.cel-stat-val { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.04em; display: block; }
+.cel-stat-lbl { font-size: 11px; color: var(--ink2); }
+.celebrate-btn {
+  width: 100%; padding: 14px; background: var(--ink); color: var(--surface);
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font); font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: opacity var(--transition);
+}
+.celebrate-btn:hover { opacity: 0.85; }
+
+/* CONFETTI */
+.confetti-piece {
+  position: fixed; pointer-events: none; z-index: 9100; border-radius: 2px;
+  animation: cfFall linear forwards;
+}
+@keyframes cfFall {
+  0% { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(900deg) scale(0.5); opacity: 0; }
+}
 
 /* ── ANIMATIONS ── */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(12px); }
-  to { opacity:1; transform:translateY(0); }
-}
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 .fade-up { animation: fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both; }
-.d1 { animation-delay: 0.05s; }
-.d2 { animation-delay: 0.10s; }
-.d3 { animation-delay: 0.15s; }
-.d4 { animation-delay: 0.20s; }
-.d5 { animation-delay: 0.25s; }
-.d6 { animation-delay: 0.30s; }
+.d1{animation-delay:.05s} .d2{animation-delay:.10s} .d3{animation-delay:.15s}
+.d4{animation-delay:.20s} .d5{animation-delay:.25s} .d6{animation-delay:.30s} .d7{animation-delay:.35s}
 
 /* ── TOAST ── */
 .toast {
@@ -367,33 +315,27 @@ nav {
   transform: translateX(-50%) translateY(16px);
   background: var(--ink); color: var(--surface);
   padding: 11px 22px; border-radius: 99px;
-  font-size: 13.5px; font-weight: 500;
-  opacity: 0; pointer-events: none; z-index: 9999;
+  font-size: 13.5px; font-weight: 500; opacity: 0;
+  pointer-events: none; z-index: 9999;
   transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: var(--shadow-lg); white-space: nowrap;
-  max-width: 90vw; text-align: center;
+  box-shadow: var(--shadow-lg); white-space: nowrap; max-width: 90vw; text-align: center;
 }
-.toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
-
-/* ── EMPTY STATE ── */
-.empty-state {
-  text-align: center; padding: 2rem 1rem;
-  color: var(--ink3); font-size: 13px; font-weight: 300;
-}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 640px) {
-  .wrap { padding: 1.5rem 1rem 4rem; }
-  nav { padding: 0 1rem; }
-  .summary-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .wrap { padding: 1.5rem 1rem 4rem; } nav { padding: 0 1rem; }
   .summary-val { font-size: 1.5rem; }
-  .table-head { grid-template-columns: 1fr repeat(7, 28px); gap: 2px; }
-  .habit-row { grid-template-columns: 1fr repeat(7, 28px); gap: 2px; }
+  .table-head { grid-template-columns: 1fr repeat(7,28px); gap: 2px; }
+  .habit-row { grid-template-columns: 1fr repeat(7,28px); gap: 2px; }
   .habit-check { width: 24px; height: 24px; font-size: 11px; }
-  .section-body { padding: 0 1rem 1rem; }
-  .section-header { padding: 1rem 1.25rem; }
+  .section-body { padding: 0 1rem 1rem; } .section-header { padding: 1rem 1.25rem; }
   .page-header { flex-direction: column; gap: 1rem; }
   .week-label { min-width: 120px; font-size: 12px; }
+  .notif-card { padding: 1.25rem; } .notif-row { gap: 8px; }
+  .nav-week { display: none; }
+  .celebrate-box { padding: 2rem 1.5rem; }
+  .celebrate-title { font-size: 1.6rem; }
 }
 </style>
 </head>
@@ -407,60 +349,64 @@ nav {
   </div>
   <div class="nav-right">
     <span class="nav-progress" id="navProgress">0%</span>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️</button>
+    <button class="icon-btn" id="notifBtn" title="Reminder settings">
+      🔔<span class="notif-dot" id="notifDot"></span>
+    </button>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">☀️</button>
   </div>
 </nav>
 
 <div class="wrap">
 
-  <!-- PAGE HEADER -->
+  <!-- HEADER -->
   <div class="page-header fade-up">
-    <div>
-      <div class="page-title">Weekly <span>Habit Tracker</span></div>
-    </div>
+    <div><div class="page-title">Weekly <span>Habit Tracker</span></div></div>
     <div class="week-nav">
-      <button class="week-nav-btn" id="prevWeek" title="Previous week">←</button>
+      <button class="week-nav-btn" id="prevWeek">←</button>
       <span class="week-label" id="weekLabel">—</span>
-      <button class="week-nav-btn" id="nextWeek" title="Next week">→</button>
+      <button class="week-nav-btn" id="nextWeek">→</button>
     </div>
   </div>
 
   <!-- SUMMARY -->
   <div class="summary-row fade-up d1">
-    <div class="summary-card">
-      <span class="summary-icon">✅</span>
-      <div class="summary-val" id="sumDone">0</div>
-      <div class="summary-lbl">Completed today</div>
-    </div>
-    <div class="summary-card">
-      <span class="summary-icon">🔥</span>
-      <div class="summary-val" id="sumStreak">0</div>
-      <div class="summary-lbl">Day streak</div>
-    </div>
-    <div class="summary-card">
-      <span class="summary-icon">📊</span>
-      <div class="summary-val" id="sumRate">0%</div>
-      <div class="summary-lbl">Week rate</div>
-    </div>
+    <div class="summary-card"><span class="summary-icon">✅</span><div class="summary-val" id="sumDone">0</div><div class="summary-lbl">Completed today</div></div>
+    <div class="summary-card"><span class="summary-icon">🔥</span><div class="summary-val" id="sumStreak">0</div><div class="summary-lbl">Day streak</div></div>
+    <div class="summary-card"><span class="summary-icon">📊</span><div class="summary-val" id="sumRate">0%</div><div class="summary-lbl">Week rate</div></div>
   </div>
 
   <!-- WEEK PROGRESS -->
   <div class="week-progress-card fade-up d2">
-    <div class="wpc-header">
-      <div class="wpc-pct" id="wpcPct">0%</div>
-      <div class="wpc-sub">weekly completion</div>
-    </div>
+    <div class="wpc-header"><div class="wpc-pct" id="wpcPct">0%</div><div class="wpc-sub">weekly completion</div></div>
     <div class="progress-track"><div class="progress-fill" id="wpcBar" style="width:0%"></div></div>
     <div class="day-mini-row" id="dayMiniRow"></div>
   </div>
 
-  <!-- TOP PRIORITY -->
-  <div class="section fade-up d3" id="sec-top">
-    <div class="section-header" onclick="toggleSection('top')">
-      <div class="section-left">
-        <span class="priority-badge badge-top">Top Priority</span>
-        <span class="section-meta" id="meta-top">0 / 0 habits</span>
+  <!-- REMINDER CARD -->
+  <div class="notif-card fade-up d3" id="notifCard">
+    <div class="notif-card-header">
+      <div class="notif-card-title">🔔 Daily Reminder</div>
+      <span class="notif-status-badge" id="notifStatusBadge">Off</span>
+    </div>
+    <div class="notif-row">
+      <span class="notif-label">Remind me at</span>
+      <input type="time" class="time-input" id="reminderTime" value="20:00" />
+      <div class="notif-actions">
+        <button class="btn-primary" id="enableNotifBtn">Enable Reminder</button>
+        <button class="btn-ghost-sm" id="testNotifBtn" style="display:none">Test Now</button>
+        <button class="btn-ghost-sm" id="disableNotifBtn" style="display:none">Turn Off</button>
       </div>
+    </div>
+    <div class="notif-hint" id="notifHint">Get a daily nudge at your chosen time showing how many habits you still need to complete.</div>
+    <div class="notif-blocked" id="notifBlocked">
+      ⚠️ Notifications are blocked. Click the 🔒 lock in your address bar → Site settings → Notifications → Allow, then refresh.
+    </div>
+  </div>
+
+  <!-- TOP PRIORITY -->
+  <div class="section fade-up d4" id="sec-top">
+    <div class="section-header" onclick="toggleSection('top')">
+      <div class="section-left"><span class="priority-badge badge-top">Top Priority</span><span class="section-meta" id="meta-top">0 / 0 today</span></div>
       <span class="section-chevron">▾</span>
     </div>
     <div class="section-body">
@@ -471,12 +417,9 @@ nav {
   </div>
 
   <!-- MEDIUM PRIORITY -->
-  <div class="section fade-up d4" id="sec-mid">
+  <div class="section fade-up d5" id="sec-mid">
     <div class="section-header" onclick="toggleSection('mid')">
-      <div class="section-left">
-        <span class="priority-badge badge-mid">Medium Priority</span>
-        <span class="section-meta" id="meta-mid">0 / 0 habits</span>
-      </div>
+      <div class="section-left"><span class="priority-badge badge-mid">Medium Priority</span><span class="section-meta" id="meta-mid">0 / 0 today</span></div>
       <span class="section-chevron">▾</span>
     </div>
     <div class="section-body">
@@ -487,12 +430,9 @@ nav {
   </div>
 
   <!-- LOW PRIORITY -->
-  <div class="section fade-up d5" id="sec-low">
+  <div class="section fade-up d6" id="sec-low">
     <div class="section-header" onclick="toggleSection('low')">
-      <div class="section-left">
-        <span class="priority-badge badge-low">Low Priority</span>
-        <span class="section-meta" id="meta-low">0 / 0 habits</span>
-      </div>
+      <div class="section-left"><span class="priority-badge badge-low">Low Priority</span><span class="section-meta" id="meta-low">0 / 0 today</span></div>
       <span class="section-chevron">▾</span>
     </div>
     <div class="section-body">
@@ -504,11 +444,31 @@ nav {
 
 </div>
 
+<!-- CELEBRATION OVERLAY -->
+<div class="celebrate-overlay" id="celebrateOverlay">
+  <div class="celebrate-box">
+    <span class="celebrate-icon">🏆</span>
+    <div class="celebrate-title">All done!</div>
+    <div class="celebrate-sub">You completed every habit today.<br/>That's what consistency looks like.</div>
+    <div class="celebrate-stats">
+      <div><span class="cel-stat-val" id="celTotal">0</span><span class="cel-stat-lbl">habits today</span></div>
+      <div><span class="cel-stat-val" id="celStreak">0</span><span class="cel-stat-lbl">day streak 🔥</span></div>
+      <div><span class="cel-stat-val" id="celRate">0%</span><span class="cel-stat-lbl">week rate</span></div>
+    </div>
+    <button class="celebrate-btn" id="celebrateBack">Back to Tracker</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+/* ════════════════════════════════════════
+   STATE & CONSTANTS
+════════════════════════════════════════ */
 const SK = 'tgp_habit_v1';
 const THEME_KEY = 'tgp_theme';
+const NOTIF_KEY = 'tgp_notif_v1';
+const CEL_KEY = 'tgp_celebrated';
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const PRIORITIES = ['top','mid','low'];
 const DEFAULT_HABITS = {
@@ -516,293 +476,349 @@ const DEFAULT_HABITS = {
   mid: ['Stretch','Cook at home','Take vitamins','Walk 10k steps','Review goals','Gratitude list','Learn something new'],
   low: ['Clean desk','Water plants','Call a friend','Limit screen time','Practice a hobby','Unsubscribe from emails','Plan next day']
 };
+let weekOffset = 0, data = {}, swReg = null;
+let notifSettings = { enabled: false, time: '20:00' };
 
-let currentWeekOffset = 0;
-let data = {};
-
-/* ── THEME ── */
+/* ════════════════════════════════════════
+   THEME
+════════════════════════════════════════ */
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   document.getElementById('themeToggle').textContent = t === 'dark' ? '🌙' : '☀️';
-  try { localStorage.setItem(THEME_KEY, t); } catch(e){}
+  try { localStorage.setItem(THEME_KEY, t); } catch(e) {}
 }
 document.getElementById('themeToggle').addEventListener('click', () => {
-  const cur = document.documentElement.getAttribute('data-theme') || 'light';
-  applyTheme(cur === 'dark' ? 'light' : 'dark');
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
-(function() {
-  try { const t = localStorage.getItem(THEME_KEY); if(t) applyTheme(t); } catch(e){}
-})();
+(function() { try { const t = localStorage.getItem(THEME_KEY); if (t) applyTheme(t); } catch(e) {} })();
 
-/* ── WEEK UTILS ── */
-function getWeekStart(offset = 0) {
-  const now = new Date();
-  const day = now.getDay(); // 0=Sun
-  const sunday = new Date(now);
-  sunday.setDate(now.getDate() - day + (offset * 7));
-  sunday.setHours(0,0,0,0);
-  return sunday;
+/* ════════════════════════════════════════
+   WEEK UTILS
+════════════════════════════════════════ */
+function getWeekStart(o = 0) {
+  const n = new Date(), s = new Date(n);
+  s.setDate(n.getDate() - n.getDay() + o * 7);
+  s.setHours(0, 0, 0, 0); return s;
 }
-function weekKey(offset = 0) {
-  const d = getWeekStart(offset);
-  return d.toISOString().slice(0,10);
+function weekKey(o = 0) { return getWeekStart(o).toISOString().slice(0, 10); }
+function weekDates(o = 0) {
+  const s = getWeekStart(o);
+  return Array.from({length: 7}, (_, i) => { const d = new Date(s); d.setDate(s.getDate() + i); return d; });
 }
-function weekDates(offset = 0) {
-  const start = getWeekStart(offset);
-  return Array.from({length:7}, (_,i) => {
-    const d = new Date(start); d.setDate(start.getDate()+i); return d;
-  });
-}
-function isToday(date) {
+function isToday(d) {
   const t = new Date(); t.setHours(0,0,0,0);
-  const d = new Date(date); d.setHours(0,0,0,0);
-  return t.getTime() === d.getTime();
+  const x = new Date(d); x.setHours(0,0,0,0);
+  return t.getTime() === x.getTime();
 }
-function fmtWeekLabel(offset=0) {
-  const dates = weekDates(offset);
-  const opts = {month:'short', day:'numeric'};
-  return dates[0].toLocaleDateString('en-US',opts) + ' – ' + dates[6].toLocaleDateString('en-US',opts);
+function fmtWeek(o = 0) {
+  const D = weekDates(o), op = {month:'short', day:'numeric'};
+  return D[0].toLocaleDateString('en-US', op) + ' – ' + D[6].toLocaleDateString('en-US', op);
 }
+function todayDateStr() { return new Date().toISOString().slice(0, 10); }
 
-/* ── STORAGE ── */
-function save() {
-  try { localStorage.setItem(SK, JSON.stringify(data)); } catch(e){}
-}
-function load() {
-  try {
-    const r = localStorage.getItem(SK);
-    if(r) { data = JSON.parse(r); return; }
-  } catch(e){}
-  // init default
-  data = {};
-}
+/* ════════════════════════════════════════
+   STORAGE
+════════════════════════════════════════ */
+function save() { try { localStorage.setItem(SK, JSON.stringify(data)); } catch(e) {} }
+function load() { try { const r = localStorage.getItem(SK); if (r) { data = JSON.parse(r); return; } } catch(e) {} data = {}; }
+function loadNS() { try { const r = localStorage.getItem(NOTIF_KEY); if (r) notifSettings = {...notifSettings, ...JSON.parse(r)}; } catch(e) {} }
+function saveNS() { try { localStorage.setItem(NOTIF_KEY, JSON.stringify(notifSettings)); } catch(e) {} }
 function ensureWeek(wk) {
-  if(!data[wk]) data[wk] = { top:[], mid:[], low:[] };
-  PRIORITIES.forEach(p => {
-    if(!data[wk][p]) data[wk][p] = [];
-  });
+  if (!data[wk]) data[wk] = {top:[], mid:[], low:[]};
+  PRIORITIES.forEach(p => { if (!data[wk][p]) data[wk][p] = []; });
 }
-function getWeek(offset=0) {
-  const wk = weekKey(offset);
-  ensureWeek(wk);
-  // If current week and empty, seed defaults
-  if(offset === 0 && PRIORITIES.every(p => data[wk][p].length === 0)) {
+function getWeek(o = 0) {
+  const wk = weekKey(o); ensureWeek(wk);
+  if (o === 0 && PRIORITIES.every(p => data[wk][p].length === 0)) {
     PRIORITIES.forEach(p => {
-      data[wk][p] = DEFAULT_HABITS[p].map(name => ({ name, days: [false,false,false,false,false,false,false] }));
+      data[wk][p] = DEFAULT_HABITS[p].map(n => ({name: n, days: [false,false,false,false,false,false,false]}));
     });
     save();
   }
   return data[wk];
 }
 
-/* ── TOAST ── */
+/* ════════════════════════════════════════
+   TOAST
+════════════════════════════════════════ */
 function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 2800);
+  const e = document.getElementById('toast');
+  e.textContent = msg; e.classList.add('show');
+  clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove('show'), 2800);
 }
 
-/* ── STREAK CALC ── */
-function calcStreak() {
-  // count how many consecutive days (going backwards from today) all top habits were completed
-  let streak = 0;
-  const today = new Date(); today.setHours(0,0,0,0);
-  for(let offset=0; offset>=-52; offset--) {
-    const wk = weekKey(offset);
-    if(!data[wk]) break;
-    const habits = data[wk].top || [];
-    if(habits.length === 0) break;
-    // figure out which day index to check
-    const dates = weekDates(offset);
-    let allDone = false;
-    for(let di=0;di<7;di++){
-      const d = new Date(dates[di]); d.setHours(0,0,0,0);
-      if(d <= today){
-        const dayDone = habits.every(h => h.days[di]);
-        if(dayDone && habits.length > 0){ allDone = true; streak++; }
-        else if(d < today) { allDone = false; }
-      }
-    }
-    if(!allDone && offset < 0) break;
+/* ════════════════════════════════════════
+   CONFETTI
+════════════════════════════════════════ */
+function launchConfetti(n = 80) {
+  const colors = ['#1C1917','#6B6860','#A8A59E','#3B3734','#D4C9B8','#E8E5DE'];
+  for (let i = 0; i < n; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 6 + Math.random() * 8;
+    const delay = Math.random() * 1.2;
+    const dur = 1.8 + Math.random() * 1.4;
+    el.style.cssText = `left:${Math.random()*100}vw;top:-16px;width:${size}px;height:${size*0.55}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${dur}s;animation-delay:${delay}s;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (dur + delay) * 1000 + 200);
   }
-  return streak;
 }
 
-/* ── RENDER ── */
+/* ════════════════════════════════════════
+   CELEBRATION
+════════════════════════════════════════ */
+function checkCelebration(week, dates) {
+  const all = [...week.top, ...week.mid, ...week.low];
+  if (all.length === 0) return;
+  const ti = new Date().getDay();
+  const todayDone = all.every(h => h.days[ti]);
+  if (!todayDone) return;
+
+  // Only show once per day
+  const celebKey = CEL_KEY + '_' + todayDateStr();
+  try { if (localStorage.getItem(celebKey)) return; } catch(e) {}
+
+  // Calc streak for overlay
+  let streak = 0;
+  for (let di = ti; di >= 0; di--) {
+    if (week.top.length > 0 && week.top.every(h => h.days[di])) streak++;
+    else if (di < ti) break;
+  }
+
+  // Calc week rate
+  let tc = 0, mc = 0;
+  all.forEach(h => h.days.forEach((d, di) => {
+    const dt = new Date(dates[di]); dt.setHours(0,0,0,0);
+    const t = new Date(); t.setHours(0,0,0,0);
+    if (dt <= t) { mc++; if (d) tc++; }
+  }));
+  const rate = mc > 0 ? Math.round((tc / mc) * 100) : 0;
+
+  // Set stats
+  document.getElementById('celTotal').textContent = all.length;
+  document.getElementById('celStreak').textContent = streak;
+  document.getElementById('celRate').textContent = rate + '%';
+
+  // Show overlay
+  setTimeout(() => {
+    document.getElementById('celebrateOverlay').classList.add('show');
+    launchConfetti(90);
+    try { localStorage.setItem(celebKey, '1'); } catch(e) {}
+  }, 500);
+}
+
+document.getElementById('celebrateBack').addEventListener('click', () => {
+  document.getElementById('celebrateOverlay').classList.remove('show');
+});
+document.getElementById('celebrateOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('celebrateOverlay')) {
+    document.getElementById('celebrateOverlay').classList.remove('show');
+  }
+});
+
+/* ════════════════════════════════════════
+   SERVICE WORKER + NOTIFICATIONS
+════════════════════════════════════════ */
+async function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  try { swReg = await navigator.serviceWorker.register('./sw.js', {scope: './'}); }
+  catch(e) { console.warn('SW failed:', e); }
+}
+
+function getTodayStats() {
+  const wk = getWeek(0), all = [...wk.top, ...wk.mid, ...wk.low], ti = new Date().getDay();
+  return { incomplete: all.filter(h => !h.days[ti]).length, total: all.length };
+}
+
+function scheduleReminder(timeStr) {
+  const sw = swReg?.active;
+  if (!sw) { toast('⚠️ Reminder engine not ready. Try refreshing.'); return null; }
+  const [hh, mm] = timeStr.split(':').map(Number);
+  const now = new Date(), target = new Date();
+  target.setHours(hh, mm, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  const delayMs = target - now;
+  const { incomplete, total } = getTodayStats();
+  sw.postMessage({ type: 'SCHEDULE_REMINDER', delayMs, incomplete, total });
+  return delayMs;
+}
+
+function cancelReminder() { swReg?.active?.postMessage({ type: 'CANCEL_REMINDER' }); }
+
+async function enableNotifications() {
+  if (!('Notification' in window)) { toast('❌ Browser does not support notifications.'); return; }
+  const perm = await Notification.requestPermission();
+  if (perm === 'denied') { document.getElementById('notifBlocked').classList.add('show'); toast('❌ Notifications blocked. See instructions below.'); return; }
+  if (perm !== 'granted') { toast('Permission not granted.'); return; }
+  document.getElementById('notifBlocked').classList.remove('show');
+  const timeStr = document.getElementById('reminderTime').value || '20:00';
+  const delayMs = scheduleReminder(timeStr);
+  if (!delayMs) return;
+  notifSettings = { enabled: true, time: timeStr }; saveNS(); updateNotifUI();
+  const h = Math.round(delayMs / 3600000 * 10) / 10;
+  toast(`🔔 Reminder set for ${timeStr} — in ~${h < 1 ? Math.round(delayMs/60000)+'min' : h+'h'}!`);
+}
+
+function disableNotifications() {
+  cancelReminder(); notifSettings = {...notifSettings, enabled: false}; saveNS(); updateNotifUI();
+  toast('🔕 Reminder turned off.');
+}
+
+async function testNotification() {
+  if (Notification.permission !== 'granted') { toast('Enable reminders first!'); return; }
+  const { incomplete, total } = getTodayStats();
+  const reg = swReg || await navigator.serviceWorker.ready;
+  reg.showNotification(
+    incomplete === 0 ? '🏆 All done! Perfect day.' : `⚡ ${incomplete} item${incomplete>1?'s':''} left — you're ${Math.round(((total-incomplete)/total)*100)}% there!`,
+    { body: incomplete === 0 ? `All ${total} habits completed. You're crushing it!` : `${total-incomplete}/${total} habits done. Finish strong!`, tag: 'habit-test', data: {url: './'} }
+  );
+  toast('Test notification sent!');
+}
+
+function updateNotifUI() {
+  const { enabled, time } = notifSettings;
+  const badge = document.getElementById('notifStatusBadge');
+  const dot = document.getElementById('notifDot');
+  const enableBtn = document.getElementById('enableNotifBtn');
+  const testBtn = document.getElementById('testNotifBtn');
+  const disableBtn = document.getElementById('disableNotifBtn');
+  const timeInput = document.getElementById('reminderTime');
+  const hint = document.getElementById('notifHint');
+  if (enabled) {
+    badge.textContent = `On · ${time}`; badge.classList.add('on'); dot.classList.add('active');
+    enableBtn.style.display = 'none'; testBtn.style.display = 'block'; disableBtn.style.display = 'block';
+    timeInput.disabled = true;
+    hint.innerHTML = `Reminder active — you'll get a nudge every day at <strong>${time}</strong>. <a onclick="disableNotifications()">Change time?</a>`;
+  } else {
+    badge.textContent = 'Off'; badge.classList.remove('on'); dot.classList.remove('active');
+    enableBtn.style.display = 'block'; testBtn.style.display = 'none'; disableBtn.style.display = 'none';
+    timeInput.disabled = false; timeInput.value = time || '20:00';
+    hint.innerHTML = `Get a daily nudge at your chosen time showing how many habits you still need to complete.`;
+  }
+}
+
+async function restoreReminder() {
+  if (!notifSettings.enabled) return;
+  if (Notification.permission !== 'granted') { notifSettings.enabled = false; saveNS(); updateNotifUI(); return; }
+  await registerSW();
+  if (swReg) {
+    await new Promise(res => {
+      if (swReg.active) return res();
+      const iv = setInterval(() => { if (swReg.active) { clearInterval(iv); res(); } }, 100);
+      setTimeout(res, 3000);
+    });
+    scheduleReminder(notifSettings.time);
+  }
+}
+
+/* ════════════════════════════════════════
+   RENDER
+════════════════════════════════════════ */
 function render() {
-  const wk = weekKey(currentWeekOffset);
-  const week = getWeek(currentWeekOffset);
-  const dates = weekDates(currentWeekOffset);
-
-  // Nav / header
-  document.getElementById('navWeek').textContent = 'Week of ' + dates[0].toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  document.getElementById('weekLabel').textContent = fmtWeekLabel(currentWeekOffset);
-
-  // Build sections
+  const week = getWeek(weekOffset), dates = weekDates(weekOffset);
+  document.getElementById('navWeek').textContent = 'Week of ' + dates[0].toLocaleDateString('en-US', {month:'short', day:'numeric'});
+  document.getElementById('weekLabel').textContent = fmtWeek(weekOffset);
   PRIORITIES.forEach(p => renderSection(p, week[p], dates));
-
-  // Stats
   updateStats(week, dates);
+  if (weekOffset === 0) checkCelebration(week, dates);
 }
 
 function renderSection(priority, habits, dates) {
-  const theadEl = document.getElementById('thead-' + priority);
-  const rowsEl = document.getElementById('rows-' + priority);
-  const metaEl = document.getElementById('meta-' + priority);
-
-  // thead
-  theadEl.innerHTML = `<div class="th-habit">Habit</div>` +
-    dates.map((d,i) => `<div class="th-day${isToday(d)?' is-today':''}">${DAYS[i]}</div>`).join('');
-
-  // rows
-  rowsEl.innerHTML = '';
-  if(habits.length === 0) {
-    rowsEl.innerHTML = `<div class="empty-state">No habits yet. Add one below.</div>`;
-  } else {
-    habits.forEach((habit, hi) => {
-      const row = document.createElement('div');
-      row.className = 'habit-row';
-      row.innerHTML = `
-        <div class="habit-name-wrap">
-          <input class="habit-name-input" value="${escHtml(habit.name)}" placeholder="Habit name…" data-p="${priority}" data-hi="${hi}" />
-        </div>
-        ${dates.map((_,di) => `
-          <div class="habit-check${habit.days[di]?' checked':''}${isToday(dates[di])?' today-col':''}"
-               data-p="${priority}" data-hi="${hi}" data-di="${di}">
-            ${habit.days[di] ? '✓' : ''}
-          </div>
-        `).join('')}
-      `;
-      rowsEl.appendChild(row);
-    });
-  }
-
-  // meta count: completed today
-  const todayIdx = new Date().getDay();
-  const doneToday = habits.filter(h => h.days[todayIdx]).length;
-  metaEl.textContent = `${doneToday} / ${habits.length} today`;
+  const thead = document.getElementById('thead-' + priority);
+  const rows = document.getElementById('rows-' + priority);
+  const meta = document.getElementById('meta-' + priority);
+  thead.innerHTML = `<div class="th-habit">Habit</div>` +
+    dates.map((d, i) => `<div class="th-day${isToday(d)?' is-today':''}">${DAYS[i]}</div>`).join('');
+  rows.innerHTML = '';
+  if (!habits.length) { rows.innerHTML = `<div class="empty-state">No habits yet. Add one below.</div>`; return; }
+  habits.forEach((habit, hi) => {
+    const row = document.createElement('div'); row.className = 'habit-row';
+    row.innerHTML = `<div class="habit-name-wrap"><input class="habit-name-input" value="${esc(habit.name)}" placeholder="Habit name…" data-p="${priority}" data-hi="${hi}" /></div>` +
+      dates.map((_, di) => `<div class="habit-check${habit.days[di]?' checked':''}${isToday(dates[di])?' today-col':''}" data-p="${priority}" data-hi="${hi}" data-di="${di}">${habit.days[di]?'✓':''}</div>`).join('');
+    rows.appendChild(row);
+  });
+  const ti = new Date().getDay();
+  meta.textContent = `${habits.filter(h => h.days[ti]).length} / ${habits.length} today`;
 }
 
 function updateStats(week, dates) {
-  const allHabits = [...week.top, ...week.mid, ...week.low];
-  const todayIdx = new Date().getDay();
-  const totalHabits = allHabits.length;
-
-  // Today done
-  const todayDone = allHabits.filter(h => h.days[todayIdx]).length;
-  document.getElementById('sumDone').textContent = todayDone;
-
-  // Week rate
-  let totalChecks = 0, maxChecks = 0;
-  allHabits.forEach(h => {
-    h.days.forEach((d,di) => {
-      const date = dates[di];
-      const t = new Date(); t.setHours(0,0,0,0);
-      const dt = new Date(date); dt.setHours(0,0,0,0);
-      if(dt <= t) { maxChecks++; if(d) totalChecks++; }
-    });
-  });
-  const rate = maxChecks > 0 ? Math.round((totalChecks/maxChecks)*100) : 0;
+  const all = [...week.top, ...week.mid, ...week.low], ti = new Date().getDay(), tot = all.length;
+  document.getElementById('sumDone').textContent = all.filter(h => h.days[ti]).length;
+  let tc = 0, mc = 0;
+  all.forEach(h => h.days.forEach((d, di) => {
+    const dt = new Date(dates[di]); dt.setHours(0,0,0,0);
+    const t = new Date(); t.setHours(0,0,0,0);
+    if (dt <= t) { mc++; if (d) tc++; }
+  }));
+  const rate = mc > 0 ? Math.round((tc / mc) * 100) : 0;
   document.getElementById('sumRate').textContent = rate + '%';
   document.getElementById('wpcPct').textContent = rate + '%';
   document.getElementById('wpcBar').style.width = rate + '%';
   document.getElementById('navProgress').textContent = rate + '%';
-
-  // Streak (simplified: consecutive days this week all top habits done)
   let streak = 0;
-  const today = new Date(); today.setHours(0,0,0,0);
-  for(let di = todayIdx; di >= 0; di--) {
-    const d = new Date(dates[di]); d.setHours(0,0,0,0);
-    if(d > today) continue;
-    if(week.top.length > 0 && week.top.every(h => h.days[di])) streak++;
-    else if(di < todayIdx) break;
+  for (let di = ti; di >= 0; di--) {
+    if (week.top.length > 0 && week.top.every(h => h.days[di])) streak++;
+    else if (di < ti) break;
   }
   document.getElementById('sumStreak').textContent = streak;
-
-  // Day mini bars
-  const miniRow = document.getElementById('dayMiniRow');
-  miniRow.innerHTML = dates.map((date, di) => {
-    const t = new Date(); t.setHours(0,0,0,0);
+  document.getElementById('dayMiniRow').innerHTML = dates.map((date, di) => {
     const dt = new Date(date); dt.setHours(0,0,0,0);
-    const isPast = dt <= t;
-    const done = isPast ? allHabits.filter(h => h.days[di]).length : 0;
-    const pct = (isPast && totalHabits > 0) ? Math.round((done/totalHabits)*100) : 0;
-    return `
-      <div class="day-mini">
-        <div class="day-mini-label${isToday(date)?' is-today':''}">${DAYS[di]}</div>
-        <div class="day-mini-bar"><div class="day-mini-fill" style="width:${pct}%"></div></div>
-        <div class="day-mini-count">${isPast && totalHabits>0 ? done+'/'+totalHabits : '—'}</div>
-      </div>
-    `;
+    const t = new Date(); t.setHours(0,0,0,0);
+    const isPast = dt <= t, done = isPast ? all.filter(h => h.days[di]).length : 0;
+    const pct = (isPast && tot > 0) ? Math.round((done/tot)*100) : 0;
+    return `<div class="day-mini"><div class="day-mini-label${isToday(date)?' is-today':''}">${DAYS[di]}</div><div class="day-mini-bar"><div class="day-mini-fill" style="width:${pct}%"></div></div><div class="day-mini-count">${isPast&&tot>0?done+'/'+tot:'—'}</div></div>`;
   }).join('');
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-/* ── EVENTS (delegated) ── */
+/* ════════════════════════════════════════
+   EVENTS
+════════════════════════════════════════ */
 document.addEventListener('click', e => {
   const check = e.target.closest('.habit-check');
-  if(check) {
+  if (check) {
     const p = check.dataset.p, hi = parseInt(check.dataset.hi), di = parseInt(check.dataset.di);
-    const wk = weekKey(currentWeekOffset);
-    ensureWeek(wk);
+    const wk = weekKey(weekOffset); ensureWeek(wk);
     const was = data[wk][p][hi].days[di];
-    data[wk][p][hi].days[di] = !was;
-    save();
-    if(!was) toast('✓ ' + (data[wk][p][hi].name || 'Habit') + ' completed!');
-    else toast('Unchecked.');
+    data[wk][p][hi].days[di] = !was; save();
+    toast(!was ? '✓ ' + (data[wk][p][hi].name || 'Habit') + ' completed!' : 'Unchecked.');
     render();
+    if (notifSettings.enabled) scheduleReminder(notifSettings.time);
   }
 });
-
 document.addEventListener('change', e => {
   const input = e.target.closest('.habit-name-input');
-  if(input) {
-    const p = input.dataset.p, hi = parseInt(input.dataset.hi);
-    const wk = weekKey(currentWeekOffset);
-    ensureWeek(wk);
-    data[wk][p][hi].name = input.value.trim() || 'Unnamed';
-    save();
+  if (input) {
+    const p = input.dataset.p, hi = parseInt(input.dataset.hi), wk = weekKey(weekOffset);
+    ensureWeek(wk); data[wk][p][hi].name = input.value.trim() || 'Unnamed'; save();
   }
 });
 
-/* ── SECTION TOGGLE ── */
-function toggleSection(id) {
-  document.getElementById('sec-' + id).classList.toggle('collapsed');
-}
+function toggleSection(id) { document.getElementById('sec-' + id).classList.toggle('collapsed'); }
 
-/* ── ADD HABIT ── */
 function addHabit(priority) {
-  const wk = weekKey(currentWeekOffset);
-  ensureWeek(wk);
-  data[wk][priority].push({ name: '', days: [false,false,false,false,false,false,false] });
-  save();
-  render();
-  // focus new input
-  setTimeout(() => {
-    const rows = document.querySelectorAll(`#rows-${priority} .habit-name-input`);
-    if(rows.length) rows[rows.length-1].focus();
-  }, 50);
+  const wk = weekKey(weekOffset); ensureWeek(wk);
+  data[wk][priority].push({name: '', days: [false,false,false,false,false,false,false]});
+  save(); render();
+  setTimeout(() => { const r = document.querySelectorAll(`#rows-${priority} .habit-name-input`); if (r.length) r[r.length-1].focus(); }, 50);
   toast('New habit added — give it a name!');
 }
 
-/* ── WEEK NAV ── */
-document.getElementById('prevWeek').addEventListener('click', () => {
-  currentWeekOffset--;
-  render();
-});
-document.getElementById('nextWeek').addEventListener('click', () => {
-  currentWeekOffset++;
-  render();
+document.getElementById('prevWeek').addEventListener('click', () => { weekOffset--; render(); });
+document.getElementById('nextWeek').addEventListener('click', () => { weekOffset++; render(); });
+document.getElementById('enableNotifBtn').addEventListener('click', enableNotifications);
+document.getElementById('disableNotifBtn').addEventListener('click', disableNotifications);
+document.getElementById('testNotifBtn').addEventListener('click', testNotification);
+document.getElementById('notifBtn').addEventListener('click', () => {
+  document.getElementById('notifCard').scrollIntoView({behavior: 'smooth', block: 'center'});
 });
 
-/* ── INIT ── */
-load();
-render();
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+load(); loadNS(); updateNotifUI(); render();
+registerSW().then(() => restoreReminder());
 </script>
 </body>
 </html>
