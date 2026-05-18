@@ -128,7 +128,17 @@ nav { position: sticky; top: 0; z-index: 100; height: 60px; display: flex; align
 .dash-actions { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
 .btn-ghost { padding: 8px 16px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; font-weight: 500; color: var(--ink2); cursor: pointer; transition: all var(--transition); -webkit-tap-highlight-color: transparent; }
 .btn-ghost:hover { background: var(--surface2); color: var(--ink); }
-.btn-ghost.danger:hover { color: #B91C1C; border-color: #B91C1C; }
+.btn-ghost.danger {
+  background: rgba(185, 28, 28, 0.06);
+  border-color: rgba(185, 28, 28, 0.18);
+  color: #B91C1C;
+}
+
+.btn-ghost.danger:hover {
+  background: rgba(185, 28, 28, 0.12);
+  border-color: rgba(185, 28, 28, 0.35);
+  color: #991B1B;
+}
 
 /* ══ STATS ══ */
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 1.5rem; }
@@ -140,9 +150,18 @@ nav { position: sticky; top: 0; z-index: 100; height: 60px; display: flex; align
 /* ══ PROGRESS ══ */
 .progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.75rem 2rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; transition: background 0.3s, border-color 0.3s; }
 .progress-left {}
-.progress-pct-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.progress-pct-row {display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
 .progress-pct { font-size: 4rem; font-weight: 600; letter-spacing: -0.05em; line-height: 1; transition: all 0.4s; }
-.progress-sublabel { font-size: 13px; color: var(--ink2); font-weight: 300; line-height: 1.4; }
+.progress-sublabel {
+  font-size: 13px;
+  color: var(--ink2);
+  font-weight: 400;
+  line-height: 1.25;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transform: translateY(2px);
+}
 .progress-track { height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; margin-bottom: 10px; }
 .progress-fill { height: 100%; background: var(--ink); border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
 .progress-ticks { display: flex; justify-content: space-between; font-size: 10px; color: var(--ink3); }
@@ -394,7 +413,10 @@ nav { position: sticky; top: 0; z-index: 100; height: 60px; display: flex; align
       <div class="progress-left">
         <div class="progress-pct-row">
           <div class="progress-pct" id="pct-big">0%</div>
-          <div class="progress-sublabel">progress<br/>completed</div>
+          <div class="progress-sublabel">
+  <span>Progress</span>
+  <span>Completed</span>
+</div>
         </div>
         <div class="progress-track"><div class="progress-fill" id="pct-bar" style="width:0%"></div></div>
         <div class="progress-ticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
