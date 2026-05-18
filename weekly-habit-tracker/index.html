@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -576,7 +575,7 @@ nav {
 /* ══════════════════════════════════════════
    CONFIG — edit password here
 ══════════════════════════════════════════ */
-const PRODUCT_PASSWORD = 'HABIT-2024';          // ← ganti password di sini
+const PRODUCT_PASSWORD = 'HABIT-2026';          // ← ganti password di sini
 const PW_STORAGE_KEY   = 'tgp_unlocked_habit';  // ← unik per produk
 
 /* ══════════════════════════════════════════
@@ -655,11 +654,7 @@ const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAYS_SHORT = ['S','M','T','W','T','F','S'];
 const PRIORITIES = ['top','mid','low'];
 const PRIORITY_LABELS = { top:'Top Priority', mid:'Medium Priority', low:'Low Priority' };
-const DEFAULT_HABITS = {
-  top: ['Morning workout','Read 30 min','Meditate','Drink 8 glasses of water','Sleep by 11pm','No social media before 9am','Journal'],
-  mid: ['Stretch','Cook at home','Take vitamins','Walk 10k steps','Review goals','Gratitude list','Learn something new'],
-  low: ['Clean desk','Water plants','Call a friend','Limit screen time','Practice a hobby','Unsubscribe from emails','Plan next day']
-};
+const DEFAULT_HABITS = { top: [], mid: [], low: [] };
 let weekOffset = 0, data = {}, swReg = null, currentView = 'today';
 let notifSettings = { enabled: false, time: '20:00' };
 
@@ -680,10 +675,6 @@ function saveNS(){try{localStorage.setItem(NOTIF_KEY,JSON.stringify(notifSetting
 function ensureWeek(wk){if(!data[wk])data[wk]={top:[],mid:[],low:[]};PRIORITIES.forEach(p=>{if(!data[wk][p])data[wk][p]=[];});}
 function getWeek(o=0){
   const wk=weekKey(o);ensureWeek(wk);
-  if(o===0&&PRIORITIES.every(p=>data[wk][p].length===0)){
-    PRIORITIES.forEach(p=>{data[wk][p]=DEFAULT_HABITS[p].map(n=>({name:n,days:[false,false,false,false,false,false,false]}));});
-    save();
-  }
   return data[wk];
 }
 
@@ -804,26 +795,84 @@ function renderMobile(){
   const container=document.getElementById('todaySections');container.innerHTML='';
   if(currentView==='today'){
     PRIORITIES.forEach(p=>{
-      const habits=week[p];if(!habits.length)return;
+      const habits=week[p];
+      // Always show section with add button, even if empty
       const sec=document.createElement('div');sec.className='today-section';
       sec.innerHTML=`<div class="today-section-header"><div class="section-left"><span class="priority-badge badge-${p}">${PRIORITY_LABELS[p]}</span><span class="section-meta">${habits.filter(h=>h.days[ti]).length}/${habits.length}</span></div></div><div class="today-habit-list" id="m-list-${p}"></div><button class="today-add-btn" onclick="addHabit('${p}')">+ Add habit</button>`;
       container.appendChild(sec);
       const list=sec.querySelector(`#m-list-${p}`);
+      if(!habits.length){
+        const empty=document.createElement('div');
+        empty.style.cssText='padding:12px 1.25rem;font-size:13px;color:var(--ink3);font-weight:300;font-style:italic;';
+        empty.textContent='No habits yet — tap "+ Add habit" to start.';
+        list.appendChild(empty);
+        return;
+      }
       habits.forEach((habit,hi)=>{
         const item=document.createElement('div');item.className='today-habit-item';
-        item.innerHTML=`<div class="today-check${habit.days[ti]?' checked':''}">${habit.days[ti]?'✓':''}</div><span class="today-habit-name${habit.days[ti]?' done':''}">${esc(habit.name)||'<em style="color:var(--ink3)">Unnamed</em>'}</span>`;
-        item.addEventListener('click',()=>toggleMobileHabit(p,hi,ti));
+
+        // Checkbox
+        const check=document.createElement('div');
+        check.className='today-check'+(habit.days[ti]?' checked':'');
+        check.textContent=habit.days[ti]?'✓':'';
+        check.addEventListener('click',e=>{
+          e.stopPropagation();
+          toggleMobileHabit(p,hi,ti);
+        });
+
+        // Name — tap to edit
+        const nameEl=document.createElement('span');
+        nameEl.className='today-habit-name'+(habit.days[ti]?' done':'');
+        nameEl.textContent=habit.name||'';
+        nameEl.style.cssText='flex:1;min-width:0;cursor:text;';
+        if(!habit.name) {
+          nameEl.textContent='Tap to name…';
+          nameEl.style.color='var(--ink3)';
+          nameEl.style.fontStyle='italic';
+        }
+
+        nameEl.addEventListener('click', e => {
+          e.stopPropagation();
+          // Replace span with input
+          const input=document.createElement('input');
+          input.type='text';
+          input.value=habit.name||'';
+          input.placeholder='Habit name…';
+          input.style.cssText=`flex:1;font-family:var(--font);font-size:15px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:2px 0;width:100%;min-width:0;`;
+          nameEl.replaceWith(input);
+          input.focus();
+          // Select all text
+          input.select();
+
+          function saveEdit(){
+            const val=input.value.trim();
+            const wk=weekKey(weekOffset);ensureWeek(wk);
+            data[wk][p][hi].name=val||'';
+            save();
+            render();
+          }
+          input.addEventListener('blur', saveEdit);
+          input.addEventListener('keydown', e=>{
+            if(e.key==='Enter'){ input.blur(); }
+            if(e.key==='Escape'){ input.blur(); }
+          });
+        });
+
+        item.appendChild(check);
+        item.appendChild(nameEl);
         list.appendChild(item);
       });
     });
   } else {
     PRIORITIES.forEach(p=>{
-      const habits=week[p];if(!habits.length)return;
+      const habits=week[p];
       const sec=document.createElement('div');sec.className='today-section';
-      sec.innerHTML=`<div class="today-section-header"><div class="section-left"><span class="priority-badge badge-${p}">${PRIORITY_LABELS[p]}</span><span class="section-meta">${habits.filter(h=>h.days[ti]).length}/${habits.length} today</span></div></div><div style="overflow-x:auto;padding:0.5rem 1.25rem 1rem"><table style="border-collapse:collapse;min-width:100%"><thead><tr><th style="text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--ink3);padding:6px 10px 6px 0;min-width:120px;text-transform:uppercase">Habit</th>${dates.map((d,di)=>`<th style="font-size:10px;font-weight:600;color:${isToday(d)?'var(--ink)':'var(--ink3)'};padding:6px 4px;text-align:center;min-width:32px;text-transform:uppercase">${DAYS_SHORT[di]}</th>`).join('')}</tr></thead><tbody id="wv-${p}"></tbody></table><button class="today-add-btn" style="margin-top:8px" onclick="addHabit('${p}')">+ Add habit</button></div>`;
+      const ti2=new Date().getDay();
+      sec.innerHTML=`<div class="today-section-header"><div class="section-left"><span class="priority-badge badge-${p}">${PRIORITY_LABELS[p]}</span><span class="section-meta">${habits.filter(h=>h.days[ti2]).length}/${habits.length} today</span></div></div><div style="overflow-x:auto;padding:0.5rem 1.25rem 1rem"><table style="border-collapse:collapse;min-width:100%"><thead><tr><th style="text-align:left;font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--ink3);padding:6px 10px 6px 0;min-width:120px;text-transform:uppercase">Habit</th>${dates.map((d,di)=>`<th style="font-size:10px;font-weight:600;color:${isToday(d)?'var(--ink)':'var(--ink3)'};padding:6px 4px;text-align:center;min-width:32px;text-transform:uppercase">${DAYS_SHORT[di]}</th>`).join('')}</tr></thead><tbody id="wv-${p}"></tbody></table><button class="today-add-btn" style="margin-top:8px" onclick="addHabit('${p}')">+ Add habit</button></div>`;
       container.appendChild(sec);
+      if(!habits.length) return;
       const tbody=sec.querySelector(`#wv-${p}`);
-      habits.forEach((habit,hi)=>{const tr=document.createElement('tr');tr.innerHTML=`<td style="font-size:14px;padding:6px 10px 6px 0;color:var(--ink);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis">${esc(habit.name)||'—'}</td>`+dates.map((_,di)=>`<td style="text-align:center;padding:4px"><div class="habit-check${habit.days[di]?' checked':''}${isToday(dates[di])?' today-col':''}" data-p="${p}" data-hi="${hi}" data-di="${di}" style="margin:0 auto">${habit.days[di]?'✓':''}</div></td>`).join('');tbody.appendChild(tr);});
+      habits.forEach((habit,hi)=>{const tr=document.createElement('tr');tr.innerHTML=`<td style="font-size:14px;padding:6px 10px 6px 0;color:var(--ink);white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis">${esc(habit.name)||'<em style="color:var(--ink3);font-style:italic">Unnamed</em>'}</td>`+dates.map((_,di)=>`<td style="text-align:center;padding:4px"><div class="habit-check${habit.days[di]?' checked':''}${isToday(dates[di])?' today-col':''}" data-p="${p}" data-hi="${hi}" data-di="${di}" style="margin:0 auto">${habit.days[di]?'✓':''}</div></td>`).join('');tbody.appendChild(tr);});
     });
   }
 }
