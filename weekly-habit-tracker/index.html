@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Weekly Habit Tracker — The Good Pages</title>
 <meta name="theme-color" content="#F7F5F0" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -221,7 +221,7 @@ nav {
 .today-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); margin-bottom: 1rem; box-shadow: var(--shadow-sm); overflow: hidden; }
 .today-section-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); min-height: 52px; }
 .today-habit-list { padding: 0.25rem 0; }
-.today-habit-item { display: flex; align-items: center; gap: 14px; padding: 8px 1.25rem; min-height: 52px; border-bottom: 1px solid var(--border); }
+.today-habit-item { display: flex; align-items: center; gap: 14px; padding: 8px 1.25rem; min-height: 52px; border-bottom: 1px solid var(--border); touch-action: manipulation; }
 .today-habit-item:last-child { border-bottom: none; }
 .today-check { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border-strong); background: transparent; display: flex; align-items: center; justify-content: center; font-size: 13px; color: transparent; flex-shrink: 0; transition: all var(--transition); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .today-check.checked { background: var(--ink); border-color: var(--ink); color: #fff; }
@@ -232,6 +232,9 @@ nav {
   padding: 4px 0; min-width: 0; width: 100%;
   transition: border-color var(--transition);
   -webkit-user-select: text; user-select: text;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: text;
 }
 .today-habit-input:focus { border-bottom-color: var(--border-strong); }
 .today-habit-input::placeholder { color: var(--ink3); font-style: italic; font-size: 15px; }
