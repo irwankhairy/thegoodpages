@@ -575,7 +575,7 @@ nav {
 /* ══════════════════════════════════════════
    CONFIG — edit password here
 ══════════════════════════════════════════ */
-const PRODUCT_PASSWORD = 'HABIT-2026';          // ← ganti password di sini
+const PRODUCT_PASSWORD = 'HABIT-2024';          // ← ganti password di sini
 const PW_STORAGE_KEY   = 'tgp_unlocked_habit';  // ← unik per produk
 
 /* ══════════════════════════════════════════
@@ -833,28 +833,32 @@ function renderMobile(){
 
         nameEl.addEventListener('click', e => {
           e.stopPropagation();
-          // Replace span with input
+          if(item.querySelector('input')) return; // already editing
+
           const input=document.createElement('input');
           input.type='text';
           input.value=habit.name||'';
           input.placeholder='Habit name…';
           input.style.cssText=`flex:1;font-family:var(--font);font-size:15px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:2px 0;width:100%;min-width:0;`;
           nameEl.replaceWith(input);
-          input.focus();
-          // Select all text
-          input.select();
 
+          // Small delay before focus — fixes mobile keyboard dismiss bug
+          setTimeout(()=>{ input.focus(); input.setSelectionRange(input.value.length, input.value.length); }, 50);
+
+          let saved = false;
           function saveEdit(){
+            if(saved) return;
+            saved = true;
             const val=input.value.trim();
             const wk=weekKey(weekOffset);ensureWeek(wk);
             data[wk][p][hi].name=val||'';
             save();
-            render();
+            render(); // only re-render after done editing
           }
           input.addEventListener('blur', saveEdit);
-          input.addEventListener('keydown', e=>{
-            if(e.key==='Enter'){ input.blur(); }
-            if(e.key==='Escape'){ input.blur(); }
+          input.addEventListener('keydown', ev=>{
+            if(ev.key==='Enter'){ input.blur(); }
+            if(ev.key==='Escape'){ input.blur(); }
           });
         });
 
