@@ -1,4 +1,3 @@
-
 // The Good Pages — Habit Tracker Service Worker v3
 
 self.addEventListener('install', () => self.skipWaiting());
