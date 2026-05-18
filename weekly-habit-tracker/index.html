@@ -820,80 +820,53 @@ function renderMobile(){
           toggleMobileHabit(p,hi,ti);
         });
 
-        // Name — tap to edit
-        const nameEl=document.createElement('span');
-        nameEl.className='today-habit-name'+(habit.days[ti]?' done':'');
-        nameEl.textContent=habit.name||'';
-        nameEl.style.cssText='flex:1;min-width:0;cursor:text;';
-        if(!habit.name) {
-          nameEl.textContent='Tap to name…';
-          nameEl.style.color='var(--ink3)';
-          nameEl.style.fontStyle='italic';
+        // Name wrapper
+        const nameWrap=document.createElement('div');
+        nameWrap.style.cssText='flex:1;min-width:0;position:relative;display:flex;align-items:center;';
+
+        // Label (shown when not editing)
+        const nameLabel=document.createElement('span');
+        nameLabel.className='today-habit-name'+(habit.days[ti]?' done':'');
+        nameLabel.style.cssText='flex:1;cursor:text;display:block;';
+        nameLabel.textContent=habit.name||(habit.days[ti]?'':'Tap to name…');
+        if(!habit.name){nameLabel.style.color='var(--ink3)';nameLabel.style.fontStyle='italic';}
+
+        // Input (always in DOM, hidden by default)
+        const input=document.createElement('input');
+        input.type='text';
+        input.value=habit.name||'';
+        input.placeholder='Habit name…';
+        input.setAttribute('autocomplete','off');
+        input.setAttribute('autocorrect','off');
+        input.setAttribute('autocapitalize','sentences');
+        input.style.cssText='display:none;flex:1;font-family:var(--font);font-size:16px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:4px 0;width:100%;min-width:0;-webkit-user-select:text;user-select:text;';
+
+        function startEdit(){
+          nameLabel.style.display='none';
+          input.style.display='block';
+          input.value=habit.name||'';
+          input.focus();
+        }
+        function endEdit(){
+          const val=input.value.trim();
+          const wk=weekKey(weekOffset);ensureWeek(wk);
+          data[wk][p][hi].name=val||'';
+          save();
+          nameLabel.style.display='block';
+          input.style.display='none';
+          nameLabel.textContent=val||(habit.days[ti]?'':'Tap to name…');
+          if(!val){nameLabel.style.color='var(--ink3)';nameLabel.style.fontStyle='italic';}
+          else{nameLabel.style.color='';nameLabel.style.fontStyle='';}
         }
 
-        // Tap name to edit — mobile friendly
-        nameEl.addEventListener('touchend', e => {
-          e.preventDefault();
-          e.stopPropagation();
-          if(item.querySelector('input')) return;
+        nameLabel.addEventListener('click',e=>{e.stopPropagation();startEdit();});
+        input.addEventListener('blur',endEdit);
+        input.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();input.blur();}});
 
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.value = habit.name || '';
-          input.placeholder = 'Habit name…';
-          input.setAttribute('autocomplete','off');
-          input.setAttribute('autocorrect','off');
-          input.setAttribute('autocapitalize','sentences');
-          input.style.cssText = `flex:1;font-family:var(--font);font-size:16px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:4px 0;width:100%;min-width:0;-webkit-user-select:text;user-select:text;`;
-          nameEl.replaceWith(input);
-          input.focus();
-
-          let saved = false;
-          function saveEdit(){
-            if(saved) return; saved = true;
-            const val = input.value.trim();
-            const wk = weekKey(weekOffset); ensureWeek(wk);
-            data[wk][p][hi].name = val || '';
-            save();
-            render();
-          }
-          input.addEventListener('keydown', ev => {
-            if(ev.key === 'Enter') { ev.preventDefault(); input.blur(); }
-          });
-          input.addEventListener('blur', () => setTimeout(saveEdit, 100));
-        });
-
-        // Also support click for desktop
-        nameEl.addEventListener('click', e => {
-          e.stopPropagation();
-          if(item.querySelector('input')) return;
-          if('ontouchstart' in window) return; // skip on touch devices, handled by touchend
-
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.value = habit.name || '';
-          input.placeholder = 'Habit name…';
-          input.style.cssText = `flex:1;font-family:var(--font);font-size:15px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:2px 0;width:100%;min-width:0;`;
-          nameEl.replaceWith(input);
-          input.focus();
-
-          let saved = false;
-          function saveEdit(){
-            if(saved) return; saved = true;
-            const val = input.value.trim();
-            const wk = weekKey(weekOffset); ensureWeek(wk);
-            data[wk][p][hi].name = val || '';
-            save();
-            render();
-          }
-          input.addEventListener('blur', saveEdit);
-          input.addEventListener('keydown', ev => {
-            if(ev.key === 'Enter') input.blur();
-          });
-        });
-
+        nameWrap.appendChild(nameLabel);
+        nameWrap.appendChild(input);
         item.appendChild(check);
-        item.appendChild(nameEl);
+        item.appendChild(nameWrap);
         list.appendChild(item);
       });
     });
