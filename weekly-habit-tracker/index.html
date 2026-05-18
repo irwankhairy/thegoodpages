@@ -831,34 +831,64 @@ function renderMobile(){
           nameEl.style.fontStyle='italic';
         }
 
-        nameEl.addEventListener('click', e => {
+        // Tap name to edit — mobile friendly
+        nameEl.addEventListener('touchend', e => {
+          e.preventDefault();
           e.stopPropagation();
-          if(item.querySelector('input')) return; // already editing
+          if(item.querySelector('input')) return;
 
-          const input=document.createElement('input');
-          input.type='text';
-          input.value=habit.name||'';
-          input.placeholder='Habit name…';
-          input.style.cssText=`flex:1;font-family:var(--font);font-size:15px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:2px 0;width:100%;min-width:0;`;
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = habit.name || '';
+          input.placeholder = 'Habit name…';
+          input.setAttribute('autocomplete','off');
+          input.setAttribute('autocorrect','off');
+          input.setAttribute('autocapitalize','sentences');
+          input.style.cssText = `flex:1;font-family:var(--font);font-size:16px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:4px 0;width:100%;min-width:0;-webkit-user-select:text;user-select:text;`;
           nameEl.replaceWith(input);
-
-          // Small delay before focus — fixes mobile keyboard dismiss bug
-          setTimeout(()=>{ input.focus(); input.setSelectionRange(input.value.length, input.value.length); }, 50);
+          input.focus();
 
           let saved = false;
           function saveEdit(){
-            if(saved) return;
-            saved = true;
-            const val=input.value.trim();
-            const wk=weekKey(weekOffset);ensureWeek(wk);
-            data[wk][p][hi].name=val||'';
+            if(saved) return; saved = true;
+            const val = input.value.trim();
+            const wk = weekKey(weekOffset); ensureWeek(wk);
+            data[wk][p][hi].name = val || '';
             save();
-            render(); // only re-render after done editing
+            render();
+          }
+          input.addEventListener('keydown', ev => {
+            if(ev.key === 'Enter') { ev.preventDefault(); input.blur(); }
+          });
+          input.addEventListener('blur', () => setTimeout(saveEdit, 100));
+        });
+
+        // Also support click for desktop
+        nameEl.addEventListener('click', e => {
+          e.stopPropagation();
+          if(item.querySelector('input')) return;
+          if('ontouchstart' in window) return; // skip on touch devices, handled by touchend
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = habit.name || '';
+          input.placeholder = 'Habit name…';
+          input.style.cssText = `flex:1;font-family:var(--font);font-size:15px;font-weight:400;color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--border-strong);outline:none;padding:2px 0;width:100%;min-width:0;`;
+          nameEl.replaceWith(input);
+          input.focus();
+
+          let saved = false;
+          function saveEdit(){
+            if(saved) return; saved = true;
+            const val = input.value.trim();
+            const wk = weekKey(weekOffset); ensureWeek(wk);
+            data[wk][p][hi].name = val || '';
+            save();
+            render();
           }
           input.addEventListener('blur', saveEdit);
-          input.addEventListener('keydown', ev=>{
-            if(ev.key==='Enter'){ input.blur(); }
-            if(ev.key==='Escape'){ input.blur(); }
+          input.addEventListener('keydown', ev => {
+            if(ev.key === 'Enter') input.blur();
           });
         });
 
