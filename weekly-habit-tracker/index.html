@@ -654,7 +654,11 @@ const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const DAYS_SHORT = ['S','M','T','W','T','F','S'];
 const PRIORITIES = ['top','mid','low'];
 const PRIORITY_LABELS = { top:'Top Priority', mid:'Medium Priority', low:'Low Priority' };
-const DEFAULT_HABITS = { top: [], mid: [], low: [] };
+const DEFAULT_HABITS = {
+  top: ['Morning workout','Read 30 min','Meditate'],
+  mid: ['Drink 8 glasses of water','Take vitamins','Walk 10k steps'],
+  low: ['Journal','Plan next day','Sleep by 11pm']
+};
 let weekOffset = 0, data = {}, swReg = null, currentView = 'today';
 let notifSettings = { enabled: false, time: '20:00' };
 
@@ -675,6 +679,10 @@ function saveNS(){try{localStorage.setItem(NOTIF_KEY,JSON.stringify(notifSetting
 function ensureWeek(wk){if(!data[wk])data[wk]={top:[],mid:[],low:[]};PRIORITIES.forEach(p=>{if(!data[wk][p])data[wk][p]=[];});}
 function getWeek(o=0){
   const wk=weekKey(o);ensureWeek(wk);
+  if(o===0&&PRIORITIES.every(p=>data[wk][p].length===0)){
+    PRIORITIES.forEach(p=>{data[wk][p]=DEFAULT_HABITS[p].map(n=>({name:n,days:[false,false,false,false,false,false,false]}));});
+    save();
+  }
   return data[wk];
 }
 
