@@ -792,7 +792,14 @@ document.getElementById('enableNotifBtn').addEventListener('click',enableNotific
 document.getElementById('disableNotifBtn').addEventListener('click',disableNotifications);
 document.getElementById('testNotifBtn').addEventListener('click',testNotification);
 document.getElementById('notifBtn').addEventListener('click',()=>document.getElementById('notifCard').scrollIntoView({behavior:'smooth',block:'center'}));
-window.addEventListener('resize',()=>render());
+let lastWidth = window.innerWidth;
+window.addEventListener('resize', () => {
+  // Hanya render ulang jika lebar layar berubah
+  if (window.innerWidth !== lastWidth) {
+    lastWidth = window.innerWidth;
+    render();
+  }
+});
 
 /* ══ INIT ══ */
 function initApp(){load();loadNS();updateNotifUI();render();registerSW().then(()=>restoreReminder());}
