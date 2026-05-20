@@ -7,6 +7,8 @@
 <meta name="theme-color" content="#F7F5F0" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Habit Tracker" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="/thegoodpages-logo (192 x 192 px).png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
@@ -269,7 +271,50 @@ nav {
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--ink); color: var(--surface); padding: 11px 22px; border-radius: 99px; font-size: 13.5px; font-weight: 500; opacity: 0; pointer-events: none; z-index: 9999; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: var(--shadow-lg); white-space: nowrap; max-width: 88vw; text-align: center; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ══ RESPONSIVE ══ */
+/* ══ INSTALL BANNER ══ */
+.install-banner {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -4px 24px rgba(28,25,23,0.10);
+  padding: 1rem 1.25rem 1.25rem;
+  display: none;
+  animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
+.install-banner.show { display: block; }
+.install-banner-inner { max-width: 480px; margin: 0 auto; }
+.install-banner-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.install-banner-left { display: flex; align-items: center; gap: 12px; }
+.install-banner-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  overflow: hidden; flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.install-banner-icon img { width: 100%; height: 100%; object-fit: cover; }
+.install-banner-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 2px; }
+.install-banner-sub { font-size: 12px; color: var(--ink2); font-weight: 300; }
+.install-banner-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface2); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--ink2); flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--transition);
+}
+.install-banner-close:hover { background: var(--border-strong); }
+.install-banner-btn {
+  width: 100%; padding: 12px;
+  background: var(--ink); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.install-banner-btn:hover { opacity: 0.87; }
 @media (max-width: 768px) {
   .wrap { padding: 1.25rem 1rem 2rem; }
   nav { padding: 0 1rem; }
@@ -442,6 +487,25 @@ nav {
       <div class="cel-stat"><span class="cel-stat-val" id="celRate">0%</span><span class="cel-stat-lbl">week rate</span></div>
     </div>
     <button class="celebrate-btn" id="celebrateBack">Back to Tracker</button>
+  </div>
+</div>
+
+<!-- INSTALL BANNER (mobile only) -->
+<div class="install-banner" id="installBanner">
+  <div class="install-banner-inner">
+    <div class="install-banner-top">
+      <div class="install-banner-left">
+        <div class="install-banner-icon">
+          <img src="/thegoodpages-logo (192 x 192 px).png" alt="The Good Pages" />
+        </div>
+        <div>
+          <div class="install-banner-title">Add to Home Screen</div>
+          <div class="install-banner-sub">The Good Pages — Habit Tracker</div>
+        </div>
+      </div>
+      <button class="install-banner-close" id="installClose">✕</button>
+    </div>
+    <button class="install-banner-btn" id="installBtn">📲 Add to Home Screen</button>
   </div>
 </div>
 
@@ -792,14 +856,57 @@ document.getElementById('enableNotifBtn').addEventListener('click',enableNotific
 document.getElementById('disableNotifBtn').addEventListener('click',disableNotifications);
 document.getElementById('testNotifBtn').addEventListener('click',testNotification);
 document.getElementById('notifBtn').addEventListener('click',()=>document.getElementById('notifCard').scrollIntoView({behavior:'smooth',block:'center'}));
-let lastWidth = window.innerWidth;
-window.addEventListener('resize', () => {
-  // Hanya render ulang jika lebar layar berubah
-  if (window.innerWidth !== lastWidth) {
-    lastWidth = window.innerWidth;
-    render();
+window.addEventListener('resize',()=>render());
+
+/* ══ INSTALL BANNER ══ */
+(function(){
+  const INSTALL_KEY = 'tgp_install_dismissed_habit';
+  let deferredPrompt = null;
+  const banner = document.getElementById('installBanner');
+  const installBtn = document.getElementById('installBtn');
+  const closeBtn = document.getElementById('installClose');
+
+  function isMobile(){ return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent); }
+  function isDismissed(){ try{ return localStorage.getItem(INSTALL_KEY)==='1'; }catch(e){ return false; } }
+  function setDismissed(){ try{ localStorage.setItem(INSTALL_KEY,'1'); }catch(e){} }
+  function isStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone; }
+
+  // Show banner after 3 seconds if mobile, not dismissed, not already installed
+  if(isMobile() && !isDismissed() && !isStandalone()){
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => banner.classList.add('show'), 3000);
+    });
+
+    // iOS Safari — no beforeinstallprompt, show manual instructions
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if(isIOS && isSafari && !isStandalone()){
+      setTimeout(() => banner.classList.add('show'), 3000);
+    }
   }
-});
+
+  installBtn?.addEventListener('click', async () => {
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      banner.classList.remove('show');
+      if(outcome === 'accepted') setDismissed();
+    } else {
+      // iOS fallback — show instructions
+      alert('To install:\n1. Tap the Share button (□↑) at the bottom\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add"');
+      setDismissed();
+      banner.classList.remove('show');
+    }
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    banner.classList.remove('show');
+    setDismissed();
+  });
+})();
 
 /* ══ INIT ══ */
 function initApp(){load();loadNS();updateNotifUI();render();registerSW().then(()=>restoreReminder());}
