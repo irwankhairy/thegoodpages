@@ -6,1006 +6,584 @@
 <title>Djiklan — Faham Data, Faham Laba</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-/* ===== THEME VARIABLES ===== */
 [data-theme="light"] {
-  --bg:       #f7f4ef;
-  --bg2:      #fffef9;
-  --bg3:      #f0ede6;
-  --bg4:      #e5e1d8;
-  --border:   #d4cfc5;
-  --border2:  #b8b2a5;
-  --text:     #1c1914;
-  --text2:    #5a5548;
-  --text3:    #9a9186;
-  --accent:   #2d2a24;
-  --wa:       #1a6b3c;
-  --lp:       #1a3d6b;
-  --web:      #6b1a1a;
-  --good:     #1a6b3c;
-  --warn:     #7a5c1a;
-  --bad:      #6b1a1a;
-  --stamp:    rgba(44,40,34,0.06);
+  --bg:#f7f4ef; --bg2:#fffef9; --bg3:#f0ede6; --bg4:#e5e1d8;
+  --border:#d4cfc5; --border2:#b8b2a5;
+  --text:#1c1914; --text2:#5a5548; --text3:#9a9186;
+  --wa:#1a6b3c; --lp:#1a3d6b; --web:#6b1a1a;
+  --good:#1a6b3c; --warn:#7a5c1a; --bad:#6b1a1a;
+  --stamp:rgba(44,40,34,0.06);
 }
 [data-theme="dark"] {
-  --bg:       #18160f;
-  --bg2:      #201e15;
-  --bg3:      #2a271c;
-  --bg4:      #34311f;
-  --border:   #3d3928;
-  --border2:  #524d38;
-  --text:     #e8e3d5;
-  --text2:    #a09880;
-  --text3:    #5c5740;
-  --accent:   #c8bc98;
-  --wa:       #4ade94;
-  --lp:       #70b0ff;
-  --web:      #e07070;
-  --good:     #4ade94;
-  --warn:     #d4a846;
-  --bad:      #e07070;
-  --stamp:    rgba(200,188,152,0.06);
+  --bg:#18160f; --bg2:#201e15; --bg3:#2a271c; --bg4:#34311f;
+  --border:#3d3928; --border2:#524d38;
+  --text:#e8e3d5; --text2:#a09880; --text3:#5c5740;
+  --wa:#4ade94; --lp:#70b0ff; --web:#e07070;
+  --good:#4ade94; --warn:#d4a846; --bad:#e07070;
+  --stamp:rgba(200,188,152,0.06);
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:14px;}
+body{font-family:'IBM Plex Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.028'/%3E%3C/svg%3E");opacity:1;}
+.app{display:flex;min-height:100vh;}
 
-/* ===== RESET ===== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { font-size: 14px; }
+/* SIDEBAR */
+.sidebar{width:210px;flex-shrink:0;background:var(--bg2);border-right:1.5px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;}
+.logo{padding:26px 22px 20px;border-bottom:1.5px solid var(--border);}
+.logo-mark{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;font-style:italic;color:var(--text);letter-spacing:-.5px;line-height:1;}
+.logo-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.18em;text-transform:uppercase;margin-top:6px;border-top:1px solid var(--border);padding-top:6px;}
+.nav{padding:16px 12px;flex:1;overflow-y:auto;}
+.nav-section-label{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);padding:0 8px;margin:12px 0 5px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;cursor:pointer;color:var(--text2);font-size:11.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em;transition:all .15s;margin-bottom:1px;border:1px solid transparent;}
+.nav-item:hover{color:var(--text);background:var(--stamp);}
+.nav-item.active{color:var(--text);background:var(--stamp);border-color:var(--border);font-weight:500;}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);flex-shrink:0;}
+.nav-item.active .nav-dot{background:var(--text);}
+.sidebar-footer{padding:14px;border-top:1.5px solid var(--border);}
+.connect-btn{width:100%;padding:9px 12px;background:transparent;border:1.5px solid var(--border2);border-radius:3px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.05em;cursor:pointer;transition:all .15s;text-align:center;}
+.connect-btn:hover{background:var(--stamp);border-color:var(--text3);}
+.connect-status{display:flex;align-items:center;gap:6px;font-size:9.5px;color:var(--text3);margin-top:8px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);flex-shrink:0;}
+.status-dot.connected{background:var(--good);}
 
-body {
-  font-family: 'IBM Plex Mono', monospace;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
-  overflow-x: hidden;
-}
+/* MAIN */
+.main{margin-left:210px;flex:1;display:flex;flex-direction:column;}
+.topbar{padding:14px 32px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);position:sticky;top:0;z-index:50;}
+.page-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;font-style:italic;color:var(--text);letter-spacing:-.2px;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.ctrl{padding:6px 11px;background:transparent;border:1px solid var(--border);border-radius:2px;color:var(--text2);font-family:'IBM Plex Mono',monospace;font-size:10.5px;cursor:pointer;transition:all .15s;letter-spacing:.03em;}
+.ctrl:hover{border-color:var(--border2);color:var(--text);}
+.theme-toggle{width:30px;height:30px;background:transparent;border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .15s;color:var(--text2);}
+.theme-toggle:hover{border-color:var(--border2);color:var(--text);}
+.content{padding:28px 32px;flex:1;}
+.page{display:none;} .page.active{display:block;}
 
-/* Subtle paper grain */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.028'/%3E%3C/svg%3E");
-  opacity: 1;
-}
+/* SECTION LABEL */
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* ===== LAYOUT ===== */
-.app { display: flex; min-height: 100vh; }
+/* NOTICE */
+.notice{padding:10px 14px;border-radius:2px;font-size:11px;margin-bottom:18px;line-height:1.65;border-left:3px solid;font-family:'IBM Plex Mono',monospace;}
+.notice-info{background:var(--stamp);border-color:var(--lp);color:var(--text2);}
+.notice-warn{background:var(--stamp);border-color:var(--warn);color:var(--text2);}
+.notice-success{background:var(--stamp);border-color:var(--good);color:var(--text2);}
 
-/* ===== SIDEBAR ===== */
-.sidebar {
-  width: 210px;
-  flex-shrink: 0;
-  background: var(--bg2);
-  border-right: 1.5px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  z-index: 100;
-}
+/* CARD */
+.card{background:var(--bg2);border:1.5px solid var(--border);border-radius:2px;padding:20px 22px;margin-bottom:16px;}
 
-.logo {
-  padding: 28px 22px 22px;
-  border-bottom: 1.5px solid var(--border);
-}
-.logo-mark {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px;
-  font-weight: 700;
-  font-style: italic;
-  color: var(--text);
-  letter-spacing: -0.5px;
-  line-height: 1;
-}
-.logo-sub {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  color: var(--text3);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-top: 6px;
-  border-top: 1px solid var(--border);
-  padding-top: 6px;
-}
+/* ===== INPUT — FIXED GRID ===== */
+.input-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--border);border-radius:2px;overflow:hidden;margin-bottom:16px;}
+.input-cell{padding:12px 14px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);transition:background .15s;}
+.input-cell:hover{background:var(--bg3);}
+.input-cell:nth-child(4n){border-right:none;}
+.input-cell:nth-last-child(-n+4){border-bottom:none;}
+.input-cell.full-row{grid-column:1/-1;border-right:none;}
+.input-cell.half-row{grid-column:span 2;}
+.input-label{font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:5px;margin-bottom:6px;}
+.lbl-auto{color:var(--good);font-size:8px;}
+.lbl-manual{color:var(--warn);font-size:8px;}
+.input-field{background:transparent;border:none;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;width:100%;outline:none;letter-spacing:.02em;}
+.input-field::placeholder{color:var(--text3);font-size:11px;}
+select.input-field{cursor:pointer;appearance:none;}
 
-.nav { padding: 18px 12px; flex: 1; overflow-y: auto; }
-.nav-section-label {
-  font-size: 8.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text3);
-  padding: 0 8px;
-  margin: 14px 0 6px;
-}
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  color: var(--text2);
-  font-size: 11.5px;
-  font-family: 'IBM Plex Mono', monospace;
-  letter-spacing: 0.02em;
-  transition: all 0.15s;
-  margin-bottom: 1px;
-  border: 1px solid transparent;
-}
-.nav-item:hover { color: var(--text); background: var(--stamp); }
-.nav-item.active {
-  color: var(--text);
-  background: var(--stamp);
-  border-color: var(--border);
-  font-weight: 500;
-}
-.nav-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--border2);
-  flex-shrink: 0;
-}
-.nav-item.active .nav-dot { background: var(--text); }
+/* ===== METRIC CARDS ===== */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1.5px;border:1.5px solid var(--border);border-radius:2px;overflow:hidden;background:var(--border);margin-bottom:0;}
+.metric-card{background:var(--bg2);padding:14px 16px;}
+.metric-label{font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;font-family:'IBM Plex Mono',monospace;}
+.metric-value{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;line-height:1;color:var(--text);margin-bottom:3px;}
+.metric-value.good{color:var(--good);} .metric-value.warn{color:var(--warn);} .metric-value.bad{color:var(--bad);}
+.metric-bench{font-size:9px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
 
-.sidebar-footer {
-  padding: 16px;
-  border-top: 1.5px solid var(--border);
-}
-.connect-btn {
-  width: 100%;
-  padding: 9px 12px;
-  background: transparent;
-  border: 1.5px solid var(--border2);
-  border-radius: 3px;
-  color: var(--text);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-.connect-btn:hover { background: var(--stamp); border-color: var(--text3); }
-.connect-status {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 9.5px;
-  color: var(--text3);
-  margin-top: 8px;
-  font-family: 'IBM Plex Mono', monospace;
-  letter-spacing: 0.04em;
-}
-.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border2); flex-shrink: 0; }
-.status-dot.connected { background: var(--good); }
+/* ===== CHART VIEW ===== */
+.view-toggle{display:flex;gap:0;border:1.5px solid var(--border);border-radius:2px;overflow:hidden;margin-bottom:14px;width:fit-content;}
+.view-btn{padding:6px 14px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;cursor:pointer;background:transparent;border:none;color:var(--text3);transition:all .15s;border-right:1px solid var(--border);}
+.view-btn:last-child{border-right:none;}
+.view-btn.active{background:var(--text);color:var(--bg);}
+.view-btn:hover:not(.active){color:var(--text);background:var(--stamp);}
 
-/* ===== MAIN ===== */
-.main { margin-left: 210px; flex: 1; display: flex; flex-direction: column; }
+.chart-view{display:none;}
+.chart-view.active{display:block;}
 
-/* ===== TOPBAR ===== */
-.topbar {
-  padding: 16px 32px;
-  border-bottom: 1.5px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg2);
-  position: sticky; top: 0; z-index: 50;
-}
-.page-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 17px;
-  font-weight: 600;
-  font-style: italic;
-  color: var(--text);
-  letter-spacing: -0.2px;
-}
-.topbar-right { display: flex; align-items: center; gap: 10px; }
+/* BAR CHART */
+.bar-chart-wrap{padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:160px;padding-bottom:24px;position:relative;}
+.bar-chart::after{content:'';position:absolute;bottom:24px;left:0;right:0;height:1px;background:var(--border);}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;}
+.bar-fill{width:100%;border-radius:2px 2px 0 0;transition:opacity .2s;cursor:pointer;position:relative;}
+.bar-fill:hover{opacity:.7;}
+.bar-lbl{font-size:8.5px;color:var(--text3);font-family:'IBM Plex Mono',monospace;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);}
+.bar-val{font-size:9px;color:var(--text2);font-family:'IBM Plex Mono',monospace;margin-bottom:4px;}
 
-.ctrl {
-  padding: 6px 12px;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  color: var(--text2);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.03em;
-}
-.ctrl:hover { border-color: var(--border2); color: var(--text); }
+/* FUNNEL CHART */
+.funnel-chart{display:flex;flex-direction:column;gap:3px;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;}
+.funnel-step-row{display:flex;align-items:center;gap:12px;}
+.funnel-bar-outer{flex:1;background:var(--border);border-radius:1px;height:28px;overflow:hidden;position:relative;}
+.funnel-bar-inner{height:100%;border-radius:1px;display:flex;align-items:center;padding:0 10px;transition:width .6s ease;}
+.funnel-bar-label{font-size:9.5px;font-family:'IBM Plex Mono',monospace;color:var(--bg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.funnel-step-meta{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);min-width:80px;text-align:right;}
+.funnel-step-name{font-size:9.5px;font-family:'IBM Plex Mono',monospace;color:var(--text2);min-width:110px;}
 
-.theme-toggle {
-  width: 32px; height: 32px;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.15s;
-  color: var(--text2);
-}
-.theme-toggle:hover { border-color: var(--border2); color: var(--text); }
-
-/* ===== CONTENT ===== */
-.content { padding: 30px 32px; flex: 1; }
-
-/* ===== PAGE SYSTEM ===== */
-.page { display: none; }
-.page.active { display: block; }
-
-/* ===== DIVIDER ===== */
-.retro-divider {
-  width: 100%;
-  height: 1.5px;
-  background: repeating-linear-gradient(90deg, var(--border) 0px, var(--border) 6px, transparent 6px, transparent 10px);
-  margin: 24px 0;
-}
-.section-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-/* ===== NOTICE ===== */
-.notice {
-  padding: 10px 14px;
-  border-radius: 2px;
-  font-size: 11px;
-  margin-bottom: 20px;
-  line-height: 1.65;
-  border-left: 3px solid;
-  font-family: 'IBM Plex Mono', monospace;
-  letter-spacing: 0.01em;
-}
-.notice-info { background: var(--stamp); border-color: var(--lp); color: var(--text2); }
-.notice-warn { background: var(--stamp); border-color: var(--warn); color: var(--text2); }
-.notice-success { background: var(--stamp); border-color: var(--good); color: var(--text2); }
-
-/* ===== CARD ===== */
-.card {
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
-  border-radius: 2px;
-  padding: 20px 22px;
-  margin-bottom: 16px;
-}
-
-/* ===== METRIC GRID ===== */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 1.5px;
-  border: 1.5px solid var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 20px;
-  background: var(--border);
-}
-.metric-card {
-  background: var(--bg2);
-  padding: 16px 18px;
-  position: relative;
-}
-.metric-label {
-  font-size: 8.5px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 8px;
-  font-family: 'IBM Plex Mono', monospace;
-}
-.metric-value {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.metric-value.good { color: var(--good); }
-.metric-value.warn { color: var(--warn); }
-.metric-value.bad  { color: var(--bad);  }
-.metric-change { font-size: 9.5px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
-
-/* ===== INPUT ===== */
-.input-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-.input-group { display: flex; flex-direction: column; gap: 5px; }
-.input-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
-.input-field {
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  border-radius: 2px;
-  padding: 8px 10px;
-  color: var(--text);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  width: 100%;
-  transition: border-color 0.15s;
-  letter-spacing: 0.02em;
-}
-.input-field:focus { outline: none; border-color: var(--border2); }
-.input-field::placeholder { color: var(--text3); }
-select.input-field { appearance: none; cursor: pointer; }
+/* TABLE VIEW */
+.result-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'IBM Plex Mono',monospace;}
+.result-table th{padding:9px 14px;text-align:left;color:var(--text3);font-weight:400;font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1.5px solid var(--border);background:var(--bg3);}
+.result-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);}
+.result-table tr:last-child td{border-bottom:none;}
+.result-table tr:hover td{background:var(--stamp);}
+.td-val{font-size:14px;font-family:'Playfair Display',serif;font-weight:600;}
+.td-val.good{color:var(--good);} .td-val.warn{color:var(--warn);} .td-val.bad{color:var(--bad);}
 
 /* ===== BUTTONS ===== */
-.btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-.btn {
-  padding: 9px 18px;
-  border-radius: 2px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.08em;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  border: 1.5px solid;
-  text-transform: uppercase;
-}
-.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-.btn-primary:hover { opacity: 0.85; }
-.btn-ghost { background: transparent; color: var(--text2); border-color: var(--border); }
-.btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:9px 18px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;font-weight:500;cursor:pointer;transition:all .15s;border:1.5px solid;text-transform:uppercase;}
+.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text);}
+.btn-primary:hover{opacity:.82;}
+.btn-ghost{background:transparent;color:var(--text2);border-color:var(--border);}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
 
 /* ===== AI BOX ===== */
-.ai-box {
-  border: 1.5px solid var(--border);
-  border-radius: 2px;
-  padding: 20px 22px;
-  margin-top: 4px;
-  background: var(--bg2);
-  position: relative;
-}
-.ai-box::before {
-  content: '[ AI ANALYSIS ]';
-  position: absolute;
-  top: -8px; left: 16px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 8.5px;
-  letter-spacing: 0.2em;
-  background: var(--bg2);
-  padding: 0 8px;
-  color: var(--text3);
-}
-.ai-content {
-  font-family: 'Libre Baskerville', serif;
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.8;
-  font-style: italic;
-}
-.ai-content strong { color: var(--text); font-style: normal; font-weight: 700; }
-.ai-loading {
-  display: flex; align-items: center; gap: 10px;
-  color: var(--text3);
-  font-size: 11px;
-  font-family: 'IBM Plex Mono', monospace;
-  letter-spacing: 0.05em;
-}
-.dots span { display: inline-block; animation: blink 1.2s infinite; }
-.dots span:nth-child(2) { animation-delay: 0.2s; }
-.dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
+.ai-box{border:1.5px solid var(--border);border-radius:2px;padding:20px 22px;margin-top:14px;background:var(--bg2);position:relative;}
+.ai-box::before{content:'[ ANALISIS AI ]';position:absolute;top:-8px;left:16px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.2em;background:var(--bg2);padding:0 8px;color:var(--text3);}
 
-/* ===== STEPS ===== */
-.steps-list { display: flex; flex-direction: column; gap: 0; margin-top: 18px; border: 1.5px solid var(--border); border-radius: 2px; overflow: hidden; }
-.step-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 13px 16px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
-}
-.step-item:last-child { border-bottom: none; }
-.step-num {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text3);
-  flex-shrink: 0;
-  width: 22px;
-  line-height: 1.4;
-}
-.step-text { font-size: 12px; color: var(--text2); line-height: 1.65; font-family: 'IBM Plex Mono', monospace; }
-.step-text strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+/* AI ENGINE SELECTOR */
+.ai-engine-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.ai-engine-label{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
+.ai-engine-opts{display:flex;gap:0;border:1.5px solid var(--border);border-radius:2px;overflow:hidden;}
+.ai-engine-btn{padding:5px 14px;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;cursor:pointer;background:transparent;border:none;color:var(--text3);transition:all .15s;border-right:1px solid var(--border);}
+.ai-engine-btn:last-child{border-right:none;}
+.ai-engine-btn.active{background:var(--text);color:var(--bg);}
+.ai-engine-btn:hover:not(.active){color:var(--text);background:var(--stamp);}
+.ai-engine-btn.manus-btn.active{background:var(--lp);color:#fff;border-color:var(--lp);}
 
-/* ===== DICTIONARY ===== */
-.dict-search-wrap { position: relative; margin-bottom: 14px; }
-.dict-search {
-  width: 100%;
-  padding: 10px 14px 10px 36px;
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
-  border-radius: 2px;
-  color: var(--text);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  transition: border-color 0.15s;
-}
-.dict-search:focus { outline: none; border-color: var(--border2); }
-.dict-search::placeholder { color: var(--text3); }
-.dict-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 13px; }
+.ai-run-btn{padding:5px 14px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;background:transparent;border:1.5px solid var(--border);color:var(--text2);transition:all .15s;}
+.ai-run-btn:hover{border-color:var(--border2);color:var(--text);}
 
-.dict-cats { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
-.dict-cat {
-  padding: 4px 12px;
-  border-radius: 2px;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  color: var(--text3);
-  background: transparent;
-  font-family: 'IBM Plex Mono', monospace;
-  transition: all 0.15s;
-}
-.dict-cat:hover, .dict-cat.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.ai-content{font-family:'Libre Baskerville',serif;font-size:13px;color:var(--text2);line-height:1.8;font-style:italic;}
+.ai-content strong{color:var(--text);font-style:normal;font-weight:700;}
+.ai-loading{display:flex;align-items:center;gap:10px;color:var(--text3);font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;}
+.dots span{display:inline-block;animation:blink 1.2s infinite;}
+.dots span:nth-child(2){animation-delay:.2s;} .dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 
-.dict-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5px; background: var(--border); border: 1.5px solid var(--border); border-radius: 2px; overflow: hidden; }
-.dict-card { background: var(--bg2); padding: 16px 18px; transition: background 0.15s; }
-.dict-card:hover { background: var(--bg3); }
-.dict-term {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 2px;
-}
-.dict-abbr { font-size: 9px; letter-spacing: 0.1em; color: var(--text3); text-transform: uppercase; margin-bottom: 8px; font-family: 'IBM Plex Mono', monospace; }
-.dict-def { font-size: 12px; color: var(--text2); line-height: 1.7; font-family: 'Libre Baskerville', serif; }
-.dict-formula {
-  font-size: 10.5px;
-  color: var(--text3);
-  margin-top: 10px;
-  font-family: 'IBM Plex Mono', monospace;
-  background: var(--stamp);
-  padding: 5px 8px;
-  border-left: 2px solid var(--border2);
-}
-.dict-tags { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
-.dict-tag {
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border: 1px solid var(--border);
-  border-radius: 1px;
-  color: var(--text3);
-  font-family: 'IBM Plex Mono', monospace;
-}
+/* STEPS */
+.steps-list{display:flex;flex-direction:column;gap:0;margin-top:16px;border:1.5px solid var(--border);border-radius:2px;overflow:hidden;}
+.step-item{display:flex;align-items:flex-start;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.step-item:last-child{border-bottom:none;}
+.step-num{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text3);flex-shrink:0;width:22px;line-height:1.4;}
+.step-text{font-size:11.5px;color:var(--text2);line-height:1.65;font-family:'IBM Plex Mono',monospace;}
+.step-text strong{color:var(--text);display:block;margin-bottom:2px;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;}
 
-/* ===== CAMPAIGNS TABLE ===== */
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
-th {
-  padding: 9px 14px;
-  text-align: left;
-  color: var(--text3);
-  font-weight: 400;
-  font-size: 8.5px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  border-bottom: 1.5px solid var(--border);
-  background: var(--bg3);
-}
-td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--stamp); }
-.pill {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 1px;
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 1px solid;
-}
-.pill-good { border-color: var(--good); color: var(--good); }
-.pill-warn { border-color: var(--warn); color: var(--warn); }
-.pill-bad  { border-color: var(--bad);  color: var(--bad);  }
+/* CAMPAIGN SELECTOR */
+.campaign-selector-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:2px;padding:18px 22px;margin-bottom:16px;}
+.pull-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end;}
+@media(max-width:700px){.pull-row{grid-template-columns:1fr;}}
 
-/* ===== MODAL ===== */
-.modal-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(2px);
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--bg2);
-  border: 1.5px solid var(--border2);
-  border-radius: 2px;
-  padding: 28px;
-  width: 460px;
-  max-width: 94vw;
-  position: relative;
-}
-.modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; font-style: italic; margin-bottom: 6px; }
-.modal-sub { font-size: 11px; color: var(--text2); margin-bottom: 20px; line-height: 1.7; font-family: 'IBM Plex Mono', monospace; }
-.modal-close { position: absolute; top: 14px; right: 14px; background: none; border: none; color: var(--text3); font-size: 16px; cursor: pointer; font-family: 'IBM Plex Mono', monospace; }
-.modal-close:hover { color: var(--text); }
+/* DICT */
+.dict-search-wrap{position:relative;margin-bottom:14px;}
+.dict-search{width:100%;padding:10px 14px 10px 36px;background:var(--bg2);border:1.5px solid var(--border);border-radius:2px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;transition:border-color .15s;}
+.dict-search:focus{outline:none;border-color:var(--border2);}
+.dict-search::placeholder{color:var(--text3);}
+.dict-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:13px;}
+.dict-cats{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px;}
+.dict-cat{padding:4px 12px;border-radius:2px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:transparent;font-family:'IBM Plex Mono',monospace;transition:all .15s;}
+.dict-cat:hover,.dict-cat.active{background:var(--text);color:var(--bg);border-color:var(--text);}
+.dict-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5px;background:var(--border);border:1.5px solid var(--border);border-radius:2px;overflow:hidden;}
+.dict-card{background:var(--bg2);padding:16px 18px;transition:background .15s;}
+.dict-card:hover{background:var(--bg3);}
+.dict-term{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.dict-abbr{font-size:9px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:8px;font-family:'IBM Plex Mono',monospace;}
+.dict-def{font-size:12px;color:var(--text2);line-height:1.7;font-family:'Libre Baskerville',serif;}
+.dict-formula{font-size:10.5px;color:var(--text3);margin-top:10px;font-family:'IBM Plex Mono',monospace;background:var(--stamp);padding:5px 8px;border-left:2px solid var(--border2);}
+.dict-tags{margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;}
+.dict-tag{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--border);border-radius:1px;color:var(--text3);font-family:'IBM Plex Mono',monospace;}
 
-/* ===== CHART ===== */
-.chart-area {
-  height: 160px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  margin-top: 12px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  padding: 12px 10px 0;
-  gap: 3px;
-}
-.bar { flex: 1; border-radius: 1px 1px 0 0; cursor: pointer; transition: opacity 0.15s; min-width: 0; }
-.bar:hover { opacity: 0.65; }
+/* CAMPAIGNS TABLE */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+th{padding:9px 14px;text-align:left;color:var(--text3);font-weight:400;font-size:8.5px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1.5px solid var(--border);background:var(--bg3);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--stamp);}
+.pill{display:inline-block;padding:2px 8px;border-radius:1px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;border:1px solid;}
+.pill-good{border-color:var(--good);color:var(--good);} .pill-warn{border-color:var(--warn);color:var(--warn);} .pill-bad{border-color:var(--bad);color:var(--bad);}
 
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+/* OVERVIEW */
+.metrics-grid-ov{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1.5px;border:1.5px solid var(--border);border-radius:2px;overflow:hidden;background:var(--border);margin-bottom:16px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:800px){.two-col{grid-template-columns:1fr;}}
+.funnel-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;font-family:'IBM Plex Mono',monospace;}
+.funnel-row:last-child{border-bottom:none;}
+.chart-area{height:150px;background:var(--bg3);border:1px solid var(--border);border-radius:2px;margin-top:10px;display:flex;align-items:flex-end;padding:10px 8px 0;gap:3px;}
+.bar{flex:1;border-radius:1px 1px 0 0;cursor:pointer;transition:opacity .15s;min-width:0;}
+.bar:hover{opacity:.65;}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);align-items:center;}
+.legend-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0;}
 
-/* ===== FUNNEL STATUS ROWS ===== */
-.funnel-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border);
-  font-size: 11px;
-  font-family: 'IBM Plex Mono', monospace;
-}
-.funnel-row:last-child { border-bottom: none; }
-.funnel-row .label { display: flex; align-items: center; gap: 8px; color: var(--text); }
-.funnel-row .val { color: var(--text3); }
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(2px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1.5px solid var(--border2);border-radius:2px;padding:28px;width:460px;max-width:94vw;position:relative;}
+.modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;font-style:italic;margin-bottom:6px;}
+.modal-sub{font-size:11px;color:var(--text2);margin-bottom:20px;line-height:1.7;font-family:'IBM Plex Mono',monospace;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;font-family:'IBM Plex Mono',monospace;}
+.modal-close:hover{color:var(--text);}
+.modal-input-group{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
 
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-/* ===== ANIMATION ===== */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.animate-in { animation: fadeIn 0.25s ease both; }
-
-/* ===== MISC ===== */
-.legend { display: flex; gap: 16px; margin-top: 10px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--text3); align-items: center; }
-.legend-dot { width: 8px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+::-webkit-scrollbar{width:4px;height:4px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeIn .25s ease both;}
 </style>
 </head>
 <body>
-
 <div class="app">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-mark">Djiklan</div>
-      <div class="logo-sub">Faham Data, Faham Laba</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">Djiklan</div>
+    <div class="logo-sub">Faham Data, Faham Laba</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section-label">Menu</div>
+    <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard"><span class="nav-dot"></span>Overview</div>
+    <div class="nav-item" onclick="showPage('funnel-wa')" id="nav-funnel-wa"><span class="nav-dot"></span>Funnel WA Langsung</div>
+    <div class="nav-item" onclick="showPage('funnel-lp')" id="nav-funnel-lp"><span class="nav-dot"></span>Funnel LP → WA</div>
+    <div class="nav-item" onclick="showPage('funnel-web')" id="nav-funnel-web"><span class="nav-dot"></span>Funnel Website</div>
+    <div class="nav-section-label">Referensi</div>
+    <div class="nav-item" onclick="showPage('dictionary')" id="nav-dictionary"><span class="nav-dot"></span>Kamus Istilah</div>
+    <div class="nav-item" onclick="showPage('campaigns')" id="nav-campaigns"><span class="nav-dot"></span>Campaigns</div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="connect-btn" onclick="openConnectModal()">⊕ Hubungkan Meta Ads</button>
+    <div class="connect-status"><span class="status-dot" id="status-dot"></span><span id="status-text">Belum terhubung</span></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="page-title" id="page-title">Overview</div>
+    <div class="topbar-right">
+      <select class="ctrl" id="date-range-select" onchange="refreshData()" style="padding:6px 10px">
+        <option value="7">7 hari</option>
+        <option value="14">14 hari</option>
+        <option value="30" selected>30 hari</option>
+        <option value="90">90 hari</option>
+      </select>
+      <button class="ctrl" onclick="refreshData()">↻ Refresh</button>
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀</button>
     </div>
-    <nav class="nav">
-      <div class="nav-section-label">Menu</div>
-      <div class="nav-item active" onclick="showPage('dashboard')" id="nav-dashboard">
-        <span class="nav-dot"></span> Overview
-      </div>
-      <div class="nav-item" onclick="showPage('funnel-wa')" id="nav-funnel-wa">
-        <span class="nav-dot"></span> Funnel WA Langsung
-      </div>
-      <div class="nav-item" onclick="showPage('funnel-lp')" id="nav-funnel-lp">
-        <span class="nav-dot"></span> Funnel LP → WA
-      </div>
-      <div class="nav-item" onclick="showPage('funnel-web')" id="nav-funnel-web">
-        <span class="nav-dot"></span> Funnel Website
-      </div>
-      <div class="nav-section-label">Referensi</div>
-      <div class="nav-item" onclick="showPage('dictionary')" id="nav-dictionary">
-        <span class="nav-dot"></span> Kamus Istilah
-      </div>
-      <div class="nav-item" onclick="showPage('campaigns')" id="nav-campaigns">
-        <span class="nav-dot"></span> Campaigns
-      </div>
-    </nav>
-    <div class="sidebar-footer">
-      <button class="connect-btn" onclick="openConnectModal()">⊕ Hubungkan Meta Ads</button>
-      <div class="connect-status">
-        <span class="status-dot" id="status-dot"></span>
-        <span id="status-text">Belum terhubung</span>
-      </div>
-    </div>
-  </aside>
+  </div>
 
-  <!-- MAIN -->
-  <main class="main">
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="page-title" id="page-title">Overview</div>
-      <div class="topbar-right">
-        <select class="ctrl" id="date-range-select" onchange="refreshData()" style="padding:6px 10px">
-          <option value="7">7 hari</option>
-          <option value="14">14 hari</option>
-          <option value="30" selected>30 hari</option>
-          <option value="90">90 hari</option>
-        </select>
-        <button class="ctrl" onclick="refreshData()">↻ Refresh</button>
-        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Toggle tema">☀</button>
+  <div class="content">
+
+    <!-- ====== OVERVIEW ====== -->
+    <div class="page active" id="page-dashboard">
+      <div class="notice notice-info animate-in" id="connect-notice">Hubungkan akun Meta Ads untuk menarik data secara otomatis. Saat ini dalam mode demo.</div>
+      <div class="section-label">Ringkasan Semua Funnel</div>
+      <div class="metrics-grid-ov animate-in">
+        <div class="metric-card"><div class="metric-label">Total Spend</div><div class="metric-value" id="ov-spend">—</div></div>
+        <div class="metric-card"><div class="metric-label">Impressions</div><div class="metric-value" id="ov-imp">—</div></div>
+        <div class="metric-card"><div class="metric-label">Reach</div><div class="metric-value" id="ov-reach">—</div></div>
+        <div class="metric-card"><div class="metric-label">Avg. CTR</div><div class="metric-value" id="ov-ctr">—</div></div>
+        <div class="metric-card"><div class="metric-label">Avg. CPM</div><div class="metric-value" id="ov-cpm">—</div></div>
+        <div class="metric-card"><div class="metric-label">Avg. Frequency</div><div class="metric-value" id="ov-freq">—</div></div>
       </div>
-    </div>
-
-    <div class="content">
-
-      <!-- ============================
-           PAGE: OVERVIEW
-      ============================= -->
-      <div class="page active" id="page-dashboard">
-        <div class="notice notice-info animate-in" id="connect-notice">
-          Hubungkan akun Meta Ads untuk menarik data secara otomatis. Saat ini dalam mode demo.
-        </div>
-
-        <div class="section-label animate-in">Ringkasan Semua Funnel</div>
-        <div class="metrics-grid animate-in">
-          <div class="metric-card">
-            <div class="metric-label">Total Spend</div>
-            <div class="metric-value" id="ov-spend">—</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">Impressions</div>
-            <div class="metric-value" id="ov-imp">—</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">Reach</div>
-            <div class="metric-value" id="ov-reach">—</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">Avg. CTR</div>
-            <div class="metric-value" id="ov-ctr">—</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">Avg. CPM</div>
-            <div class="metric-value" id="ov-cpm">—</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">Avg. Frequency</div>
-            <div class="metric-value" id="ov-freq">—</div>
-          </div>
-        </div>
-
-        <div class="two-col animate-in">
-          <div class="card">
-            <div class="section-label">Distribusi Spend (Demo)</div>
-            <div class="chart-area" id="demo-chart">
-              <div class="bar" style="height:62%;background:var(--wa);opacity:0.55" title="WA W1"></div>
-              <div class="bar" style="height:42%;background:var(--wa);opacity:0.4" title="WA W2"></div>
-              <div class="bar" style="height:78%;background:var(--wa);opacity:0.55" title="WA W3"></div>
-              <div class="bar" style="height:50%;background:var(--wa);opacity:0.4" title="WA W4"></div>
-              <div style="width:6px;flex-shrink:0"></div>
-              <div class="bar" style="height:48%;background:var(--lp);opacity:0.55" title="LP W1"></div>
-              <div class="bar" style="height:65%;background:var(--lp);opacity:0.4" title="LP W2"></div>
-              <div class="bar" style="height:55%;background:var(--lp);opacity:0.55" title="LP W3"></div>
-              <div class="bar" style="height:72%;background:var(--lp);opacity:0.4" title="LP W4"></div>
-              <div style="width:6px;flex-shrink:0"></div>
-              <div class="bar" style="height:38%;background:var(--web);opacity:0.55" title="Web W1"></div>
-              <div class="bar" style="height:52%;background:var(--web);opacity:0.4" title="Web W2"></div>
-              <div class="bar" style="height:88%;background:var(--web);opacity:0.55" title="Web W3"></div>
-              <div class="bar" style="height:60%;background:var(--web);opacity:0.4" title="Web W4"></div>
-            </div>
-            <div class="legend">
-              <span class="legend-dot" style="background:var(--wa)"></span> WA Langsung
-              <span class="legend-dot" style="background:var(--lp)"></span> LP → WA
-              <span class="legend-dot" style="background:var(--web)"></span> Website
-            </div>
-          </div>
-          <div class="card">
-            <div class="section-label">Status Funnel</div>
-            <div style="border:1.5px solid var(--border);border-radius:2px;overflow:hidden">
-              <div class="funnel-row">
-                <span class="label"><span style="color:var(--wa)">●</span> WA Langsung</span>
-                <span class="val" id="wa-status-mini">Belum ada data</span>
-              </div>
-              <div class="funnel-row">
-                <span class="label"><span style="color:var(--lp)">●</span> LP → WA</span>
-                <span class="val" id="lp-status-mini">Belum ada data</span>
-              </div>
-              <div class="funnel-row">
-                <span class="label"><span style="color:var(--web)">●</span> Website</span>
-                <span class="val" id="web-status-mini">Belum ada data</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ============================
-           PAGE: FUNNEL WA
-      ============================= -->
-      <div class="page" id="page-funnel-wa">
-        <div class="section-label">Funnel — Direct to WhatsApp</div>
-        <div class="notice notice-info">Masukkan data performa iklan untuk dianalisis oleh AI.</div>
-
+      <div class="two-col animate-in">
         <div class="card">
-          <div class="section-label" style="margin-bottom:14px">Input Metrik</div>
-          <div class="input-grid">
-            <div class="input-group"><label class="input-label">Budget Iklan (Rp)</label><input class="input-field" type="number" placeholder="5000000" id="wa-budget"></div>
-            <div class="input-group"><label class="input-label">Impressions</label><input class="input-field" type="number" placeholder="120000" id="wa-impressions"></div>
-            <div class="input-group"><label class="input-label">Reach</label><input class="input-field" type="number" placeholder="85000" id="wa-reach"></div>
-            <div class="input-group"><label class="input-label">Clicks (Link)</label><input class="input-field" type="number" placeholder="3200" id="wa-clicks"></div>
-            <div class="input-group"><label class="input-label">Chat WA Masuk</label><input class="input-field" type="number" placeholder="280" id="wa-chats"></div>
-            <div class="input-group"><label class="input-label">Order / Transaksi</label><input class="input-field" type="number" placeholder="45" id="wa-orders"></div>
-            <div class="input-group"><label class="input-label">Total Revenue (Rp)</label><input class="input-field" type="number" placeholder="22500000" id="wa-revenue"></div>
-            <div class="input-group"><label class="input-label">Produk / Niche</label><input class="input-field" type="text" placeholder="Skincare, Fashion…" id="wa-niche"></div>
+          <div class="section-label">Distribusi Spend (Demo)</div>
+          <div class="chart-area">
+            <div class="bar" style="height:62%;background:var(--wa);opacity:.55"></div>
+            <div class="bar" style="height:42%;background:var(--wa);opacity:.4"></div>
+            <div class="bar" style="height:78%;background:var(--wa);opacity:.55"></div>
+            <div class="bar" style="height:50%;background:var(--wa);opacity:.4"></div>
+            <div style="width:6px;flex-shrink:0"></div>
+            <div class="bar" style="height:48%;background:var(--lp);opacity:.55"></div>
+            <div class="bar" style="height:65%;background:var(--lp);opacity:.4"></div>
+            <div class="bar" style="height:55%;background:var(--lp);opacity:.55"></div>
+            <div class="bar" style="height:72%;background:var(--lp);opacity:.4"></div>
+            <div style="width:6px;flex-shrink:0"></div>
+            <div class="bar" style="height:38%;background:var(--web);opacity:.55"></div>
+            <div class="bar" style="height:52%;background:var(--web);opacity:.4"></div>
+            <div class="bar" style="height:88%;background:var(--web);opacity:.55"></div>
+            <div class="bar" style="height:60%;background:var(--web);opacity:.4"></div>
           </div>
-          <div class="btn-row">
-            <button class="btn btn-primary" onclick="analyzeWA()">Analisis →</button>
-            <button class="btn btn-ghost" onclick="clearWA()">Bersihkan</button>
+          <div class="legend">
+            <span class="legend-dot" style="background:var(--wa)"></span>WA Langsung
+            <span class="legend-dot" style="background:var(--lp)"></span>LP → WA
+            <span class="legend-dot" style="background:var(--web)"></span>Website
           </div>
         </div>
-
-        <div id="wa-results" style="display:none">
-          <div class="section-label">Hasil Kalkulasi</div>
-          <div class="metrics-grid animate-in">
-            <div class="metric-card"><div class="metric-label">CPM</div><div class="metric-value" id="wa-cpm-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CPC</div><div class="metric-value" id="wa-cpc-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CTR</div><div class="metric-value" id="wa-ctr-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Click-to-Chat Rate</div><div class="metric-value" id="wa-ctc-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CPL (per Chat)</div><div class="metric-value" id="wa-cpl-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Conv. Rate Chat→Order</div><div class="metric-value" id="wa-conv-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CPA (per Order)</div><div class="metric-value" id="wa-cpa-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">ROAS</div><div class="metric-value" id="wa-roas-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Frequency</div><div class="metric-value" id="wa-freq-r">—</div></div>
-          </div>
-          <div class="ai-box animate-in">
-            <div class="ai-content" id="wa-ai-content">
-              <div class="ai-loading">Menganalisis data<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
-            </div>
-            <div class="steps-list" id="wa-steps" style="display:none"></div>
+        <div class="card">
+          <div class="section-label">Status Funnel</div>
+          <div style="border:1.5px solid var(--border);border-radius:2px;overflow:hidden">
+            <div class="funnel-row"><span style="color:var(--wa)">● WA Langsung</span><span id="wa-status-mini" style="color:var(--text3)">Belum ada data</span></div>
+            <div class="funnel-row"><span style="color:var(--lp)">● LP → WA</span><span id="lp-status-mini" style="color:var(--text3)">Belum ada data</span></div>
+            <div class="funnel-row"><span style="color:var(--web)">● Website</span><span id="web-status-mini" style="color:var(--text3)">Belum ada data</span></div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- ============================
-           PAGE: FUNNEL LP
-      ============================= -->
-      <div class="page" id="page-funnel-lp">
-        <div class="section-label">Funnel — Landing Page → WhatsApp</div>
-        <div class="notice notice-info">Masukkan data iklan + performa landing page kamu.</div>
-
-        <div class="card">
-          <div class="section-label" style="margin-bottom:14px">Input Metrik</div>
-          <div class="input-grid">
-            <div class="input-group"><label class="input-label">Budget Iklan (Rp)</label><input class="input-field" type="number" placeholder="3000000" id="lp-budget"></div>
-            <div class="input-group"><label class="input-label">Impressions</label><input class="input-field" type="number" placeholder="90000" id="lp-impressions"></div>
-            <div class="input-group"><label class="input-label">Reach</label><input class="input-field" type="number" placeholder="65000" id="lp-reach"></div>
-            <div class="input-group"><label class="input-label">Clicks ke LP</label><input class="input-field" type="number" placeholder="2500" id="lp-clicks"></div>
-            <div class="input-group"><label class="input-label">LP Views (unique)</label><input class="input-field" type="number" placeholder="2100" id="lp-views"></div>
-            <div class="input-group"><label class="input-label">Klik WA dari LP</label><input class="input-field" type="number" placeholder="320" id="lp-waclik"></div>
-            <div class="input-group"><label class="input-label">Chat WA Masuk</label><input class="input-field" type="number" placeholder="250" id="lp-chats"></div>
-            <div class="input-group"><label class="input-label">Order / Transaksi</label><input class="input-field" type="number" placeholder="38" id="lp-orders"></div>
-            <div class="input-group"><label class="input-label">Total Revenue (Rp)</label><input class="input-field" type="number" placeholder="19000000" id="lp-revenue"></div>
-            <div class="input-group"><label class="input-label">Time on Page (detik)</label><input class="input-field" type="number" placeholder="45" id="lp-timepage"></div>
-            <div class="input-group"><label class="input-label">Bounce Rate (%)</label><input class="input-field" type="number" placeholder="62" id="lp-bounce"></div>
-            <div class="input-group"><label class="input-label">Produk / Niche</label><input class="input-field" type="text" placeholder="Jasa, Kursus…" id="lp-niche"></div>
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-primary" onclick="analyzeLP()">Analisis →</button>
-            <button class="btn btn-ghost" onclick="clearLP()">Bersihkan</button>
+    <!-- ====== FUNNEL WA ====== -->
+    <div class="page" id="page-funnel-wa">
+      <div class="section-label">Funnel — Direct to WhatsApp</div>
+      <div class="card">
+        <div class="section-label" style="margin-bottom:0">Input Metrik</div>
+        <div style="height:10px"></div>
+        <div class="input-grid" id="wa-input-grid">
+          <div class="input-cell"><div class="input-label">Budget Iklan (Rp)</div><input class="input-field" type="number" placeholder="5000000" id="wa-budget"></div>
+          <div class="input-cell"><div class="input-label">Impressions</div><input class="input-field" type="number" placeholder="120000" id="wa-impressions"></div>
+          <div class="input-cell"><div class="input-label">Reach</div><input class="input-field" type="number" placeholder="85000" id="wa-reach"></div>
+          <div class="input-cell"><div class="input-label">Clicks (Link)</div><input class="input-field" type="number" placeholder="3200" id="wa-clicks"></div>
+          <div class="input-cell"><div class="input-label">Chat WA Masuk</div><input class="input-field" type="number" placeholder="280" id="wa-chats"></div>
+          <div class="input-cell"><div class="input-label">Order / Transaksi</div><input class="input-field" type="number" placeholder="45" id="wa-orders"></div>
+          <div class="input-cell"><div class="input-label">Total Revenue (Rp)</div><input class="input-field" type="number" placeholder="22500000" id="wa-revenue"></div>
+          <div class="input-cell"><div class="input-label">Produk / Niche</div><input class="input-field" type="text" placeholder="Skincare, Fashion…" id="wa-niche"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="analyzeWA()">Analisis →</button><button class="btn btn-ghost" onclick="clearWA()">Bersihkan</button></div>
+      </div>
+      <div id="wa-results" style="display:none">
+        <div class="section-label">Hasil Kalkulasi</div>
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="setView('wa','cards',this)">Cards</button>
+          <button class="view-btn" onclick="setView('wa','bar',this)">Bar Chart</button>
+          <button class="view-btn" onclick="setView('wa','funnel',this)">Funnel</button>
+          <button class="view-btn" onclick="setView('wa','table',this)">Tabel</button>
+        </div>
+        <!-- CARDS -->
+        <div class="chart-view active" id="wa-view-cards">
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="metric-label">CPM</div><div class="metric-value" id="wa-cpm-r">—</div><div class="metric-bench">Benchmark &lt;Rp30rb</div></div>
+            <div class="metric-card"><div class="metric-label">CPC</div><div class="metric-value" id="wa-cpc-r">—</div><div class="metric-bench">Benchmark &lt;Rp8rb</div></div>
+            <div class="metric-card"><div class="metric-label">CTR</div><div class="metric-value" id="wa-ctr-r">—</div><div class="metric-bench">Benchmark &gt;2%</div></div>
+            <div class="metric-card"><div class="metric-label">Click-to-Chat Rate</div><div class="metric-value" id="wa-ctc-r">—</div><div class="metric-bench">Benchmark &gt;10%</div></div>
+            <div class="metric-card"><div class="metric-label">CPL (per Chat)</div><div class="metric-value" id="wa-cpl-r">—</div><div class="metric-bench">Bergantung niche</div></div>
+            <div class="metric-card"><div class="metric-label">Conv. Chat→Order</div><div class="metric-value" id="wa-conv-r">—</div><div class="metric-bench">Benchmark &gt;20%</div></div>
+            <div class="metric-card"><div class="metric-label">CPA (per Order)</div><div class="metric-value" id="wa-cpa-r">—</div><div class="metric-bench">Harus &lt; profit/order</div></div>
+            <div class="metric-card"><div class="metric-label">ROAS</div><div class="metric-value" id="wa-roas-r">—</div><div class="metric-bench">Benchmark &gt;3×</div></div>
+            <div class="metric-card"><div class="metric-label">Frequency</div><div class="metric-value" id="wa-freq-r">—</div><div class="metric-bench">Ideal &lt;3×</div></div>
           </div>
         </div>
+        <!-- BAR CHART -->
+        <div class="chart-view" id="wa-view-bar">
+          <div class="bar-chart-wrap"><div class="bar-chart" id="wa-bar-chart"></div></div>
+        </div>
+        <!-- FUNNEL -->
+        <div class="chart-view" id="wa-view-funnel">
+          <div class="funnel-chart" id="wa-funnel-chart"></div>
+        </div>
+        <!-- TABLE -->
+        <div class="chart-view" id="wa-view-table">
+          <div class="table-wrap"><table class="result-table"><thead><tr><th>Metrik</th><th>Nilai</th><th>Status</th><th>Benchmark</th></tr></thead><tbody id="wa-table-body"></tbody></table></div>
+        </div>
+        <!-- AI -->
+        <div class="ai-box animate-in">
+          <div class="ai-engine-bar">
+            <span class="ai-engine-label">Dianalisis oleh:</span>
+            <div class="ai-engine-opts">
+              <button class="ai-engine-btn active" id="wa-engine-claude" onclick="selectEngine('wa','claude')">Claude AI</button>
+              <button class="ai-engine-btn manus-btn" id="wa-engine-manus" onclick="selectEngine('wa','manus')">Manus AI</button>
+            </div>
+            <button class="ai-run-btn" onclick="runAI('wa')">▶ Jalankan Analisis</button>
+          </div>
+          <div class="ai-content" id="wa-ai-content" style="color:var(--text3);font-style:normal;font-size:11px">Pilih engine AI dan klik "Jalankan Analisis" untuk mendapatkan rekomendasi.</div>
+          <div class="steps-list" id="wa-steps" style="display:none"></div>
+        </div>
+      </div>
+    </div>
 
-        <div id="lp-results" style="display:none">
-          <div class="section-label">Hasil Kalkulasi</div>
-          <div class="metrics-grid animate-in">
+    <!-- ====== FUNNEL LP ====== -->
+    <div class="page" id="page-funnel-lp">
+      <div class="section-label">Funnel — Landing Page → WhatsApp</div>
+      <div class="card">
+        <div class="section-label" style="margin-bottom:0">Input Metrik</div>
+        <div style="height:10px"></div>
+        <div class="input-grid">
+          <div class="input-cell"><div class="input-label">Budget Iklan (Rp)</div><input class="input-field" type="number" placeholder="3000000" id="lp-budget"></div>
+          <div class="input-cell"><div class="input-label">Impressions</div><input class="input-field" type="number" placeholder="90000" id="lp-impressions"></div>
+          <div class="input-cell"><div class="input-label">Reach</div><input class="input-field" type="number" placeholder="65000" id="lp-reach"></div>
+          <div class="input-cell"><div class="input-label">Clicks ke LP</div><input class="input-field" type="number" placeholder="2500" id="lp-clicks"></div>
+          <div class="input-cell"><div class="input-label">LP Views (unique)</div><input class="input-field" type="number" placeholder="2100" id="lp-views"></div>
+          <div class="input-cell"><div class="input-label">Klik WA dari LP</div><input class="input-field" type="number" placeholder="320" id="lp-waclik"></div>
+          <div class="input-cell"><div class="input-label">Chat WA Masuk</div><input class="input-field" type="number" placeholder="250" id="lp-chats"></div>
+          <div class="input-cell"><div class="input-label">Order / Transaksi</div><input class="input-field" type="number" placeholder="38" id="lp-orders"></div>
+          <div class="input-cell"><div class="input-label">Total Revenue (Rp)</div><input class="input-field" type="number" placeholder="19000000" id="lp-revenue"></div>
+          <div class="input-cell"><div class="input-label">Time on Page (dtk)</div><input class="input-field" type="number" placeholder="45" id="lp-timepage"></div>
+          <div class="input-cell"><div class="input-label">Bounce Rate (%)</div><input class="input-field" type="number" placeholder="62" id="lp-bounce"></div>
+          <div class="input-cell"><div class="input-label">Produk / Niche</div><input class="input-field" type="text" placeholder="Jasa, Kursus…" id="lp-niche"></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="analyzeLP()">Analisis →</button><button class="btn btn-ghost" onclick="clearLP()">Bersihkan</button></div>
+      </div>
+      <div id="lp-results" style="display:none">
+        <div class="section-label">Hasil Kalkulasi</div>
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="setView('lp','cards',this)">Cards</button>
+          <button class="view-btn" onclick="setView('lp','bar',this)">Bar Chart</button>
+          <button class="view-btn" onclick="setView('lp','table',this)">Tabel</button>
+        </div>
+        <div class="chart-view active" id="lp-view-cards">
+          <div class="metrics-grid">
             <div class="metric-card"><div class="metric-label">CPM</div><div class="metric-value" id="lp-cpm-r">—</div></div>
             <div class="metric-card"><div class="metric-label">CPC (ke LP)</div><div class="metric-value" id="lp-cpc-r">—</div></div>
             <div class="metric-card"><div class="metric-label">CTR</div><div class="metric-value" id="lp-ctr-r">—</div></div>
             <div class="metric-card"><div class="metric-label">Click-to-LP Rate</div><div class="metric-value" id="lp-ctlp-r">—</div></div>
             <div class="metric-card"><div class="metric-label">LP Conv. Rate (→WA)</div><div class="metric-value" id="lp-lpconv-r">—</div></div>
             <div class="metric-card"><div class="metric-label">CPL (per Chat)</div><div class="metric-value" id="lp-cpl-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Conv. Rate Chat→Order</div><div class="metric-value" id="lp-conv-r">—</div></div>
+            <div class="metric-card"><div class="metric-label">Conv. Chat→Order</div><div class="metric-value" id="lp-conv-r">—</div></div>
             <div class="metric-card"><div class="metric-label">CPA (per Order)</div><div class="metric-value" id="lp-cpa-r">—</div></div>
             <div class="metric-card"><div class="metric-label">ROAS</div><div class="metric-value" id="lp-roas-r">—</div></div>
           </div>
-          <div class="ai-box animate-in">
-            <div class="ai-content" id="lp-ai-content">
-              <div class="ai-loading">Menganalisis data<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
+        </div>
+        <div class="chart-view" id="lp-view-bar"><div class="bar-chart-wrap"><div class="bar-chart" id="lp-bar-chart"></div></div></div>
+        <div class="chart-view" id="lp-view-table"><div class="table-wrap"><table class="result-table"><thead><tr><th>Metrik</th><th>Nilai</th><th>Status</th><th>Benchmark</th></tr></thead><tbody id="lp-table-body"></tbody></table></div></div>
+        <div class="ai-box animate-in">
+          <div class="ai-engine-bar">
+            <span class="ai-engine-label">Dianalisis oleh:</span>
+            <div class="ai-engine-opts">
+              <button class="ai-engine-btn active" id="lp-engine-claude" onclick="selectEngine('lp','claude')">Claude AI</button>
+              <button class="ai-engine-btn manus-btn" id="lp-engine-manus" onclick="selectEngine('lp','manus')">Manus AI</button>
             </div>
-            <div class="steps-list" id="lp-steps" style="display:none"></div>
+            <button class="ai-run-btn" onclick="runAI('lp')">▶ Jalankan Analisis</button>
+          </div>
+          <div class="ai-content" id="lp-ai-content" style="color:var(--text3);font-style:normal;font-size:11px">Pilih engine AI dan klik "Jalankan Analisis".</div>
+          <div class="steps-list" id="lp-steps" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== FUNNEL WEBSITE ====== -->
+    <div class="page" id="page-funnel-web">
+      <div class="section-label">Funnel — Purchase di Website</div>
+
+      <!-- CAMPAIGN PULL -->
+      <div id="web-campaign-selector" style="display:none">
+        <div class="campaign-selector-card">
+          <div class="section-label" style="margin-bottom:12px">Tarik Data dari Campaign</div>
+          <div class="pull-row">
+            <div>
+              <div class="input-label" style="margin-bottom:5px">Pilih Campaign</div>
+              <select class="ctrl" id="web-campaign-pick" style="width:100%;padding:8px 10px">
+                <option value="">— Memuat campaign… —</option>
+              </select>
+            </div>
+            <div>
+              <div class="input-label" style="margin-bottom:5px">Rentang</div>
+              <select class="ctrl" id="web-pull-days" style="padding:8px 10px">
+                <option value="7">7 hari</option>
+                <option value="14">14 hari</option>
+                <option value="30" selected>30 hari</option>
+                <option value="90">90 hari</option>
+              </select>
+            </div>
+            <div style="padding-top:18px">
+              <button class="btn btn-primary" onclick="pullWebCampaign()">⊙ Tarik Data</button>
+            </div>
+          </div>
+          <div id="web-pull-status" style="margin-top:10px;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;display:none"></div>
+          <div style="margin-top:12px;font-size:10px;color:var(--text3);font-family:'IBM Plex Mono',monospace;border-top:1px solid var(--border);padding-top:10px;line-height:1.9">
+            <span style="color:var(--good)">●</span> Otomatis dari Meta: Spend, Impressions, Reach, Clicks, Add to Cart, Checkout, Purchases, Revenue<br>
+            <span style="color:var(--warn)">●</span> Manual: Sessions/Visits — ambil dari Google Analytics
           </div>
         </div>
       </div>
 
-      <!-- ============================
-           PAGE: FUNNEL WEBSITE
-      ============================= -->
-      <div class="page" id="page-funnel-web">
-        <div class="section-label">Funnel — Purchase di Website</div>
+      <div class="notice notice-info" id="web-not-connected-notice">Hubungkan Meta Ads di sidebar untuk tarik data otomatis, atau isi manual di bawah.</div>
 
-        <!-- CAMPAIGN SELECTOR (shown when connected) -->
-        <div id="web-campaign-selector" style="display:none">
-          <div class="card" style="margin-bottom:16px">
-            <div class="section-label" style="margin-bottom:14px">Tarik Data dari Campaign</div>
-            <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
-              <div class="input-group" style="flex:1;min-width:220px">
-                <label class="input-label">Pilih Campaign</label>
-                <select class="input-field" id="web-campaign-pick">
-                  <option value="">— Memuat daftar campaign… —</option>
-                </select>
-              </div>
-              <div class="input-group" style="min-width:160px">
-                <label class="input-label">Rentang Waktu</label>
-                <select class="input-field" id="web-pull-days">
-                  <option value="7">7 hari terakhir</option>
-                  <option value="14">14 hari terakhir</option>
-                  <option value="30" selected>30 hari terakhir</option>
-                  <option value="90">90 hari terakhir</option>
-                </select>
-              </div>
-              <button class="btn btn-primary" onclick="pullWebCampaign()" style="margin-bottom:0">⊙ Tarik Data →</button>
-            </div>
-            <div id="web-pull-status" style="margin-top:10px;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;display:none"></div>
-            <div style="margin-top:12px;font-size:10.5px;color:var(--text3);font-family:'IBM Plex Mono',monospace;line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
-              <span style="color:var(--good)">●</span> Otomatis: Spend, Impressions, Reach, Clicks, Add to Cart, Checkout, Purchases, Revenue (dari Meta Pixel)<br>
-              <span style="color:var(--warn)">●</span> Manual: Sessions/Visits (ambil dari Google Analytics atau dashboard website)
-            </div>
-          </div>
+      <!-- INPUT -->
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div class="section-label" style="margin-bottom:0">Input Metrik</div>
+          <span id="web-autofill-badge" style="display:none;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--good);font-family:'IBM Plex Mono',monospace;border:1px solid var(--good);padding:2px 8px;border-radius:2px">✓ Terisi Otomatis</span>
         </div>
-
-        <!-- NOT CONNECTED NOTICE -->
-        <div class="notice notice-info" id="web-not-connected-notice">
-          Hubungkan akun Meta Ads (sidebar kiri) untuk menarik data campaign otomatis. Atau isi manual di bawah.
+        <div class="input-grid">
+          <div class="input-cell"><div class="input-label">Budget / Spend (Rp) <span class="lbl-auto" id="web-lbl-budget"></span></div><input class="input-field" type="number" placeholder="8000000" id="web-budget"></div>
+          <div class="input-cell"><div class="input-label">Impressions <span class="lbl-auto" id="web-lbl-imp"></span></div><input class="input-field" type="number" placeholder="200000" id="web-impressions"></div>
+          <div class="input-cell"><div class="input-label">Reach <span class="lbl-auto" id="web-lbl-reach"></span></div><input class="input-field" type="number" placeholder="140000" id="web-reach"></div>
+          <div class="input-cell"><div class="input-label">Link Clicks <span class="lbl-auto" id="web-lbl-clicks"></span></div><input class="input-field" type="number" placeholder="6000" id="web-clicks"></div>
+          <div class="input-cell"><div class="input-label">Sessions / Visits <span class="lbl-manual">● manual</span></div><input class="input-field" type="number" placeholder="dari Google Analytics" id="web-sessions"></div>
+          <div class="input-cell"><div class="input-label">Add to Cart <span class="lbl-auto" id="web-lbl-cart"></span></div><input class="input-field" type="number" placeholder="820" id="web-cart"></div>
+          <div class="input-cell"><div class="input-label">Initiated Checkout <span class="lbl-auto" id="web-lbl-checkout"></span></div><input class="input-field" type="number" placeholder="380" id="web-checkout"></div>
+          <div class="input-cell"><div class="input-label">Purchases <span class="lbl-auto" id="web-lbl-purch"></span></div><input class="input-field" type="number" placeholder="140" id="web-purchases"></div>
+          <div class="input-cell"><div class="input-label">Total Revenue (Rp) <span class="lbl-auto" id="web-lbl-rev"></span></div><input class="input-field" type="number" placeholder="56000000" id="web-revenue"></div>
+          <div class="input-cell"><div class="input-label">Produk / Niche</div><input class="input-field" type="text" placeholder="Fashion, Elektronik…" id="web-niche"></div>
+          <div class="input-cell" style="grid-column:span 2"></div>
         </div>
-
-        <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-            <div class="section-label" style="margin-bottom:0">Input Metrik</div>
-            <span id="web-autofill-badge" style="display:none;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--good);font-family:'IBM Plex Mono',monospace;border:1px solid var(--good);padding:2px 8px;border-radius:2px">✓ Terisi Otomatis</span>
-          </div>
-          <div class="input-grid">
-            <div class="input-group">
-              <label class="input-label">Budget / Spend (Rp) <span id="web-lbl-budget" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="8000000" id="web-budget">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Impressions <span id="web-lbl-imp" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="200000" id="web-impressions">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Reach <span id="web-lbl-reach" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="140000" id="web-reach">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Link Clicks <span id="web-lbl-clicks" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="6000" id="web-clicks">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Sessions / Visits <span style="color:var(--warn);font-size:9px">● manual</span></label>
-              <input class="input-field" type="number" placeholder="5200 — dari Google Analytics" id="web-sessions">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Add to Cart <span id="web-lbl-cart" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="820" id="web-cart">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Initiated Checkout <span id="web-lbl-checkout" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="380" id="web-checkout">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Purchases <span id="web-lbl-purch" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="140" id="web-purchases">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Total Revenue (Rp) <span id="web-lbl-rev" style="color:var(--good);font-size:9px"></span></label>
-              <input class="input-field" type="number" placeholder="56000000" id="web-revenue">
-            </div>
-            <div class="input-group">
-              <label class="input-label">Produk / Niche</label>
-              <input class="input-field" type="text" placeholder="Fashion, Elektronik…" id="web-niche">
-            </div>
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-primary" onclick="analyzeWEB()">Analisis →</button>
-            <button class="btn btn-ghost" onclick="clearWEB()">Bersihkan</button>
-          </div>
-        </div>
-
-        <div id="web-results" style="display:none">
-          <div class="section-label">Hasil Kalkulasi</div>
-          <div class="metrics-grid animate-in">
-            <div class="metric-card"><div class="metric-label">CPM</div><div class="metric-value" id="web-cpm-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CPC</div><div class="metric-value" id="web-cpc-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CTR</div><div class="metric-value" id="web-ctr-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Add to Cart Rate</div><div class="metric-value" id="web-atcr-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Checkout Rate</div><div class="metric-value" id="web-cor-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Purchase Conv. Rate</div><div class="metric-value" id="web-pcr-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">Cart Abandonment</div><div class="metric-value" id="web-car-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">CPA (per Purchase)</div><div class="metric-value" id="web-cpa-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">AOV</div><div class="metric-value" id="web-aov-r">—</div></div>
-            <div class="metric-card"><div class="metric-label">ROAS</div><div class="metric-value" id="web-roas-r">—</div></div>
-          </div>
-          <div class="ai-box animate-in">
-            <div class="ai-content" id="web-ai-content">
-              <div class="ai-loading">Menganalisis data<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>
-            </div>
-            <div class="steps-list" id="web-steps" style="display:none"></div>
-          </div>
-        </div>
+        <div class="btn-row"><button class="btn btn-primary" onclick="analyzeWEB()">Analisis →</button><button class="btn btn-ghost" onclick="clearWEB()">Bersihkan</button></div>
       </div>
 
-      <!-- ============================
-           PAGE: DICTIONARY
-      ============================= -->
-      <div class="page" id="page-dictionary">
-        <div class="section-label">Kamus Istilah Meta Ads</div>
-        <div class="dict-search-wrap">
-          <span class="dict-search-icon">⌕</span>
-          <input class="dict-search" type="text" placeholder="Cari istilah — CTR, ROAS, CPM…" oninput="filterDict(this.value)">
+      <!-- RESULTS -->
+      <div id="web-results" style="display:none">
+        <div class="section-label">Hasil Kalkulasi</div>
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="setView('web','cards',this)">Cards</button>
+          <button class="view-btn" onclick="setView('web','bar',this)">Bar Chart</button>
+          <button class="view-btn" onclick="setView('web','funnel',this)">Funnel</button>
+          <button class="view-btn" onclick="setView('web','table',this)">Tabel</button>
         </div>
-        <div class="dict-cats">
-          <button class="dict-cat active" onclick="filterCat('all',this)">Semua</button>
-          <button class="dict-cat" onclick="filterCat('efficiency',this)">Efisiensi</button>
-          <button class="dict-cat" onclick="filterCat('reach',this)">Jangkauan</button>
-          <button class="dict-cat" onclick="filterCat('conversion',this)">Konversi</button>
-          <button class="dict-cat" onclick="filterCat('engagement',this)">Engagement</button>
-          <button class="dict-cat" onclick="filterCat('revenue',this)">Revenue</button>
-          <button class="dict-cat" onclick="filterCat('audience',this)">Audiens</button>
-        </div>
-        <div class="dict-grid" id="dict-grid"></div>
-      </div>
-
-      <!-- ============================
-           PAGE: CAMPAIGNS
-      ============================= -->
-      <div class="page" id="page-campaigns">
-        <div class="section-label">Data Campaigns</div>
-        <div class="notice notice-warn" id="campaigns-notice">Hubungkan akun Meta Ads terlebih dahulu untuk melihat data campaign aktual.</div>
-        <div class="card">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nama Campaign</th>
-                  <th>Status</th>
-                  <th>Spend</th>
-                  <th>Impressions</th>
-                  <th>CTR</th>
-                  <th>CPM</th>
-                  <th>Result</th>
-                  <th>CPA</th>
-                  <th>ROAS</th>
-                </tr>
-              </thead>
-              <tbody id="campaigns-body">
-                <tr><td colspan="9" style="text-align:center;color:var(--text3);padding:32px;font-family:'IBM Plex Mono',monospace;font-size:11px">Belum ada data. Hubungkan Meta Ads.</td></tr>
-              </tbody>
-            </table>
+        <div class="chart-view active" id="web-view-cards">
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="metric-label">CPM</div><div class="metric-value" id="web-cpm-r">—</div><div class="metric-bench">Benchmark &lt;Rp30rb</div></div>
+            <div class="metric-card"><div class="metric-label">CPC</div><div class="metric-value" id="web-cpc-r">—</div><div class="metric-bench">Benchmark &lt;Rp8rb</div></div>
+            <div class="metric-card"><div class="metric-label">CTR</div><div class="metric-value" id="web-ctr-r">—</div><div class="metric-bench">Benchmark &gt;2%</div></div>
+            <div class="metric-card"><div class="metric-label">Add to Cart Rate</div><div class="metric-value" id="web-atcr-r">—</div><div class="metric-bench">Benchmark 5–10%</div></div>
+            <div class="metric-card"><div class="metric-label">Checkout Rate</div><div class="metric-value" id="web-cor-r">—</div><div class="metric-bench">Benchmark &gt;60%</div></div>
+            <div class="metric-card"><div class="metric-label">Purchase Conv. Rate</div><div class="metric-value" id="web-pcr-r">—</div><div class="metric-bench">Benchmark &gt;3%</div></div>
+            <div class="metric-card"><div class="metric-label">Cart Abandonment</div><div class="metric-value" id="web-car-r">—</div><div class="metric-bench">Rata-rata industri ~70%</div></div>
+            <div class="metric-card"><div class="metric-label">CPA (per Purchase)</div><div class="metric-value" id="web-cpa-r">—</div><div class="metric-bench">Harus &lt; profit/order</div></div>
+            <div class="metric-card"><div class="metric-label">AOV</div><div class="metric-value" id="web-aov-r">—</div><div class="metric-bench">Makin tinggi makin baik</div></div>
+            <div class="metric-card"><div class="metric-label">ROAS</div><div class="metric-value" id="web-roas-r">—</div><div class="metric-bench">Benchmark &gt;3×</div></div>
           </div>
         </div>
+        <div class="chart-view" id="web-view-bar"><div class="bar-chart-wrap"><div class="bar-chart" id="web-bar-chart"></div></div></div>
+        <div class="chart-view" id="web-view-funnel"><div class="funnel-chart" id="web-funnel-chart"></div></div>
+        <div class="chart-view" id="web-view-table"><div class="table-wrap"><table class="result-table"><thead><tr><th>Metrik</th><th>Nilai</th><th>Status</th><th>Benchmark</th></tr></thead><tbody id="web-table-body"></tbody></table></div></div>
+        <!-- AI -->
+        <div class="ai-box animate-in">
+          <div class="ai-engine-bar">
+            <span class="ai-engine-label">Dianalisis oleh:</span>
+            <div class="ai-engine-opts">
+              <button class="ai-engine-btn active" id="web-engine-claude" onclick="selectEngine('web','claude')">Claude AI</button>
+              <button class="ai-engine-btn manus-btn" id="web-engine-manus" onclick="selectEngine('web','manus')">Manus AI</button>
+            </div>
+            <button class="ai-run-btn" onclick="runAI('web')">▶ Jalankan Analisis</button>
+          </div>
+          <div class="ai-content" id="web-ai-content" style="color:var(--text3);font-style:normal;font-size:11px">Pilih engine AI dan klik "Jalankan Analisis".</div>
+          <div class="steps-list" id="web-steps" style="display:none"></div>
+        </div>
       </div>
+    </div>
 
-    </div><!-- /content -->
-  </main>
+    <!-- ====== DICTIONARY ====== -->
+    <div class="page" id="page-dictionary">
+      <div class="section-label">Kamus Istilah Meta Ads</div>
+      <div class="dict-search-wrap"><span class="dict-search-icon">⌕</span><input class="dict-search" type="text" placeholder="Cari istilah — CTR, ROAS, CPM…" oninput="filterDict(this.value)"></div>
+      <div class="dict-cats">
+        <button class="dict-cat active" onclick="filterCat('all',this)">Semua</button>
+        <button class="dict-cat" onclick="filterCat('efficiency',this)">Efisiensi</button>
+        <button class="dict-cat" onclick="filterCat('reach',this)">Jangkauan</button>
+        <button class="dict-cat" onclick="filterCat('conversion',this)">Konversi</button>
+        <button class="dict-cat" onclick="filterCat('engagement',this)">Engagement</button>
+        <button class="dict-cat" onclick="filterCat('revenue',this)">Revenue</button>
+        <button class="dict-cat" onclick="filterCat('audience',this)">Audiens</button>
+      </div>
+      <div class="dict-grid" id="dict-grid"></div>
+    </div>
+
+    <!-- ====== CAMPAIGNS ====== -->
+    <div class="page" id="page-campaigns">
+      <div class="section-label">Data Campaigns</div>
+      <div class="notice notice-warn" id="campaigns-notice">Hubungkan akun Meta Ads terlebih dahulu untuk melihat data campaign.</div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="table-wrap">
+          <table><thead><tr><th>Nama Campaign</th><th>Status</th><th>Spend</th><th>Impressions</th><th>CTR</th><th>CPM</th><th>Result</th><th>CPA</th><th>ROAS</th></tr></thead>
+          <tbody id="campaigns-body"><tr><td colspan="9" style="text-align:center;color:var(--text3);padding:32px;font-size:11px">Belum ada data.</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
 </div><!-- /app -->
 
 <!-- MODAL -->
@@ -1013,85 +591,153 @@ tr:hover td { background: var(--stamp); }
   <div class="modal">
     <button class="modal-close" onclick="closeConnectModal()">✕</button>
     <div class="modal-title">Hubungkan Meta Ads</div>
-    <div class="modal-sub">Masukkan Access Token dari Meta Business Suite → Settings → System Users. Token disimpan hanya di browser kamu.</div>
-    <div class="notice notice-warn">Token bersifat sensitif — jangan share ke siapapun.</div>
-    <div class="input-group" style="margin-bottom:10px">
-      <label class="input-label">Access Token</label>
-      <input class="input-field" type="password" id="meta-token-input" placeholder="EAAxxxxxxxxxxxxxxx…">
+    <div class="modal-sub">Access Token dari Meta Business Suite → Settings → System Users. Token disimpan hanya di browser kamu (localStorage).</div>
+    <div class="notice notice-warn" style="margin-bottom:14px">Token bersifat sensitif — jangan share ke siapapun.</div>
+    <div class="modal-input-group">
+      <div class="input-label">Access Token</div>
+      <input class="ctrl" type="password" id="meta-token-input" placeholder="EAAxxxxxxxxxxxxxxx…" style="width:100%;padding:9px 12px;font-size:12px">
     </div>
-    <div class="input-group" style="margin-bottom:20px">
-      <label class="input-label">Ad Account ID</label>
-      <input class="input-field" type="text" id="meta-adaccount-input" placeholder="act_123456789">
+    <div class="modal-input-group" style="margin-bottom:20px">
+      <div class="input-label">Ad Account ID</div>
+      <input class="ctrl" type="text" id="meta-adaccount-input" placeholder="act_123456789" style="width:100%;padding:9px 12px;font-size:12px">
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="connectMeta()">Hubungkan →</button>
       <button class="btn btn-ghost" onclick="closeConnectModal()">Batal</button>
     </div>
-    <div id="connect-error" style="margin-top:12px;font-size:11px;color:var(--bad);font-family:'IBM Plex Mono',monospace;display:none"></div>
+    <div id="connect-error" style="margin-top:12px;font-size:11px;font-family:'IBM Plex Mono',monospace;display:none"></div>
   </div>
 </div>
 
 <script>
-// ===========================
-// THEME
-// ===========================
-let theme = localStorage.getItem('adlens_theme') || 'light';
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  document.getElementById('theme-btn').textContent = t === 'light' ? '☾' : '☀';
-  localStorage.setItem('adlens_theme', t);
-}
-function toggleTheme() {
-  theme = theme === 'light' ? 'dark' : 'light';
-  applyTheme(theme);
-}
+// ========== THEME ==========
+let theme=localStorage.getItem('djiklan_theme')||'light';
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('theme-btn').textContent=t==='light'?'☾':'☀';localStorage.setItem('djiklan_theme',t);}
+function toggleTheme(){theme=theme==='light'?'dark':'light';applyTheme(theme);}
 applyTheme(theme);
 
-// ===========================
-// NAVIGATION
-// ===========================
-const PAGES = ['dashboard','funnel-wa','funnel-lp','funnel-web','dictionary','campaigns'];
-const TITLES = { dashboard:'Overview', 'funnel-wa':'Funnel — Direct WA', 'funnel-lp':'Funnel — LP → WA', 'funnel-web':'Funnel — Website', dictionary:'Kamus Istilah', campaigns:'Campaigns' };
+// ========== NAV ==========
+const PAGES=['dashboard','funnel-wa','funnel-lp','funnel-web','dictionary','campaigns'];
+const TITLES={dashboard:'Overview','funnel-wa':'Funnel — Direct WA','funnel-lp':'Funnel — LP → WA','funnel-web':'Funnel — Website',dictionary:'Kamus Istilah',campaigns:'Campaigns'};
+function showPage(id){PAGES.forEach(p=>{document.getElementById('page-'+p).classList.toggle('active',p===id);const n=document.getElementById('nav-'+p);if(n)n.classList.toggle('active',p===id);});document.getElementById('page-title').textContent=TITLES[id]||id;}
 
-function showPage(id) {
-  PAGES.forEach(p => {
-    document.getElementById('page-'+p).classList.toggle('active', p===id);
-    const n = document.getElementById('nav-'+p);
-    if(n) n.classList.toggle('active', p===id);
-  });
-  document.getElementById('page-title').textContent = TITLES[id]||id;
+// ========== FORMAT ==========
+function fmtRp(v){if(!v||isNaN(v))return'—';if(v>=1000000)return'Rp'+(v/1000000).toFixed(1)+'jt';if(v>=1000)return'Rp'+Math.round(v/1000)+'rb';return'Rp'+Math.round(v);}
+function fmtPct(v){if(isNaN(v)||!isFinite(v))return'—';return v.toFixed(2)+'%';}
+function fmtX(v){if(isNaN(v)||!isFinite(v))return'—';return v.toFixed(2)+'×';}
+function fmtN(v){if(!v||isNaN(v))return'—';return Number(v).toLocaleString('id-ID');}
+function cc(val,good,bad,lower=false){if(!val||isNaN(val))return'';if(lower){if(val<=good)return'good';if(val>=bad)return'bad';return'warn';}else{if(val>=good)return'good';if(val<=bad)return'bad';return'warn';}}
+function setM(id,val,cls){const el=document.getElementById(id);if(!el)return;el.textContent=val;el.className='metric-value'+(cls?' '+cls:'');}
+
+// ========== VIEW TOGGLE ==========
+function setView(funnel,view,btn){
+  const prefix=funnel+'-view-';
+  ['cards','bar','funnel','table'].forEach(v=>{const el=document.getElementById(prefix+v);if(el)el.classList.toggle('active',v===view);});
+  btn.closest('.view-toggle').querySelectorAll('.view-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  if(view==='bar') renderBarChart(funnel);
+  if(view==='funnel') renderFunnelChart(funnel);
 }
 
-// ===========================
-// FORMAT HELPERS
-// ===========================
-function fmtRp(v) {
-  if(!v||isNaN(v)) return '—';
-  if(v>=1000000) return 'Rp'+(v/1000000).toFixed(1)+'jt';
-  if(v>=1000) return 'Rp'+Math.round(v/1000)+'rb';
-  return 'Rp'+Math.round(v);
-}
-function fmtPct(v) { if(isNaN(v)||!isFinite(v)) return '—'; return v.toFixed(2)+'%'; }
-function fmtX(v) { if(isNaN(v)||!isFinite(v)) return '—'; return v.toFixed(2)+'×'; }
-function fmtN(v) { if(!v||isNaN(v)) return '—'; return Number(v).toLocaleString('id-ID'); }
+// ========== STORED METRICS ==========
+const storedMetrics={};
 
-function colorCls(val, good, bad, lower=false) {
-  if(!val||isNaN(val)) return '';
-  if(lower) { if(val<=good) return 'good'; if(val>=bad) return 'bad'; return 'warn'; }
-  else       { if(val>=good) return 'good'; if(val<=bad) return 'bad'; return 'warn'; }
-}
-
-function setM(id, val, cls) {
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.textContent = val;
-  el.className = 'metric-value' + (cls ? ' '+cls : '');
+// ========== BAR CHART ==========
+function renderBarChart(funnel){
+  const m=storedMetrics[funnel];if(!m)return;
+  const el=document.getElementById(funnel+'-bar-chart');if(!el)return;
+  const items=getChartItems(funnel,m);
+  const maxH=Math.max(...items.map(i=>i.raw||0));
+  el.innerHTML=items.map(i=>{
+    const h=maxH>0?Math.max(8,(i.raw/maxH)*100):8;
+    return`<div class="bar-col">
+      <div class="bar-val">${i.val}</div>
+      <div class="bar-fill" style="height:${h}%;background:var(--${funnel==='wa'?'wa':funnel==='lp'?'lp':'web'});opacity:.7;position:relative" title="${i.label}: ${i.val}">
+        <span class="bar-lbl">${i.label}</span>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-// ===========================
-// FUNNEL WA
-// ===========================
-function analyzeWA() {
+function getChartItems(funnel,m){
+  if(funnel==='wa')return[
+    {label:'CTR%',raw:m.ctr,val:fmtPct(m.ctr)},
+    {label:'C2C%',raw:m.ctc,val:m.ctc?fmtPct(m.ctc):'—'},
+    {label:'Conv%',raw:m.cvr,val:m.cvr?fmtPct(m.cvr):'—'},
+    {label:'ROAS',raw:m.roas,val:m.roas?fmtX(m.roas):'—'},
+    {label:'Freq',raw:m.freq,val:m.freq?m.freq.toFixed(1)+'×':'—'},
+  ];
+  if(funnel==='lp')return[
+    {label:'CTR%',raw:m.ctr,val:fmtPct(m.ctr)},
+    {label:'LP→WA%',raw:m.lpconv,val:m.lpconv?fmtPct(m.lpconv):'—'},
+    {label:'Conv%',raw:m.cvr,val:m.cvr?fmtPct(m.cvr):'—'},
+    {label:'ROAS',raw:m.roas,val:m.roas?fmtX(m.roas):'—'},
+  ];
+  return[
+    {label:'CTR%',raw:m.ctr,val:fmtPct(m.ctr)},
+    {label:'ATC%',raw:m.atcr,val:m.atcr?fmtPct(m.atcr):'—'},
+    {label:'CO%',raw:m.cor,val:m.cor?fmtPct(m.cor):'—'},
+    {label:'PCR%',raw:m.pcr,val:m.pcr?fmtPct(m.pcr):'—'},
+    {label:'ROAS',raw:m.roas,val:m.roas?fmtX(m.roas):'—'},
+  ];
+}
+
+// ========== FUNNEL CHART ==========
+function renderFunnelChart(funnel){
+  const m=storedMetrics[funnel];if(!m)return;
+  const el=document.getElementById(funnel+'-funnel-chart');if(!el)return;
+  let steps=[];
+  const col=`var(--${funnel==='wa'?'wa':funnel==='lp'?'lp':'web'})`;
+  if(funnel==='wa'){
+    const base=m.imp||1;
+    steps=[
+      {name:'Impressions',val:m.imp,pct:100},
+      {name:'Clicks',val:m.clicks,pct:m.clicks?(m.clicks/base)*100:0},
+      {name:'Chat WA',val:m.chats,pct:m.chats?(m.chats/base)*100:0},
+      {name:'Orders',val:m.orders,pct:m.orders?(m.orders/base)*100:0},
+    ];
+  } else if(funnel==='lp'){
+    const base=m.imp||1;
+    steps=[
+      {name:'Impressions',val:m.imp,pct:100},
+      {name:'Clicks ke LP',val:m.clicks,pct:m.clicks?(m.clicks/base)*100:0},
+      {name:'Klik WA',val:m.waclik,pct:m.waclik?(m.waclik/base)*100:0},
+      {name:'Orders',val:m.orders,pct:m.orders?(m.orders/base)*100:0},
+    ];
+  } else {
+    const base=m.imp||1;
+    steps=[
+      {name:'Impressions',val:m.imp,pct:100},
+      {name:'Clicks',val:m.clicks,pct:m.clicks?(m.clicks/base)*100:0},
+      {name:'Add to Cart',val:m.cart,pct:m.cart?(m.cart/base)*100:0},
+      {name:'Checkout',val:m.checkout,pct:m.checkout?(m.checkout/base)*100:0},
+      {name:'Purchases',val:m.purch,pct:m.purch?(m.purch/base)*100:0},
+    ];
+  }
+  el.innerHTML=steps.map((s,i)=>`
+    <div class="funnel-step-row">
+      <div class="funnel-step-name">${s.name}</div>
+      <div class="funnel-bar-outer">
+        <div class="funnel-bar-inner" style="width:${Math.max(s.pct,1)}%;background:${col};opacity:${1-(i*0.12)}">
+          <span class="funnel-bar-label">${fmtN(s.val)}</span>
+        </div>
+      </div>
+      <div class="funnel-step-meta">${s.pct.toFixed(2)}%</div>
+    </div>`).join('');
+}
+
+// ========== TABLE VIEW ==========
+function renderTable(funnel,rows){
+  const tbody=document.getElementById(funnel+'-table-body');if(!tbody)return;
+  tbody.innerHTML=rows.map(r=>`<tr>
+    <td style="color:var(--text)">${r.label}</td>
+    <td><span class="td-val ${r.cls||''}">${r.val}</span></td>
+    <td>${r.status||'—'}</td>
+    <td style="font-size:10px">${r.bench||'—'}</td>
+  </tr>`).join('');
+}
+
+// ========== ANALYZE WA ==========
+function analyzeWA(){
   const b=+document.getElementById('wa-budget').value;
   const imp=+document.getElementById('wa-impressions').value;
   const reach=+document.getElementById('wa-reach').value;
@@ -1101,31 +747,43 @@ function analyzeWA() {
   const rev=+document.getElementById('wa-revenue').value;
   const niche=document.getElementById('wa-niche').value||'umum';
   if(!b||!imp||!clicks){alert('Minimal isi: Budget, Impressions, Clicks');return;}
-  const cpm=(b/imp)*1000, cpc=b/clicks, ctr=(clicks/imp)*100;
+  const cpm=(b/imp)*1000,cpc=b/clicks,ctr=(clicks/imp)*100;
   const ctc=chats?(chats/clicks)*100:null;
   const cpl=chats?b/chats:null;
   const cvr=(chats&&orders)?(orders/chats)*100:null;
   const cpa=orders?b/orders:null;
   const roas=rev?rev/b:null;
   const freq=reach?imp/reach:null;
+  storedMetrics.wa={b,imp,reach,clicks,chats,orders,rev,niche,cpm,cpc,ctr,ctc,cpl,cvr,cpa,roas,freq};
   document.getElementById('wa-results').style.display='block';
-  setM('wa-cpm-r',fmtRp(cpm),colorCls(cpm,0,30000,true));
-  setM('wa-cpc-r',fmtRp(cpc),colorCls(cpc,0,8000,true));
-  setM('wa-ctr-r',fmtPct(ctr),colorCls(ctr,2,0.5));
-  setM('wa-ctc-r',ctc?fmtPct(ctc):'—',ctc?colorCls(ctc,10,3):'');
+  setM('wa-cpm-r',fmtRp(cpm),cc(cpm,0,30000,true));
+  setM('wa-cpc-r',fmtRp(cpc),cc(cpc,0,8000,true));
+  setM('wa-ctr-r',fmtPct(ctr),cc(ctr,2,0.5));
+  setM('wa-ctc-r',ctc?fmtPct(ctc):'—',ctc?cc(ctc,10,3):'');
   setM('wa-cpl-r',cpl?fmtRp(cpl):'—','');
-  setM('wa-conv-r',cvr?fmtPct(cvr):'—',cvr?colorCls(cvr,20,5):'');
+  setM('wa-conv-r',cvr?fmtPct(cvr):'—',cvr?cc(cvr,20,5):'');
   setM('wa-cpa-r',cpa?fmtRp(cpa):'—','');
-  setM('wa-roas-r',roas?fmtX(roas):'—',roas?colorCls(roas,3,1):'');
-  setM('wa-freq-r',freq?freq.toFixed(1)+'×':'—',freq?colorCls(freq,0,3.5,true):'');
+  setM('wa-roas-r',roas?fmtX(roas):'—',roas?cc(roas,3,1):'');
+  setM('wa-freq-r',freq?freq.toFixed(1)+'×':'—',freq?cc(freq,0,3.5,true):'');
   document.getElementById('wa-status-mini').textContent=roas?'ROAS '+fmtX(roas):'Dianalisis';
-  callAI('wa',{b,imp,reach,clicks,chats,orders,rev,niche,cpm,cpc,ctr,ctc,cpl,cvr,cpa,roas,freq});
+  renderTable('wa',[
+    {label:'CPM',val:fmtRp(cpm),cls:cc(cpm,0,30000,true),status:cpm<30000?'✓ Baik':'⚠ Tinggi',bench:'< Rp30rb'},
+    {label:'CPC',val:fmtRp(cpc),cls:cc(cpc,0,8000,true),status:cpc<8000?'✓ Baik':'⚠ Tinggi',bench:'< Rp8rb'},
+    {label:'CTR',val:fmtPct(ctr),cls:cc(ctr,2,0.5),status:ctr>=2?'✓ Baik':ctr>=0.5?'⚠ Cukup':'✗ Rendah',bench:'> 2%'},
+    {label:'Click-to-Chat Rate',val:ctc?fmtPct(ctc):'—',cls:ctc?cc(ctc,10,3):'',status:ctc?ctc>=10?'✓ Baik':'⚠ Perlu ditingkatkan':'—',bench:'> 10%'},
+    {label:'CPL (per Chat)',val:cpl?fmtRp(cpl):'—',bench:'Bergantung niche'},
+    {label:'Conv. Rate Chat→Order',val:cvr?fmtPct(cvr):'—',cls:cvr?cc(cvr,20,5):'',bench:'> 20%'},
+    {label:'CPA (per Order)',val:cpa?fmtRp(cpa):'—',bench:'< profit per order'},
+    {label:'ROAS',val:roas?fmtX(roas):'—',cls:roas?cc(roas,3,1):'',status:roas?roas>=3?'✓ Baik':roas>=1?'⚠ Impas':'✗ Rugi':'—',bench:'> 3×'},
+    {label:'Frequency',val:freq?freq.toFixed(1)+'×':'—',cls:freq?cc(freq,0,3.5,true):'',bench:'< 3×'},
+  ]);
+  document.getElementById('wa-ai-content').textContent='Klik "Jalankan Analisis" untuk mendapatkan rekomendasi AI.';
+  document.getElementById('wa-ai-content').style.cssText='color:var(--text3);font-style:normal;font-size:11px';
+  document.getElementById('wa-steps').style.display='none';
 }
 function clearWA(){['wa-budget','wa-impressions','wa-reach','wa-clicks','wa-chats','wa-orders','wa-revenue','wa-niche'].forEach(id=>document.getElementById(id).value='');document.getElementById('wa-results').style.display='none';}
 
-// ===========================
-// FUNNEL LP
-// ===========================
+// ========== ANALYZE LP ==========
 function analyzeLP(){
   const b=+document.getElementById('lp-budget').value;
   const imp=+document.getElementById('lp-impressions').value;
@@ -1147,24 +805,35 @@ function analyzeLP(){
   const cvr=(chats&&orders)?(orders/chats)*100:null;
   const cpa=orders?b/orders:null;
   const roas=rev?rev/b:null;
+  storedMetrics.lp={b,imp,reach,clicks,views,waclik,chats,orders,rev,timepage,bounce,niche,cpm,cpc,ctr,ctlp,lpconv,cpl,cvr,cpa,roas};
   document.getElementById('lp-results').style.display='block';
-  setM('lp-cpm-r',fmtRp(cpm),colorCls(cpm,0,30000,true));
-  setM('lp-cpc-r',fmtRp(cpc),colorCls(cpc,0,8000,true));
-  setM('lp-ctr-r',fmtPct(ctr),colorCls(ctr,2,0.5));
-  setM('lp-ctlp-r',ctlp?fmtPct(ctlp):'—',ctlp?colorCls(ctlp,75,40):'');
-  setM('lp-lpconv-r',lpconv?fmtPct(lpconv):'—',lpconv?colorCls(lpconv,15,5):'');
+  setM('lp-cpm-r',fmtRp(cpm),cc(cpm,0,30000,true));
+  setM('lp-cpc-r',fmtRp(cpc),cc(cpc,0,8000,true));
+  setM('lp-ctr-r',fmtPct(ctr),cc(ctr,2,0.5));
+  setM('lp-ctlp-r',ctlp?fmtPct(ctlp):'—',ctlp?cc(ctlp,75,40):'');
+  setM('lp-lpconv-r',lpconv?fmtPct(lpconv):'—',lpconv?cc(lpconv,15,5):'');
   setM('lp-cpl-r',cpl?fmtRp(cpl):'—','');
-  setM('lp-conv-r',cvr?fmtPct(cvr):'—',cvr?colorCls(cvr,20,5):'');
+  setM('lp-conv-r',cvr?fmtPct(cvr):'—',cvr?cc(cvr,20,5):'');
   setM('lp-cpa-r',cpa?fmtRp(cpa):'—','');
-  setM('lp-roas-r',roas?fmtX(roas):'—',roas?colorCls(roas,3,1):'');
+  setM('lp-roas-r',roas?fmtX(roas):'—',roas?cc(roas,3,1):'');
   document.getElementById('lp-status-mini').textContent=roas?'ROAS '+fmtX(roas):'Dianalisis';
-  callAI('lp',{b,imp,reach,clicks,views,waclik,chats,orders,rev,timepage,bounce,niche,cpm,cpc,ctr,ctlp,lpconv,cpl,cvr,cpa,roas});
+  renderTable('lp',[
+    {label:'CPM',val:fmtRp(cpm),cls:cc(cpm,0,30000,true),bench:'< Rp30rb'},
+    {label:'CPC',val:fmtRp(cpc),cls:cc(cpc,0,8000,true),bench:'< Rp8rb'},
+    {label:'CTR',val:fmtPct(ctr),cls:cc(ctr,2,0.5),bench:'> 2%'},
+    {label:'Click-to-LP Rate',val:ctlp?fmtPct(ctlp):'—',cls:ctlp?cc(ctlp,75,40):'',bench:'> 75%'},
+    {label:'LP Conv. Rate (→WA)',val:lpconv?fmtPct(lpconv):'—',cls:lpconv?cc(lpconv,15,5):'',bench:'> 15%'},
+    {label:'CPL',val:cpl?fmtRp(cpl):'—',bench:'Bergantung niche'},
+    {label:'Conv. Chat→Order',val:cvr?fmtPct(cvr):'—',cls:cvr?cc(cvr,20,5):'',bench:'> 20%'},
+    {label:'ROAS',val:roas?fmtX(roas):'—',cls:roas?cc(roas,3,1):'',bench:'> 3×'},
+  ]);
+  document.getElementById('lp-ai-content').textContent='Klik "Jalankan Analisis".';
+  document.getElementById('lp-ai-content').style.cssText='color:var(--text3);font-style:normal;font-size:11px';
+  document.getElementById('lp-steps').style.display='none';
 }
 function clearLP(){['lp-budget','lp-impressions','lp-reach','lp-clicks','lp-views','lp-waclik','lp-chats','lp-orders','lp-revenue','lp-timepage','lp-bounce','lp-niche'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('lp-results').style.display='none';}
 
-// ===========================
-// FUNNEL WEB
-// ===========================
+// ========== ANALYZE WEB ==========
 function analyzeWEB(){
   const b=+document.getElementById('web-budget').value;
   const imp=+document.getElementById('web-impressions').value;
@@ -1185,19 +854,34 @@ function analyzeWEB(){
   const cpa=purch?b/purch:null;
   const aov=(rev&&purch)?rev/purch:null;
   const roas=rev?rev/b:null;
+  storedMetrics.web={b,imp,reach,clicks,sess,cart,checkout,purch,rev,niche,cpm,cpc,ctr,atcr,cor,pcr,car,cpa,aov,roas};
   document.getElementById('web-results').style.display='block';
-  setM('web-cpm-r',fmtRp(cpm),colorCls(cpm,0,30000,true));
-  setM('web-cpc-r',fmtRp(cpc),colorCls(cpc,0,8000,true));
-  setM('web-ctr-r',fmtPct(ctr),colorCls(ctr,2,0.5));
-  setM('web-atcr-r',atcr?fmtPct(atcr):'—',atcr?colorCls(atcr,8,3):'');
-  setM('web-cor-r',cor?fmtPct(cor):'—',cor?colorCls(cor,60,30):'');
-  setM('web-pcr-r',pcr?fmtPct(pcr):'—',pcr?colorCls(pcr,3,0.5):'');
-  setM('web-car-r',car?fmtPct(car):'—',car?colorCls(car,0,80,true):'');
+  setM('web-cpm-r',fmtRp(cpm),cc(cpm,0,30000,true));
+  setM('web-cpc-r',fmtRp(cpc),cc(cpc,0,8000,true));
+  setM('web-ctr-r',fmtPct(ctr),cc(ctr,2,0.5));
+  setM('web-atcr-r',atcr?fmtPct(atcr):'—',atcr?cc(atcr,8,3):'');
+  setM('web-cor-r',cor?fmtPct(cor):'—',cor?cc(cor,60,30):'');
+  setM('web-pcr-r',pcr?fmtPct(pcr):'—',pcr?cc(pcr,3,0.5):'');
+  setM('web-car-r',car?fmtPct(car):'—',car?cc(car,0,80,true):'');
   setM('web-cpa-r',cpa?fmtRp(cpa):'—','');
   setM('web-aov-r',aov?fmtRp(aov):'—','');
-  setM('web-roas-r',roas?fmtX(roas):'—',roas?colorCls(roas,3,1):'');
+  setM('web-roas-r',roas?fmtX(roas):'—',roas?cc(roas,3,1):'');
   document.getElementById('web-status-mini').textContent=roas?'ROAS '+fmtX(roas):'Dianalisis';
-  callAI('web',{b,imp,reach,clicks,sess,cart,checkout,purch,rev,niche,cpm,cpc,ctr,atcr,cor,pcr,car,cpa,aov,roas});
+  renderTable('web',[
+    {label:'CPM',val:fmtRp(cpm),cls:cc(cpm,0,30000,true),bench:'< Rp30rb'},
+    {label:'CPC',val:fmtRp(cpc),cls:cc(cpc,0,8000,true),bench:'< Rp8rb'},
+    {label:'CTR',val:fmtPct(ctr),cls:cc(ctr,2,0.5),bench:'> 2%'},
+    {label:'Add to Cart Rate',val:atcr?fmtPct(atcr):'—',cls:atcr?cc(atcr,8,3):'',bench:'5–10%'},
+    {label:'Checkout Rate',val:cor?fmtPct(cor):'—',cls:cor?cc(cor,60,30):'',bench:'> 60%'},
+    {label:'Purchase Conv. Rate',val:pcr?fmtPct(pcr):'—',cls:pcr?cc(pcr,3,0.5):'',bench:'> 3%'},
+    {label:'Cart Abandonment',val:car?fmtPct(car):'—',bench:'~70% rata-rata'},
+    {label:'CPA',val:cpa?fmtRp(cpa):'—',bench:'< profit/order'},
+    {label:'AOV',val:aov?fmtRp(aov):'—',bench:'Makin tinggi makin baik'},
+    {label:'ROAS',val:roas?fmtX(roas):'—',cls:roas?cc(roas,3,1):'',bench:'> 3×'},
+  ]);
+  document.getElementById('web-ai-content').textContent='Klik "Jalankan Analisis".';
+  document.getElementById('web-ai-content').style.cssText='color:var(--text3);font-style:normal;font-size:11px';
+  document.getElementById('web-steps').style.display='none';
 }
 function clearWEB(){
   ['web-budget','web-impressions','web-reach','web-clicks','web-sessions','web-cart','web-checkout','web-purchases','web-revenue','web-niche'].forEach(id=>document.getElementById(id).value='');
@@ -1207,127 +891,124 @@ function clearWEB(){
   const st=document.getElementById('web-pull-status');if(st)st.style.display='none';
 }
 
-// ===========================
-// AI ANALYSIS
-// ===========================
-async function callAI(funnel, m) {
-  const cId=funnel+'-ai-content', sId=funnel+'-steps';
-  document.getElementById(cId).innerHTML=`<div class="ai-loading">Menganalisis data<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>`;
-  document.getElementById(sId).style.display='none';
+// ========== AI ENGINE SELECTOR ==========
+const selectedEngine={wa:'claude',lp:'claude',web:'claude'};
+function selectEngine(funnel,engine){
+  selectedEngine[funnel]=engine;
+  ['claude','manus'].forEach(e=>{
+    const btn=document.getElementById(funnel+'-engine-'+e);
+    if(btn)btn.classList.toggle('active',e===engine);
+  });
+}
 
-  const promptMap = {
-    wa: `Kamu adalah konsultan Meta Ads berpengalaman untuk pasar Indonesia. Analisis performa iklan Direct to WhatsApp berikut dan berikan wawasan dalam Bahasa Indonesia.
+// ========== BUILD PROMPT ==========
+function buildPrompt(funnel){
+  const m=storedMetrics[funnel];if(!m)return'';
+  const base=`Kamu adalah konsultan Meta Ads senior berpengalaman khusus pasar Indonesia. Berikan analisis tajam dalam Bahasa Indonesia.\n\nNiche/Produk: ${m.niche}\n`;
+  const suffix=`\n\nFormat respons WAJIB:\n1. Tulis analisis performa 2-3 kalimat (apa yang baik, apa yang bermasalah)\n2. Identifikasi satu bottleneck utama\n3. Di bagian akhir, tulis blok JSON persis seperti ini:\nJSON:{"steps":[{"title":"Judul Aksi","desc":"Penjelasan langkah konkret yang harus dilakukan"}]}\nBuat 4-5 langkah aksi yang spesifik dan bisa langsung dieksekusi.`;
+  if(funnel==='wa'){
+    return base+`Budget: Rp ${m.b?.toLocaleString('id-ID')} | Impressions: ${fmtN(m.imp)} | Reach: ${fmtN(m.reach)}\nClicks: ${fmtN(m.clicks)} | Chat WA Masuk: ${m.chats||'-'} | Orders: ${m.orders||'-'} | Revenue: ${m.rev?'Rp '+m.rev?.toLocaleString('id-ID'):'-'}\n\nMetrik Kalkulasi:\nCPM: ${fmtRp(m.cpm)} | CPC: ${fmtRp(m.cpc)} | CTR: ${fmtPct(m.ctr)}\nClick-to-Chat: ${m.ctc?fmtPct(m.ctc):'-'} | CPL: ${fmtRp(m.cpl)} | Conv Rate: ${m.cvr?fmtPct(m.cvr):'-'}\nROAS: ${m.roas?fmtX(m.roas):'-'} | Frequency: ${m.freq?m.freq.toFixed(1)+'×':'-'}`+suffix;
+  }
+  if(funnel==='lp'){
+    return base+`Budget: Rp ${m.b?.toLocaleString('id-ID')} | Impressions: ${fmtN(m.imp)} | Clicks ke LP: ${fmtN(m.clicks)}\nLP Views: ${m.views||'-'} | Klik WA dari LP: ${m.waclik||'-'} | Chat WA: ${m.chats||'-'} | Orders: ${m.orders||'-'}\nRevenue: ${m.rev?'Rp '+m.rev?.toLocaleString('id-ID'):'-'} | Bounce Rate: ${m.bounce||'-'}% | Time on Page: ${m.timepage||'-'}dtk\n\nMetrik Kalkulasi:\nCPM: ${fmtRp(m.cpm)} | CTR: ${fmtPct(m.ctr)} | Click-to-LP: ${m.ctlp?fmtPct(m.ctlp):'-'}\nLP Conv→WA: ${m.lpconv?fmtPct(m.lpconv):'-'} | CPL: ${fmtRp(m.cpl)} | ROAS: ${m.roas?fmtX(m.roas):'-'}`+suffix;
+  }
+  return base+`Budget: Rp ${m.b?.toLocaleString('id-ID')} | Impressions: ${fmtN(m.imp)} | Clicks: ${fmtN(m.clicks)}\nSessions: ${m.sess||'-'} | Add to Cart: ${m.cart||'-'} | Checkout: ${m.checkout||'-'} | Purchases: ${m.purch||'-'}\nRevenue: ${m.rev?'Rp '+m.rev?.toLocaleString('id-ID'):'-'}\n\nMetrik Kalkulasi:\nCPM: ${fmtRp(m.cpm)} | CTR: ${fmtPct(m.ctr)} | ATC Rate: ${m.atcr?fmtPct(m.atcr):'-'}\nCheckout Rate: ${m.cor?fmtPct(m.cor):'-'} | Purchase CVR: ${m.pcr?fmtPct(m.pcr):'-'}\nCart Abandonment: ${m.car?fmtPct(m.car):'-'} | CPA: ${fmtRp(m.cpa)} | AOV: ${fmtRp(m.aov)} | ROAS: ${m.roas?fmtX(m.roas):'-'}`+suffix;
+}
 
-Data:
-- Niche: ${m.niche}
-- Budget: Rp ${m.b?.toLocaleString('id-ID')}
-- Impressions: ${fmtN(m.imp)} | Reach: ${fmtN(m.reach)}
-- Clicks: ${fmtN(m.clicks)} | Chat WA Masuk: ${m.chats||'-'} | Orders: ${m.orders||'-'}
-- Revenue: ${m.rev?'Rp '+m.rev?.toLocaleString('id-ID'):'-'}
+// ========== RUN AI ==========
+async function runAI(funnel){
+  if(!storedMetrics[funnel]){alert('Jalankan analisis metrik terlebih dahulu.');return;}
+  const engine=selectedEngine[funnel]||'claude';
+  const cId=funnel+'-ai-content',sId=funnel+'-steps';
+  const contentEl=document.getElementById(cId);
+  const stepsEl=document.getElementById(sId);
+  contentEl.innerHTML=`<div class="ai-loading">Memproses dengan ${engine==='claude'?'Claude AI':'Manus AI'}<span class="dots"><span>.</span><span>.</span><span>.</span></span></div>`;
+  contentEl.style.cssText='';
+  stepsEl.style.display='none';
 
-Kalkulasi:
-CPM: ${fmtRp(m.cpm)} | CPC: ${fmtRp(m.cpc)} | CTR: ${fmtPct(m.ctr)}
-Click-to-Chat: ${m.ctc?fmtPct(m.ctc):'-'} | CPL: ${fmtRp(m.cpl)} | Conv Rate: ${m.cvr?fmtPct(m.cvr):'-'}
-ROAS: ${m.roas?fmtX(m.roas):'-'} | Frequency: ${m.freq?m.freq.toFixed(1)+'×':'-'}
+  if(engine==='manus'){
+    // Manus AI — buka di tab baru dengan prompt yang sudah disiapkan
+    const prompt=encodeURIComponent(buildPrompt(funnel));
+    const manusUrl=`https://manus.im/?q=${prompt}`;
+    window.open(manusUrl,'_blank');
+    contentEl.innerHTML=`<span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-style:normal;color:var(--text2)">
+      Manus AI dibuka di tab baru dengan data iklan kamu yang sudah disiapkan.<br><br>
+      <strong style="font-style:normal;color:var(--text)">Cara menggunakannya:</strong><br>
+      1. Di tab Manus yang baru terbuka, prompt sudah terisi otomatis<br>
+      2. Jalankan analisis di sana<br>
+      3. Salin hasilnya dan tempel di sini jika diperlukan
+    </span>`;
+    return;
+  }
 
-Tulis: (1) analisis performa 2-3 kalimat, (2) identifikasi bottleneck utama, lalu di akhir tulis JSON ini persis:
-JSON:{"steps":[{"title":"judul aksi","desc":"deskripsi konkret langkah yang harus dilakukan"}]}
-Buat 4-5 langkah aksi yang konkret dan spesifik.`,
-
-    lp: `Kamu adalah konsultan Meta Ads berpengalaman untuk pasar Indonesia. Analisis performa iklan Landing Page → WhatsApp berikut.
-
-Data:
-- Niche: ${m.niche}
-- Budget: Rp ${m.b?.toLocaleString('id-ID')} | Impressions: ${fmtN(m.imp)}
-- Clicks ke LP: ${fmtN(m.clicks)} | LP Views: ${m.views||'-'} | Klik WA dari LP: ${m.waclik||'-'}
-- Chat WA: ${m.chats||'-'} | Orders: ${m.orders||'-'} | Revenue: ${m.rev?'Rp '+m.rev?.toLocaleString('id-ID'):'-'}
-- Time on Page: ${m.timepage||'-'}dtk | Bounce Rate: ${m.bounce||'-'}%
-
-Kalkulasi:
-CPM: ${fmtRp(m.cpm)} | CTR: ${fmtPct(m.ctr)} | Click-to-LP: ${m.ctlp?fmtPct(m.ctlp):'-'}
-LP Conv (→WA): ${m.lpconv?fmtPct(m.lpconv):'-'} | CPL: ${fmtRp(m.cpl)} | ROAS: ${m.roas?fmtX(m.roas):'-'}
-
-Tulis analisis 2-3 kalimat + identifikasi bottleneck, lalu:
-JSON:{"steps":[{"title":"judul","desc":"langkah konkret"}]}
-Buat 4-5 langkah aksi.`,
-
-    web: `Kamu adalah konsultan Meta Ads berpengalaman untuk pasar Indonesia. Analisis performa iklan funnel Website Purchase berikut.
-
-Data:
-- Niche: ${m.niche}
-- Budget: Rp ${m.b?.toLocaleString('id-ID')} | Impressions: ${fmtN(m.imp)}
-- Sessions: ${m.sess||'-'} | Add to Cart: ${m.cart||'-'} | Checkout: ${m.checkout||'-'} | Purchases: ${m.purch||'-'}
-- Revenue: ${m.rev?'Rp '+m.rev?.toLocaleString('id-ID'):'-'}
-
-Kalkulasi:
-CPM: ${fmtRp(m.cpm)} | CTR: ${fmtPct(m.ctr)} | ATC Rate: ${m.atcr?fmtPct(m.atcr):'-'}
-Checkout Rate: ${m.cor?fmtPct(m.cor):'-'} | Purchase CVR: ${m.pcr?fmtPct(m.pcr):'-'}
-Cart Abandonment: ${m.car?fmtPct(m.car):'-'} | CPA: ${fmtRp(m.cpa)} | AOV: ${fmtRp(m.aov)} | ROAS: ${m.roas?fmtX(m.roas):'-'}
-
-Tulis analisis 2-3 kalimat + identifikasi bottleneck, lalu:
-JSON:{"steps":[{"title":"judul","desc":"langkah konkret"}]}
-Buat 4-5 langkah aksi.`
-  };
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+  // Claude AI via API
+  const prompt=buildPrompt(funnel);
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:promptMap[funnel]}] })
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
     });
-    const data = await res.json();
-    const raw = data.content?.[0]?.text || '';
-
-    let text = raw, steps = null;
-    const jm = raw.match(/JSON:\s*(\{[\s\S]+?\})\s*$/);
-    if(jm){ text=raw.slice(0,raw.lastIndexOf('JSON:')).trim(); try{steps=JSON.parse(jm[1]);}catch(e){} }
-
-    document.getElementById(cId).innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-    if(steps?.steps?.length){
-      const sEl=document.getElementById(sId);
-      sEl.innerHTML=steps.steps.map((s,i)=>`<div class="step-item"><div class="step-num">${i+1}</div><div class="step-text"><strong>${s.title}</strong>${s.desc}</div></div>`).join('');
-      sEl.style.display='flex';
+    if(!res.ok){
+      const err=await res.json().catch(()=>({}));
+      throw new Error(err.error?.message||`HTTP ${res.status}`);
     }
-  } catch(e){
-    document.getElementById(cId).innerHTML=`<span style="color:var(--bad)">Gagal memuat analisis AI. Periksa koneksi internet.</span>`;
+    const data=await res.json();
+    const raw=data.content?.[0]?.text||'';
+    let text=raw,steps=null;
+    const jm=raw.match(/JSON:\s*(\{[\s\S]+\})\s*$/);
+    if(jm){text=raw.slice(0,raw.lastIndexOf('JSON:')).trim();try{steps=JSON.parse(jm[1]);}catch(e){}}
+    contentEl.innerHTML=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+    contentEl.style.cssText='';
+    if(steps?.steps?.length){
+      stepsEl.innerHTML=steps.steps.map((s,i)=>`<div class="step-item"><div class="step-num">${i+1}</div><div class="step-text"><strong>${s.title}</strong>${s.desc}</div></div>`).join('');
+      stepsEl.style.display='flex';
+    }
+  }catch(e){
+    contentEl.innerHTML=`<span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-style:normal;color:var(--bad)">
+      Gagal memanggil Claude AI: ${e.message}<br><br>
+      <strong style="color:var(--text)">Kemungkinan penyebab:</strong><br>
+      • Dashboard ini diakses dari domain yang belum diizinkan di Anthropic Console<br>
+      • Pastikan domain <strong>${location.hostname}</strong> sudah ditambahkan di Anthropic Console → API Keys → Allowed Origins<br>
+      • Atau coba gunakan Manus AI sebagai alternatif
+    </span>`;
+    contentEl.style.cssText='';
   }
 }
 
-// ===========================
-// DICTIONARY
-// ===========================
-const DICT = [
+// ========== DICTIONARY ==========
+const DICT=[
   {term:'CTR',full:'Click-Through Rate',cat:'engagement',def:'Persentase orang yang mengklik iklan dari total yang melihatnya. CTR tinggi menandakan iklan relevan dan menarik perhatian audiens target.',formula:'CTR = (Clicks ÷ Impressions) × 100%',tags:['engagement']},
   {term:'CPM',full:'Cost Per Mille',cat:'efficiency',def:'Biaya yang dikeluarkan untuk setiap 1.000 tayangan iklan. Indikator efisiensi biaya dalam menjangkau audiens.',formula:'CPM = (Spend ÷ Impressions) × 1.000',tags:['efficiency']},
   {term:'CPC',full:'Cost Per Click',cat:'efficiency',def:'Biaya rata-rata per klik yang dihasilkan. Semakin rendah CPC dengan kualitas yang baik, semakin efisien pengeluaran iklan.',formula:'CPC = Total Spend ÷ Total Clicks',tags:['efficiency']},
   {term:'CPL',full:'Cost Per Lead',cat:'efficiency',def:'Biaya yang dikeluarkan untuk mendapatkan satu lead (chat WA masuk, isi form, dll). Tolak ukur efisiensi funnel bagian atas.',formula:'CPL = Total Spend ÷ Total Leads',tags:['efficiency','conversion']},
   {term:'CPA',full:'Cost Per Acquisition',cat:'efficiency',def:'Biaya per satu konversi/pembelian. CPA ideal harus lebih kecil dari profit margin per transaksi agar iklan menguntungkan.',formula:'CPA = Total Spend ÷ Total Pembelian',tags:['efficiency','conversion']},
   {term:'ROAS',full:'Return on Ad Spend',cat:'revenue',def:'Berapa rupiah revenue yang dihasilkan untuk setiap Rp 1 yang dibelanjakan. ROAS 3× artinya setiap Rp 1 iklan menghasilkan Rp 3 revenue.',formula:'ROAS = Revenue ÷ Total Ad Spend',tags:['revenue']},
-  {term:'Reach',full:'Jangkauan',cat:'reach',def:'Jumlah orang unik yang melihat iklan minimal satu kali. Berbeda dengan Impressions yang menghitung total tayangan termasuk yang berulang.',tags:['reach']},
-  {term:'Impressions',full:'Tayangan',cat:'reach',def:'Total berapa kali iklan ditampilkan, termasuk tayangan berulang ke orang yang sama. Selalu lebih besar atau sama dengan Reach.',tags:['reach']},
-  {term:'Frequency',full:'Frekuensi',cat:'reach',def:'Rata-rata berapa kali satu orang melihat iklan kamu. Frequency >3 umumnya memicu ad fatigue — perlu refresh creative.',formula:'Frequency = Impressions ÷ Reach',tags:['reach','engagement']},
-  {term:'Conversion Rate',full:'Tingkat Konversi',cat:'conversion',def:'Persentase orang yang mengambil tindakan yang diinginkan dari total yang masuk ke funnel. Metrik kesehatan funnel secara keseluruhan.',formula:'CVR = (Konversi ÷ Total Masuk) × 100%',tags:['conversion']},
-  {term:'AOV',full:'Average Order Value',cat:'revenue',def:'Rata-rata nilai transaksi per order. Meningkatkan AOV adalah cara efektif meningkatkan ROAS tanpa menambah budget iklan.',formula:'AOV = Total Revenue ÷ Total Orders',tags:['revenue']},
-  {term:'Ad Fatigue',full:'Kelelahan Iklan',cat:'engagement',def:'Kondisi ketika audiens terlalu sering melihat iklan yang sama sehingga CTR turun dan CPC naik. Solusinya: ganti creative atau perluas audiens.',tags:['engagement']},
-  {term:'Lookalike',full:'Lookalike Audience',cat:'audience',def:'Audiens baru yang dibuat Meta berdasarkan kesamaan karakteristik dengan pelanggan/audiens existing. Efektif untuk menskalakan kampanye.',tags:['audience']},
+  {term:'Reach',full:'Jangkauan',cat:'reach',def:'Jumlah orang unik yang melihat iklan minimal satu kali dalam periode tertentu.',tags:['reach']},
+  {term:'Impressions',full:'Tayangan',cat:'reach',def:'Total berapa kali iklan ditampilkan termasuk tayangan berulang ke orang yang sama.',tags:['reach']},
+  {term:'Frequency',full:'Frekuensi',cat:'reach',def:'Rata-rata berapa kali satu orang melihat iklan. Frequency >3 umumnya memicu ad fatigue.',formula:'Frequency = Impressions ÷ Reach',tags:['reach','engagement']},
+  {term:'Conversion Rate',full:'Tingkat Konversi',cat:'conversion',def:'Persentase orang yang mengambil tindakan yang diinginkan dari total yang masuk ke funnel.',formula:'CVR = (Konversi ÷ Total Masuk) × 100%',tags:['conversion']},
+  {term:'AOV',full:'Average Order Value',cat:'revenue',def:'Rata-rata nilai transaksi per order. Meningkatkan AOV adalah cara efektif meningkatkan ROAS tanpa menambah budget.',formula:'AOV = Total Revenue ÷ Total Orders',tags:['revenue']},
+  {term:'Ad Fatigue',full:'Kelelahan Iklan',cat:'engagement',def:'Kondisi ketika audiens terlalu sering melihat iklan yang sama sehingga CTR turun dan CPC naik.',tags:['engagement']},
+  {term:'Lookalike',full:'Lookalike Audience',cat:'audience',def:'Audiens baru yang dibuat Meta berdasarkan kesamaan karakteristik dengan pelanggan existing.',tags:['audience']},
   {term:'Retargeting',full:'Penargetan Ulang',cat:'audience',def:'Menampilkan iklan kepada orang yang sudah pernah berinteraksi — kunjungi website, lihat produk, atau tambah ke cart tapi belum beli.',tags:['audience','conversion']},
-  {term:'Custom Audience',full:'Audiens Kustom',cat:'audience',def:'Audiens yang dibuat dari data yang kamu miliki: daftar pelanggan, pengunjung website (pixel), penonton video, atau yang pernah chat.',tags:['audience']},
-  {term:'Pixel',full:'Meta Pixel',cat:'audience',def:'Kode JavaScript yang dipasang di website untuk melacak perilaku pengunjung dan mengoptimalkan iklan berdasarkan kejadian (event) tertentu.',tags:['audience','conversion']},
-  {term:'Bounce Rate',full:'Tingkat Pentalan',cat:'conversion',def:'Persentase pengunjung yang meninggalkan landing page tanpa interaksi apapun. Bounce rate >70% menandakan relevansi atau UX halaman rendah.',formula:'Bounce Rate = Sesi tanpa interaksi ÷ Total Sesi × 100%',tags:['conversion']},
-  {term:'Add to Cart Rate',full:'Tingkat Tambah Keranjang',cat:'conversion',def:'Persentase pengunjung website yang menambahkan produk ke keranjang belanja. Benchmark e-commerce Indonesia: 5–10%.',formula:'ATC Rate = Add to Cart ÷ Sessions × 100%',tags:['conversion']},
-  {term:'Cart Abandonment',full:'Abandonment Keranjang',cat:'conversion',def:'Persentase orang yang menambah produk ke keranjang tapi tidak menyelesaikan pembelian. Rata-rata industri ~70%. Bisa diatasi dengan retargeting.',formula:'CAR = (1 − Purchase ÷ Add to Cart) × 100%',tags:['conversion']},
-  {term:'Objective',full:'Tujuan Kampanye',cat:'reach',def:'Tujuan yang dipilih saat membuat campaign. Menentukan algoritma optimasi Meta: Awareness, Traffic, Engagement, Leads, atau Sales.',tags:['reach']},
-  {term:'Ad Set',full:'Set Iklan',cat:'audience',def:'Level di bawah Campaign, tempat mengatur budget, jadwal, target audiens, dan penempatan iklan (placement).',tags:['audience']},
-  {term:'Creative',full:'Materi Iklan',cat:'engagement',def:'Konten visual iklan: gambar, video, carousel, atau collection. Creative adalah faktor terbesar yang menentukan performa — biasanya 80% dari hasil.',tags:['engagement']},
-  {term:'Cost Cap',full:'Batas Biaya',cat:'efficiency',def:'Strategi bidding Meta yang membatasi rata-rata CPA/CPL agar tidak melebihi nilai tertentu. Lebih ketat dari Bid Cap dan memerlukan data konversi yang cukup.',tags:['efficiency']},
-  {term:'Click-to-Chat',full:'Klik ke Chat WA',cat:'conversion',def:'Jumlah atau rate pengguna yang mengklik iklan dan benar-benar membuka percakapan WhatsApp. Metrik kunci untuk funnel Direct to WA.',formula:'Click-to-Chat Rate = Chat dibuka ÷ Clicks × 100%',tags:['conversion']},
-  {term:'Advantage+',full:'Meta Advantage+',cat:'audience',def:'Suite fitur otomatisasi Meta yang menggunakan AI untuk mengoptimalkan audience, creative, dan placement secara otomatis. Cocok untuk skala besar.',tags:['audience']},
-  {term:'CPP',full:'Cost Per Purchase',cat:'efficiency',def:'Biaya iklan untuk menghasilkan satu pembelian. Sama dengan CPA untuk funnel e-commerce. Harus lebih kecil dari profit margin per produk.',formula:'CPP = Total Spend ÷ Total Purchases',tags:['efficiency']},
-  {term:'Frequency Cap',full:'Batas Frekuensi',cat:'reach',def:'Pengaturan batas maksimum berapa kali satu orang boleh melihat iklan dalam periode tertentu. Berguna untuk mencegah ad fatigue.',tags:['reach']},
+  {term:'Custom Audience',full:'Audiens Kustom',cat:'audience',def:'Audiens yang dibuat dari data yang kamu miliki: daftar pelanggan, pengunjung website, penonton video, atau yang pernah chat.',tags:['audience']},
+  {term:'Pixel',full:'Meta Pixel',cat:'audience',def:'Kode JavaScript yang dipasang di website untuk melacak perilaku pengunjung dan mengoptimalkan iklan berdasarkan event tertentu.',tags:['audience','conversion']},
+  {term:'Bounce Rate',full:'Tingkat Pentalan',cat:'conversion',def:'Persentase pengunjung yang meninggalkan LP tanpa interaksi. Bounce rate >70% menandakan relevansi rendah.',formula:'Bounce Rate = Sesi tanpa interaksi ÷ Total Sesi × 100%',tags:['conversion']},
+  {term:'Add to Cart Rate',full:'Tingkat Tambah Keranjang',cat:'conversion',def:'Persentase pengunjung yang menambahkan produk ke keranjang. Benchmark e-commerce 5–10%.',formula:'ATC Rate = Add to Cart ÷ Sessions × 100%',tags:['conversion']},
+  {term:'Cart Abandonment',full:'Abandonment Keranjang',cat:'conversion',def:'Persentase yang menambah ke keranjang tapi tidak menyelesaikan pembelian. Rata-rata industri ~70%.',formula:'CAR = (1 − Purchase ÷ Add to Cart) × 100%',tags:['conversion']},
+  {term:'Objective',full:'Tujuan Kampanye',cat:'reach',def:'Tujuan yang dipilih saat membuat campaign. Menentukan algoritma optimasi: Awareness, Traffic, Leads, atau Sales.',tags:['reach']},
+  {term:'Ad Set',full:'Set Iklan',cat:'audience',def:'Level di bawah Campaign untuk mengatur budget, jadwal, target audiens, dan placement.',tags:['audience']},
+  {term:'Creative',full:'Materi Iklan',cat:'engagement',def:'Konten visual iklan: gambar, video, carousel, atau collection. Faktor terbesar penentu performa iklan.',tags:['engagement']},
+  {term:'Cost Cap',full:'Batas Biaya',cat:'efficiency',def:'Strategi bidding yang membatasi rata-rata CPA/CPL. Lebih ketat dari Bid Cap.',tags:['efficiency']},
+  {term:'Click-to-Chat',full:'Klik ke Chat WA',cat:'conversion',def:'Rate pengguna yang mengklik iklan dan membuka chat WhatsApp. Metrik kunci funnel Direct to WA.',formula:'Click-to-Chat Rate = Chat dibuka ÷ Clicks × 100%',tags:['conversion']},
+  {term:'Advantage+',full:'Meta Advantage+',cat:'audience',def:'Suite otomatisasi Meta AI untuk mengoptimalkan audience, creative, dan placement secara bersamaan.',tags:['audience']},
+  {term:'CPP',full:'Cost Per Purchase',cat:'efficiency',def:'Biaya iklan per satu pembelian. Harus lebih kecil dari profit margin per produk.',formula:'CPP = Total Spend ÷ Total Purchases',tags:['efficiency']},
+  {term:'Frequency Cap',full:'Batas Frekuensi',cat:'reach',def:'Batas maksimum berapa kali satu orang boleh melihat iklan. Mencegah ad fatigue.',tags:['reach']},
 ];
 
-function renderDict() {
-  document.getElementById('dict-grid').innerHTML = DICT.map(d=>`
+function renderDict(){
+  document.getElementById('dict-grid').innerHTML=DICT.map(d=>`
     <div class="dict-card" data-cat="${d.cat}" data-search="${(d.term+' '+d.full+' '+d.def).toLowerCase()}">
       <div class="dict-term">${d.term}</div>
       ${d.full?`<div class="dict-abbr">${d.full}</div>`:''}
@@ -1336,47 +1017,27 @@ function renderDict() {
       <div class="dict-tags">${d.tags.map(t=>`<span class="dict-tag">${t}</span>`).join('')}</div>
     </div>`).join('');
 }
+function filterDict(q){const l=q.toLowerCase().trim();document.querySelectorAll('.dict-card').forEach(c=>{c.style.display=(!l||c.dataset.search.includes(l))?'':'none';});}
+function filterCat(cat,btn){document.querySelectorAll('.dict-cat').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.dict-card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none';});}
 
-function filterDict(q) {
-  const l=q.toLowerCase().trim();
-  document.querySelectorAll('.dict-card').forEach(c=>{
-    c.style.display=(!l||c.dataset.search.includes(l))?'':'none';
-  });
-}
+// ========== META ADS ==========
+let metaToken=localStorage.getItem('meta_token')||'';
+let metaAdAccount=localStorage.getItem('meta_adaccount')||'';
+let allCampaigns=[];
 
-function filterCat(cat,btn) {
-  document.querySelectorAll('.dict-cat').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.dict-card').forEach(c=>{
-    c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none';
-  });
-}
+function openConnectModal(){document.getElementById('meta-token-input').value=metaToken;document.getElementById('meta-adaccount-input').value=metaAdAccount;document.getElementById('connect-modal').classList.add('open');document.getElementById('connect-error').style.display='none';}
+function closeConnectModal(){document.getElementById('connect-modal').classList.remove('open');}
 
-// ===========================
-// META ADS CONNECTION
-// ===========================
-let metaToken = localStorage.getItem('meta_token')||'';
-let metaAdAccount = localStorage.getItem('meta_adaccount')||'';
-
-function openConnectModal() {
-  document.getElementById('meta-token-input').value=metaToken;
-  document.getElementById('meta-adaccount-input').value=metaAdAccount;
-  document.getElementById('connect-modal').classList.add('open');
-  document.getElementById('connect-error').style.display='none';
-}
-function closeConnectModal(){ document.getElementById('connect-modal').classList.remove('open'); }
-
-async function connectMeta() {
+async function connectMeta(){
   const token=document.getElementById('meta-token-input').value.trim();
   const account=document.getElementById('meta-adaccount-input').value.trim();
-  if(!token||!account){ showConnErr('Isi token dan ad account ID.'); return; }
+  if(!token||!account){showConnErr('Isi token dan ad account ID.');return;}
   showConnErr('Memverifikasi…');
-  document.getElementById('connect-error').style.color='var(--text3)';
-  try {
+  try{
     const res=await fetch(`https://graph.facebook.com/v21.0/${account}?fields=name,currency,account_status&access_token=${token}`);
     const data=await res.json();
-    if(data.error){ showConnErr('✕ '+data.error.message); return; }
-    metaToken=token; metaAdAccount=account;
+    if(data.error){showConnErr('✕ '+data.error.message);return;}
+    metaToken=token;metaAdAccount=account;
     localStorage.setItem('meta_token',token);
     localStorage.setItem('meta_adaccount',account);
     document.getElementById('status-dot').classList.add('connected');
@@ -1386,64 +1047,88 @@ async function connectMeta() {
     document.getElementById('campaigns-notice').style.display='none';
     closeConnectModal();
     fetchCampaigns();
-  } catch(e){ showConnErr('✕ Gagal: '+e.message); }
+  }catch(e){showConnErr('✕ Gagal: '+e.message);}
 }
-function showConnErr(msg){ const el=document.getElementById('connect-error'); el.textContent=msg; el.style.color=msg.startsWith('✕')?'var(--bad)':'var(--text3)'; el.style.display='block'; }
+function showConnErr(msg){const el=document.getElementById('connect-error');el.textContent=msg;el.style.color=msg.startsWith('✕')?'var(--bad)':'var(--text3)';el.style.display='block';}
 
-async function fetchCampaigns() {
-  if(!metaToken||!metaAdAccount) return;
+async function fetchCampaigns(){
+  if(!metaToken||!metaAdAccount)return;
   const days=document.getElementById('date-range-select').value;
   const since=new Date(Date.now()-days*86400000).toISOString().slice(0,10);
   const today=new Date().toISOString().slice(0,10);
   const fields='name,status,insights{spend,impressions,reach,clicks,ctr,cpm,actions,action_values}';
   const url=`https://graph.facebook.com/v21.0/${metaAdAccount}/campaigns?fields=${fields}&time_range={"since":"${since}","until":"${today}"}&access_token=${metaToken}&limit=25`;
-  try {
-    const res=await fetch(url);
-    const data=await res.json();
+  try{
+    const res=await fetch(url);const data=await res.json();
     if(data.error){console.error(data.error);return;}
-    renderCampaigns(data.data||[]);
-    updateOverview(data.data||[]);
-    populateWebCampaignDropdown(data.data||[]);
-    showWebCampaignSelector();
-  } catch(e){ console.error(e); }
+    allCampaigns=data.data||[];
+    renderCampaigns(allCampaigns);
+    updateOverview(allCampaigns);
+    populateWebDropdown(allCampaigns);
+    document.getElementById('web-campaign-selector').style.display='block';
+    document.getElementById('web-not-connected-notice').style.display='none';
+  }catch(e){console.error(e);}
 }
 
-function renderCampaigns(campaigns) {
+function populateWebDropdown(campaigns){
+  const sel=document.getElementById('web-campaign-pick');
+  sel.innerHTML='<option value="">— Pilih campaign —</option>'+campaigns.map(c=>`<option value="${c.id}">${c.name} (${c.status==='ACTIVE'?'Aktif':'Dijeda'})</option>`).join('');
+}
+
+async function pullWebCampaign(){
+  const campaignId=document.getElementById('web-campaign-pick').value;
+  const days=document.getElementById('web-pull-days').value;
+  const statusEl=document.getElementById('web-pull-status');
+  if(!campaignId){alert('Pilih campaign terlebih dahulu.');return;}
+  statusEl.style.display='block';statusEl.style.color='var(--text3)';statusEl.textContent='⟳ Menarik data…';
+  const since=new Date(Date.now()-days*86400000).toISOString().slice(0,10);
+  const today=new Date().toISOString().slice(0,10);
+  const url=`https://graph.facebook.com/v21.0/${campaignId}/insights?fields=spend,impressions,reach,clicks,actions,action_values&time_range={"since":"${since}","until":"${today}"}&access_token=${metaToken}`;
+  try{
+    const res=await fetch(url);const data=await res.json();
+    if(data.error){statusEl.style.color='var(--bad)';statusEl.textContent='✕ '+data.error.message;return;}
+    const ins=data.data?.[0];
+    if(!ins){statusEl.style.color='var(--warn)';statusEl.textContent='⚠ Tidak ada data di periode ini. Coba ganti rentang waktu.';return;}
+    const actions=ins.actions||[];const vals=ins.action_values||[];
+    const getA=(type)=>{const a=actions.find(x=>x.action_type===type||x.action_type==='offsite_conversion.fb_pixel_'+type);return a?Math.round(parseFloat(a.value)):null;};
+    const getV=(type)=>{const a=vals.find(x=>x.action_type===type||x.action_type==='offsite_conversion.fb_pixel_'+type);return a?Math.round(parseFloat(a.value)):null;};
+    const fill=(id,val,lblId)=>{if(val!==null&&val!==undefined){document.getElementById(id).value=val;const l=document.getElementById(lblId);if(l)l.textContent='● otomatis';}};
+    fill('web-budget',Math.round(parseFloat(ins.spend)||0),'web-lbl-budget');
+    fill('web-impressions',parseInt(ins.impressions)||0,'web-lbl-imp');
+    fill('web-reach',parseInt(ins.reach)||0,'web-lbl-reach');
+    fill('web-clicks',parseInt(ins.clicks)||0,'web-lbl-clicks');
+    fill('web-cart',getA('add_to_cart'),'web-lbl-cart');
+    fill('web-checkout',getA('initiate_checkout'),'web-lbl-checkout');
+    fill('web-purchases',getA('purchase'),'web-lbl-purch');
+    fill('web-revenue',getV('purchase'),'web-lbl-rev');
+    document.getElementById('web-autofill-badge').style.display='inline-block';
+    const name=allCampaigns.find(c=>c.id===campaignId)?.name||campaignId;
+    statusEl.style.color='var(--good)';
+    statusEl.textContent=`✓ Data "${name}" berhasil ditarik. Isi Sessions/Visits secara manual lalu klik Analisis.`;
+  }catch(e){statusEl.style.color='var(--bad)';statusEl.textContent='✕ Gagal: '+e.message;}
+}
+
+function renderCampaigns(campaigns){
   const tbody=document.getElementById('campaigns-body');
-  if(!campaigns.length){ tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:28px;font-family:\'IBM Plex Mono\',monospace;font-size:11px">Tidak ada campaign aktif di periode ini.</td></tr>'; return; }
+  if(!campaigns.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:28px;font-size:11px">Tidak ada campaign aktif.</td></tr>';return;}
   tbody.innerHTML=campaigns.map(c=>{
     const ins=c.insights?.data?.[0]||{};
-    const spend=parseFloat(ins.spend)||0;
-    const imp=parseInt(ins.impressions)||0;
-    const ctr=parseFloat(ins.ctr)||0;
-    const cpm=parseFloat(ins.cpm)||0;
-    const actions=ins.actions||[];
-    const vals=ins.action_values||[];
+    const spend=parseFloat(ins.spend)||0,imp=parseInt(ins.impressions)||0,ctr=parseFloat(ins.ctr)||0,cpm=parseFloat(ins.cpm)||0;
+    const actions=ins.actions||[];const vals=ins.action_values||[];
     const resAct=actions.find(a=>a.action_type==='purchase'||a.action_type==='lead')||actions[0];
     const resVal=resAct?parseInt(resAct.value):0;
     const revAct=vals.find(a=>a.action_type==='purchase');
     const rev=revAct?parseFloat(revAct.value):0;
-    const cpa=resVal?spend/resVal:0;
-    const roas=rev?rev/spend:0;
+    const cpa=resVal?spend/resVal:0;const roas=rev?rev/spend:0;
     const pill=c.status==='ACTIVE'?'pill-good':c.status==='PAUSED'?'pill-warn':'pill-bad';
     const pillTxt=c.status==='ACTIVE'?'Aktif':c.status==='PAUSED'?'Dijeda':c.status;
-    return `<tr>
-      <td style="color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:11px">${c.name}</td>
-      <td><span class="pill ${pill}">${pillTxt}</span></td>
-      <td>${spend?fmtRp(spend):'—'}</td>
-      <td>${imp?fmtN(imp):'—'}</td>
-      <td>${ctr?ctr.toFixed(2)+'%':'—'}</td>
-      <td>${cpm?fmtRp(cpm):'—'}</td>
-      <td>${resVal||'—'}</td>
-      <td>${cpa?fmtRp(cpa):'—'}</td>
-      <td>${roas?roas.toFixed(2)+'×':'—'}</td>
-    </tr>`;
+    return`<tr><td style="color:var(--text)">${c.name}</td><td><span class="pill ${pill}">${pillTxt}</span></td><td>${spend?fmtRp(spend):'—'}</td><td>${imp?fmtN(imp):'—'}</td><td>${ctr?ctr.toFixed(2)+'%':'—'}</td><td>${cpm?fmtRp(cpm):'—'}</td><td>${resVal||'—'}</td><td>${cpa?fmtRp(cpa):'—'}</td><td>${roas?roas.toFixed(2)+'×':'—'}</td></tr>`;
   }).join('');
 }
 
-function updateOverview(campaigns) {
+function updateOverview(campaigns){
   let spend=0,imp=0,reach=0,clicks=0;
-  campaigns.forEach(c=>{ const i=c.insights?.data?.[0]||{}; spend+=parseFloat(i.spend)||0; imp+=parseInt(i.impressions)||0; reach+=parseInt(i.reach)||0; clicks+=parseInt(i.clicks)||0; });
+  campaigns.forEach(c=>{const i=c.insights?.data?.[0]||{};spend+=parseFloat(i.spend)||0;imp+=parseInt(i.impressions)||0;reach+=parseInt(i.reach)||0;clicks+=parseInt(i.clicks)||0;});
   document.getElementById('ov-spend').textContent=fmtRp(spend);
   document.getElementById('ov-imp').textContent=fmtN(imp);
   document.getElementById('ov-reach').textContent=fmtN(reach);
@@ -1452,127 +1137,9 @@ function updateOverview(campaigns) {
   document.getElementById('ov-freq').textContent=reach?((imp/reach).toFixed(1)+'×'):'—';
 }
 
-function refreshData(){ if(metaToken&&metaAdAccount) fetchCampaigns(); }
+function refreshData(){if(metaToken&&metaAdAccount)fetchCampaigns();}
 
-// ===========================
-// WEB FUNNEL — AUTO PULL
-// ===========================
-let allCampaigns = [];
-
-async function populateWebCampaignDropdown(campaigns) {
-  const sel = document.getElementById('web-campaign-pick');
-  // Filter untuk campaign dengan objective purchase/website
-  allCampaigns = campaigns;
-  sel.innerHTML = '<option value="">— Pilih campaign —</option>' +
-    campaigns.map(c => `<option value="${c.id}">${c.name} ${c.status==='ACTIVE'?'(Aktif)':'('+c.status+')'}</option>`).join('');
-}
-
-async function pullWebCampaign() {
-  const campaignId = document.getElementById('web-campaign-pick').value;
-  const days = document.getElementById('web-pull-days').value;
-  const statusEl = document.getElementById('web-pull-status');
-
-  if (!campaignId) { alert('Pilih campaign terlebih dahulu.'); return; }
-  if (!metaToken) { alert('Hubungkan Meta Ads terlebih dahulu.'); return; }
-
-  statusEl.style.display = 'block';
-  statusEl.textContent = '⟳ Menarik data dari Meta Ads…';
-
-  const since = new Date(Date.now() - days * 86400000).toISOString().slice(0,10);
-  const today = new Date().toISOString().slice(0,10);
-
-  // Fields: termasuk pixel events (add_to_cart, initiated_checkout, purchase, purchase_roas)
-  const fields = [
-    'spend','impressions','reach','clicks',
-    'actions','action_values','cost_per_action_type'
-  ].join(',');
-
-  const url = `https://graph.facebook.com/v21.0/${campaignId}/insights?fields=${fields}&time_range={"since":"${since}","until":"${today}"}&access_token=${metaToken}`;
-
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (data.error) {
-      statusEl.textContent = '✕ Error: ' + data.error.message;
-      statusEl.style.color = 'var(--bad)';
-      return;
-    }
-
-    const ins = data.data?.[0];
-    if (!ins) {
-      statusEl.textContent = '⚠ Tidak ada data untuk periode ini. Coba ganti rentang waktu.';
-      statusEl.style.color = 'var(--warn)';
-      return;
-    }
-
-    const actions = ins.actions || [];
-    const actionValues = ins.action_values || [];
-
-    // Helper ambil nilai action berdasarkan type
-    const getAction = (type) => {
-      const a = actions.find(x => x.action_type === type);
-      return a ? Math.round(parseFloat(a.value)) : null;
-    };
-    const getActionVal = (type) => {
-      const a = actionValues.find(x => x.action_type === type);
-      return a ? Math.round(parseFloat(a.value)) : null;
-    };
-
-    // Data dari Meta
-    const spend    = Math.round(parseFloat(ins.spend)||0);
-    const imp      = parseInt(ins.impressions)||0;
-    const reach    = parseInt(ins.reach)||0;
-    const clicks   = parseInt(ins.clicks)||0;
-
-    // Pixel events — coba beberapa nama action_type yang umum
-    const cart     = getAction('add_to_cart') || getAction('offsite_conversion.fb_pixel_add_to_cart');
-    const checkout = getAction('initiate_checkout') || getAction('offsite_conversion.fb_pixel_initiate_checkout');
-    const purchase = getAction('purchase') || getAction('offsite_conversion.fb_pixel_purchase');
-    const revenue  = getActionVal('purchase') || getActionVal('offsite_conversion.fb_pixel_purchase');
-
-    // Isi ke form
-    const fill = (id, val, lblId) => {
-      if (val !== null && val !== undefined) {
-        document.getElementById(id).value = val;
-        const lbl = document.getElementById(lblId);
-        if (lbl) lbl.textContent = '● otomatis';
-      }
-    };
-
-    fill('web-budget',    spend,    'web-lbl-budget');
-    fill('web-impressions', imp,    'web-lbl-imp');
-    fill('web-reach',     reach,    'web-lbl-reach');
-    fill('web-clicks',    clicks,   'web-lbl-clicks');
-    fill('web-cart',      cart,     'web-lbl-cart');
-    fill('web-checkout',  checkout, 'web-lbl-checkout');
-    fill('web-purchases', purchase, 'web-lbl-purch');
-    fill('web-revenue',   revenue,  'web-lbl-rev');
-
-    // Tampilkan badge
-    document.getElementById('web-autofill-badge').style.display = 'inline-block';
-
-    // Status summary
-    const campaignName = allCampaigns.find(c=>c.id===campaignId)?.name || campaignId;
-    const pixelFound = [cart,checkout,purchase,revenue].some(v=>v!==null);
-    statusEl.style.color = 'var(--good)';
-    statusEl.textContent = `✓ Data "${campaignName}" berhasil ditarik.` +
-      (!pixelFound ? ' ⚠ Data pixel (cart/checkout/purchase) tidak ditemukan — pastikan Meta Pixel sudah terpasang dan event sudah terlacak.' : '');
-
-  } catch(e) {
-    statusEl.textContent = '✕ Gagal menarik data: ' + e.message;
-    statusEl.style.color = 'var(--bad)';
-  }
-}
-
-function showWebCampaignSelector() {
-  document.getElementById('web-campaign-selector').style.display = 'block';
-  document.getElementById('web-not-connected-notice').style.display = 'none';
-}
-
-// ===========================
-// INIT
-// ===========================
+// ========== INIT ==========
 renderDict();
 if(metaToken&&metaAdAccount){
   document.getElementById('status-dot').classList.add('connected');
