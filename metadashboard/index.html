@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Djiklan — Faham Data, Faham Tjara</title>
+<title>Djiklan — Faham Data, Faham Laba</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 /* ===== THEME VARIABLES ===== */
@@ -605,7 +605,7 @@ tr:hover td { background: var(--stamp); }
   <aside class="sidebar">
     <div class="logo">
       <div class="logo-mark">Djiklan</div>
-      <div class="logo-sub">Faham Data, Faham Tjara</div>
+      <div class="logo-sub">Faham Data, Faham Laba</div>
     </div>
     <nav class="nav">
       <div class="nav-section-label">Menu</div>
@@ -841,21 +841,88 @@ tr:hover td { background: var(--stamp); }
       ============================= -->
       <div class="page" id="page-funnel-web">
         <div class="section-label">Funnel — Purchase di Website</div>
-        <div class="notice notice-info">Masukkan data iklan + performa e-commerce website kamu.</div>
+
+        <!-- CAMPAIGN SELECTOR (shown when connected) -->
+        <div id="web-campaign-selector" style="display:none">
+          <div class="card" style="margin-bottom:16px">
+            <div class="section-label" style="margin-bottom:14px">Tarik Data dari Campaign</div>
+            <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+              <div class="input-group" style="flex:1;min-width:220px">
+                <label class="input-label">Pilih Campaign</label>
+                <select class="input-field" id="web-campaign-pick">
+                  <option value="">— Memuat daftar campaign… —</option>
+                </select>
+              </div>
+              <div class="input-group" style="min-width:160px">
+                <label class="input-label">Rentang Waktu</label>
+                <select class="input-field" id="web-pull-days">
+                  <option value="7">7 hari terakhir</option>
+                  <option value="14">14 hari terakhir</option>
+                  <option value="30" selected>30 hari terakhir</option>
+                  <option value="90">90 hari terakhir</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" onclick="pullWebCampaign()" style="margin-bottom:0">⊙ Tarik Data →</button>
+            </div>
+            <div id="web-pull-status" style="margin-top:10px;font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;display:none"></div>
+            <div style="margin-top:12px;font-size:10.5px;color:var(--text3);font-family:'IBM Plex Mono',monospace;line-height:1.8;border-top:1px solid var(--border);padding-top:10px">
+              <span style="color:var(--good)">●</span> Otomatis: Spend, Impressions, Reach, Clicks, Add to Cart, Checkout, Purchases, Revenue (dari Meta Pixel)<br>
+              <span style="color:var(--warn)">●</span> Manual: Sessions/Visits (ambil dari Google Analytics atau dashboard website)
+            </div>
+          </div>
+        </div>
+
+        <!-- NOT CONNECTED NOTICE -->
+        <div class="notice notice-info" id="web-not-connected-notice">
+          Hubungkan akun Meta Ads (sidebar kiri) untuk menarik data campaign otomatis. Atau isi manual di bawah.
+        </div>
 
         <div class="card">
-          <div class="section-label" style="margin-bottom:14px">Input Metrik</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div class="section-label" style="margin-bottom:0">Input Metrik</div>
+            <span id="web-autofill-badge" style="display:none;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--good);font-family:'IBM Plex Mono',monospace;border:1px solid var(--good);padding:2px 8px;border-radius:2px">✓ Terisi Otomatis</span>
+          </div>
           <div class="input-grid">
-            <div class="input-group"><label class="input-label">Budget Iklan (Rp)</label><input class="input-field" type="number" placeholder="8000000" id="web-budget"></div>
-            <div class="input-group"><label class="input-label">Impressions</label><input class="input-field" type="number" placeholder="200000" id="web-impressions"></div>
-            <div class="input-group"><label class="input-label">Reach</label><input class="input-field" type="number" placeholder="140000" id="web-reach"></div>
-            <div class="input-group"><label class="input-label">Link Clicks</label><input class="input-field" type="number" placeholder="6000" id="web-clicks"></div>
-            <div class="input-group"><label class="input-label">Sessions / Visits</label><input class="input-field" type="number" placeholder="5200" id="web-sessions"></div>
-            <div class="input-group"><label class="input-label">Add to Cart</label><input class="input-field" type="number" placeholder="820" id="web-cart"></div>
-            <div class="input-group"><label class="input-label">Initiated Checkout</label><input class="input-field" type="number" placeholder="380" id="web-checkout"></div>
-            <div class="input-group"><label class="input-label">Purchases</label><input class="input-field" type="number" placeholder="140" id="web-purchases"></div>
-            <div class="input-group"><label class="input-label">Total Revenue (Rp)</label><input class="input-field" type="number" placeholder="56000000" id="web-revenue"></div>
-            <div class="input-group"><label class="input-label">Produk / Niche</label><input class="input-field" type="text" placeholder="Fashion, Elektronik…" id="web-niche"></div>
+            <div class="input-group">
+              <label class="input-label">Budget / Spend (Rp) <span id="web-lbl-budget" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="8000000" id="web-budget">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Impressions <span id="web-lbl-imp" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="200000" id="web-impressions">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Reach <span id="web-lbl-reach" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="140000" id="web-reach">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Link Clicks <span id="web-lbl-clicks" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="6000" id="web-clicks">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Sessions / Visits <span style="color:var(--warn);font-size:9px">● manual</span></label>
+              <input class="input-field" type="number" placeholder="5200 — dari Google Analytics" id="web-sessions">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Add to Cart <span id="web-lbl-cart" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="820" id="web-cart">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Initiated Checkout <span id="web-lbl-checkout" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="380" id="web-checkout">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Purchases <span id="web-lbl-purch" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="140" id="web-purchases">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Total Revenue (Rp) <span id="web-lbl-rev" style="color:var(--good);font-size:9px"></span></label>
+              <input class="input-field" type="number" placeholder="56000000" id="web-revenue">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Produk / Niche</label>
+              <input class="input-field" type="text" placeholder="Fashion, Elektronik…" id="web-niche">
+            </div>
           </div>
           <div class="btn-row">
             <button class="btn btn-primary" onclick="analyzeWEB()">Analisis →</button>
@@ -1132,7 +1199,13 @@ function analyzeWEB(){
   document.getElementById('web-status-mini').textContent=roas?'ROAS '+fmtX(roas):'Dianalisis';
   callAI('web',{b,imp,reach,clicks,sess,cart,checkout,purch,rev,niche,cpm,cpc,ctr,atcr,cor,pcr,car,cpa,aov,roas});
 }
-function clearWEB(){['web-budget','web-impressions','web-reach','web-clicks','web-sessions','web-cart','web-checkout','web-purchases','web-revenue','web-niche'].forEach(id=>document.getElementById(id).value='');document.getElementById('web-results').style.display='none';}
+function clearWEB(){
+  ['web-budget','web-impressions','web-reach','web-clicks','web-sessions','web-cart','web-checkout','web-purchases','web-revenue','web-niche'].forEach(id=>document.getElementById(id).value='');
+  ['web-lbl-budget','web-lbl-imp','web-lbl-reach','web-lbl-clicks','web-lbl-cart','web-lbl-checkout','web-lbl-purch','web-lbl-rev'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='';});
+  document.getElementById('web-autofill-badge').style.display='none';
+  document.getElementById('web-results').style.display='none';
+  const st=document.getElementById('web-pull-status');if(st)st.style.display='none';
+}
 
 // ===========================
 // AI ANALYSIS
@@ -1330,6 +1403,8 @@ async function fetchCampaigns() {
     if(data.error){console.error(data.error);return;}
     renderCampaigns(data.data||[]);
     updateOverview(data.data||[]);
+    populateWebCampaignDropdown(data.data||[]);
+    showWebCampaignSelector();
   } catch(e){ console.error(e); }
 }
 
@@ -1378,6 +1453,122 @@ function updateOverview(campaigns) {
 }
 
 function refreshData(){ if(metaToken&&metaAdAccount) fetchCampaigns(); }
+
+// ===========================
+// WEB FUNNEL — AUTO PULL
+// ===========================
+let allCampaigns = [];
+
+async function populateWebCampaignDropdown(campaigns) {
+  const sel = document.getElementById('web-campaign-pick');
+  // Filter untuk campaign dengan objective purchase/website
+  allCampaigns = campaigns;
+  sel.innerHTML = '<option value="">— Pilih campaign —</option>' +
+    campaigns.map(c => `<option value="${c.id}">${c.name} ${c.status==='ACTIVE'?'(Aktif)':'('+c.status+')'}</option>`).join('');
+}
+
+async function pullWebCampaign() {
+  const campaignId = document.getElementById('web-campaign-pick').value;
+  const days = document.getElementById('web-pull-days').value;
+  const statusEl = document.getElementById('web-pull-status');
+
+  if (!campaignId) { alert('Pilih campaign terlebih dahulu.'); return; }
+  if (!metaToken) { alert('Hubungkan Meta Ads terlebih dahulu.'); return; }
+
+  statusEl.style.display = 'block';
+  statusEl.textContent = '⟳ Menarik data dari Meta Ads…';
+
+  const since = new Date(Date.now() - days * 86400000).toISOString().slice(0,10);
+  const today = new Date().toISOString().slice(0,10);
+
+  // Fields: termasuk pixel events (add_to_cart, initiated_checkout, purchase, purchase_roas)
+  const fields = [
+    'spend','impressions','reach','clicks',
+    'actions','action_values','cost_per_action_type'
+  ].join(',');
+
+  const url = `https://graph.facebook.com/v21.0/${campaignId}/insights?fields=${fields}&time_range={"since":"${since}","until":"${today}"}&access_token=${metaToken}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.error) {
+      statusEl.textContent = '✕ Error: ' + data.error.message;
+      statusEl.style.color = 'var(--bad)';
+      return;
+    }
+
+    const ins = data.data?.[0];
+    if (!ins) {
+      statusEl.textContent = '⚠ Tidak ada data untuk periode ini. Coba ganti rentang waktu.';
+      statusEl.style.color = 'var(--warn)';
+      return;
+    }
+
+    const actions = ins.actions || [];
+    const actionValues = ins.action_values || [];
+
+    // Helper ambil nilai action berdasarkan type
+    const getAction = (type) => {
+      const a = actions.find(x => x.action_type === type);
+      return a ? Math.round(parseFloat(a.value)) : null;
+    };
+    const getActionVal = (type) => {
+      const a = actionValues.find(x => x.action_type === type);
+      return a ? Math.round(parseFloat(a.value)) : null;
+    };
+
+    // Data dari Meta
+    const spend    = Math.round(parseFloat(ins.spend)||0);
+    const imp      = parseInt(ins.impressions)||0;
+    const reach    = parseInt(ins.reach)||0;
+    const clicks   = parseInt(ins.clicks)||0;
+
+    // Pixel events — coba beberapa nama action_type yang umum
+    const cart     = getAction('add_to_cart') || getAction('offsite_conversion.fb_pixel_add_to_cart');
+    const checkout = getAction('initiate_checkout') || getAction('offsite_conversion.fb_pixel_initiate_checkout');
+    const purchase = getAction('purchase') || getAction('offsite_conversion.fb_pixel_purchase');
+    const revenue  = getActionVal('purchase') || getActionVal('offsite_conversion.fb_pixel_purchase');
+
+    // Isi ke form
+    const fill = (id, val, lblId) => {
+      if (val !== null && val !== undefined) {
+        document.getElementById(id).value = val;
+        const lbl = document.getElementById(lblId);
+        if (lbl) lbl.textContent = '● otomatis';
+      }
+    };
+
+    fill('web-budget',    spend,    'web-lbl-budget');
+    fill('web-impressions', imp,    'web-lbl-imp');
+    fill('web-reach',     reach,    'web-lbl-reach');
+    fill('web-clicks',    clicks,   'web-lbl-clicks');
+    fill('web-cart',      cart,     'web-lbl-cart');
+    fill('web-checkout',  checkout, 'web-lbl-checkout');
+    fill('web-purchases', purchase, 'web-lbl-purch');
+    fill('web-revenue',   revenue,  'web-lbl-rev');
+
+    // Tampilkan badge
+    document.getElementById('web-autofill-badge').style.display = 'inline-block';
+
+    // Status summary
+    const campaignName = allCampaigns.find(c=>c.id===campaignId)?.name || campaignId;
+    const pixelFound = [cart,checkout,purchase,revenue].some(v=>v!==null);
+    statusEl.style.color = 'var(--good)';
+    statusEl.textContent = `✓ Data "${campaignName}" berhasil ditarik.` +
+      (!pixelFound ? ' ⚠ Data pixel (cart/checkout/purchase) tidak ditemukan — pastikan Meta Pixel sudah terpasang dan event sudah terlacak.' : '');
+
+  } catch(e) {
+    statusEl.textContent = '✕ Gagal menarik data: ' + e.message;
+    statusEl.style.color = 'var(--bad)';
+  }
+}
+
+function showWebCampaignSelector() {
+  document.getElementById('web-campaign-selector').style.display = 'block';
+  document.getElementById('web-not-connected-notice').style.display = 'none';
+}
 
 // ===========================
 // INIT
