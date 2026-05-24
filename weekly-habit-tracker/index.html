@@ -676,6 +676,17 @@ document.getElementById('deleteConfirm').addEventListener('click',e=>{
   }
 });
 
+function downloadTemplate(){
+  document.getElementById('printModal').classList.remove('open');
+  const a = document.createElement('a');
+  a.href = 'https://github.com/morningflows/weekly-habit-tracker-morningFlows/raw/main/weekly-habit-tracker-morningFlows.zip';
+  a.download = 'weekly-habit-tracker-morningFlows.zip';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  toast('⬇️ Download started!');
+}
+  
 function attachLongPress(el,p,hi){
   el.addEventListener('touchstart',()=>{longPressTimer=setTimeout(()=>showDeleteConfirm(p,hi),600);},{passive:true});
   el.addEventListener('touchend',()=>clearTimeout(longPressTimer),{passive:true});
