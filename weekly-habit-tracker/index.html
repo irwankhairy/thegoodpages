@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -45,7 +45,6 @@
 html { font-size: 16px; }
 body { font-family: var(--font); background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
 
-/* ══ ANIMATIONS ══ */
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
 @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
@@ -57,7 +56,6 @@ body { font-family: var(--font); background: var(--bg); color: var(--ink); min-h
 .d1{animation-delay:.05s} .d2{animation-delay:.10s} .d3{animation-delay:.15s}
 .d4{animation-delay:.20s} .d5{animation-delay:.25s} .d6{animation-delay:.30s}
 
-/* ══ PASSWORD SCREEN ══ */
 .pw-screen {
   position: fixed; inset: 0; z-index: 99999;
   background: var(--bg); display: flex; flex-direction: column;
@@ -93,7 +91,6 @@ body { font-family: var(--font); background: var(--bg); color: var(--ink); min-h
 .pw-footer-credit { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 12px; color: var(--ink3); font-weight: 300; }
 .pw-footer-credit a { color: var(--ink2); font-weight: 500; text-decoration: none; }
 
-/* ══ NAV ══ */
 nav {
   position: sticky; top: 0; z-index: 100; height: 60px;
   display: flex; align-items: center; justify-content: space-between;
@@ -112,10 +109,8 @@ nav {
 .notif-dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: #E05A2B; border: 1.5px solid var(--surface); display: none; }
 .notif-dot.active { display: block; }
 
-/* ══ LAYOUT ══ */
 .wrap { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 2rem; }
 
-/* ══ PAGE HEADER ══ */
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
 .page-title { font-size: clamp(1.5rem,4vw,2.2rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; font-family: var(--font-display); }
 .page-title span { font-weight: 300; font-style: italic; }
@@ -124,14 +119,12 @@ nav {
 .week-nav-btn:hover { background: var(--surface2); }
 .week-label { font-size: 12px; font-weight: 500; color: var(--ink2); min-width: 140px; text-align: center; }
 
-/* ══ SUMMARY ══ */
 .summary-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
 .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem 1.2rem; box-shadow: var(--shadow-sm); transition: background 0.3s, border-color 0.3s; }
 .summary-icon { font-size: 17px; margin-bottom: 8px; display: block; }
 .summary-val { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 3px; transition: all 0.4s; font-family: var(--font-display); }
 .summary-lbl { font-size: 10.5px; color: var(--ink2); font-weight: 500; letter-spacing: 0.02em; line-height: 1.3; }
 
-/* ══ WEEK PROGRESS ══ */
 .week-progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); transition: background 0.3s, border-color 0.3s; }
 .wpc-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
 .wpc-pct { font-size: 2.8rem; font-weight: 700; letter-spacing: -0.05em; line-height: 1; transition: all 0.4s; font-family: var(--font-display); }
@@ -146,7 +139,6 @@ nav {
 .day-mini-fill { height: 100%; border-radius: 99px; background: var(--ink); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
 .day-mini-count { font-size: 9px; color: var(--ink3); margin-top: 3px; font-weight: 500; }
 
-/* ══ REMINDER CARD ══ */
 .notif-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); transition: background 0.3s, border-color 0.3s; }
 .notif-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
 .notif-card-title { font-size: 13px; font-weight: 700; letter-spacing: 0.01em; }
@@ -156,7 +148,9 @@ nav {
 .notif-time-row { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap; }
 .notif-time-block { flex: 1; min-width: 120px; }
 .notif-time-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; display: block; }
-.time-input {   font-family: var(--font);    font-size: 1.6rem;    font-weight: 700;    color: var(--ink);    background: var(--surface2);    border: 1px solid var(--border-strong);    border-radius: var(--radius-md);    padding: 0; /* Diubah jadi 0 agar full presisi di tengah */   outline: none;    transition: border-color var(--transition);    width: 100%;    height: 56px;    text-align: center;    -webkit-appearance: none;    appearance: none;    position: relative; /* Ditambahkan agar ikon jam bisa melayang */ }  /* Memaksa text (jam & menit) untuk benar-benar di tengah */ .time-input::-webkit-datetime-edit {   width: 100%;   display: flex;   justify-content: center; }  /* Membuat ikon jam melayang di sebelah kanan dan tidak mendorong teks */ .time-input::-webkit-calendar-picker-indicator {   position: absolute;   right: 16px;   cursor: pointer; }
+.time-input { font-family: var(--font); font-size: 1.6rem; font-weight: 700; color: var(--ink); background: var(--surface2); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 0; outline: none; transition: border-color var(--transition); width: 100%; height: 56px; text-align: center; -webkit-appearance: none; appearance: none; position: relative; }
+.time-input::-webkit-datetime-edit { width: 100%; display: flex; justify-content: center; }
+.time-input::-webkit-calendar-picker-indicator { position: absolute; right: 16px; cursor: pointer; }
 .time-input:focus { border-color: var(--ink); }
 .time-input:disabled { opacity: 0.4; cursor: not-allowed; }
 .notif-btn-col { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
@@ -171,7 +165,6 @@ nav {
 [data-theme="dark"] .notif-blocked { background: #451A03; color: #FCD34D; }
 .notif-blocked.show { display: block; }
 
-/* ══ DESKTOP SECTIONS ══ */
 .section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); margin-bottom: 1.25rem; box-shadow: var(--shadow-sm); overflow: hidden; transition: background 0.3s, border-color 0.3s; }
 .section-header { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; min-height: 56px; transition: background var(--transition); -webkit-tap-highlight-color: transparent; }
 .section-header:hover { background: var(--surface2); }
@@ -186,7 +179,6 @@ nav {
 .section-body { padding: 0 1.5rem 1.25rem; }
 .section.collapsed .section-body { display: none; }
 
-/* ══ DESKTOP TABLE ══ */
 .table-head { display: grid; grid-template-columns: 1fr repeat(7,34px); gap: 4px; padding: 10px 0 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
 .th-habit { font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; color: var(--ink3); text-transform: uppercase; }
 .th-day { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; color: var(--ink3); text-transform: uppercase; text-align: center; }
@@ -206,12 +198,10 @@ nav {
 .add-habit-btn:hover { background: var(--surface2); color: var(--ink); border-color: var(--ink3); }
 .empty-state { text-align: center; padding: 1.5rem 1rem; color: var(--ink3); font-size: 13px; font-weight: 300; }
 
-/* ══ VIEW TOGGLE ══ */
 .view-toggle-row { display: none; align-items: center; margin-bottom: 1rem; background: var(--surface2); border-radius: var(--radius-md); padding: 3px; }
 .view-tab { flex: 1; padding: 8px; text-align: center; font-size: 12.5px; font-weight: 600; color: var(--ink2); cursor: pointer; border-radius: calc(var(--radius-md) - 2px); transition: all var(--transition); border: none; background: transparent; font-family: var(--font); letter-spacing: 0.01em; -webkit-tap-highlight-color: transparent; }
 .view-tab.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); }
 
-/* ══ MOBILE TODAY VIEW ══ */
 .today-sections { display: none; }
 .today-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); margin-bottom: 1rem; box-shadow: var(--shadow-sm); overflow: hidden; }
 .today-section-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); min-height: 52px; }
@@ -226,14 +216,11 @@ nav {
 .today-habit-input.done { text-decoration: line-through; color: var(--ink3); }
 .today-add-btn { display: flex; align-items: center; gap: 8px; padding: 12px 1.25rem; color: var(--ink3); font-size: 13px; font-weight: 500; cursor: pointer; border-top: 1px dashed var(--border); min-height: 48px; background: transparent; border-left: none; border-right: none; border-bottom: none; font-family: var(--font); width: 100%; -webkit-tap-highlight-color: transparent; }
 
-/* Hint text */
 .habit-hint { font-size: 11px; color: var(--ink3); font-weight: 300; padding: 6px 1.25rem 8px; font-style: italic; }
 
-/* Scroll indicator */
 .scroll-indicator { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--ink3); font-weight: 500; padding: 8px 0 2px; letter-spacing: 0.02em; }
 .scroll-indicator-arrow { animation: scrollPulse 1.5s ease-in-out infinite; display: inline-block; }
 
-/* ══ DELETE CONFIRM ══ */
 .delete-confirm { position: fixed; inset: 0; z-index: 9000; background: rgba(28,25,23,0.4); backdrop-filter: blur(4px); display: none; align-items: flex-end; justify-content: center; padding: 1rem; }
 .delete-confirm.open { display: flex; }
 .delete-confirm-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.5rem; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1); }
@@ -243,7 +230,6 @@ nav {
 .btn-delete { flex: 1; padding: 12px; background: #B91C1C; color: #fff; border: none; border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; letter-spacing: 0.02em; }
 .btn-cancel-del { flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--ink2); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
-/* ══ PRINT MODAL ══ */
 .print-modal { position: fixed; inset: 0; z-index: 8000; background: rgba(28,25,23,0.4); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 1rem; }
 .print-modal.open { display: flex; }
 .print-modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 2rem; width: 100%; max-width: 380px; box-shadow: var(--shadow-lg); animation: fadeUp 0.25s cubic-bezier(0.4,0,0.2,1); }
@@ -258,7 +244,6 @@ nav {
 .print-cancel { width: 100%; padding: 11px; background: transparent; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; font-weight: 600; color: var(--ink2); cursor: pointer; transition: all var(--transition); }
 .print-cancel:hover { background: var(--surface2); color: var(--ink); }
 
-/* ══ CELEBRATION ══ */
 .celebrate-overlay { position: fixed; inset: 0; z-index: 9500; background: rgba(15,14,13,0.85); backdrop-filter: blur(14px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
 .celebrate-overlay.show { opacity: 1; pointer-events: all; }
 .celebrate-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 2.5rem 2rem; max-width: 380px; width: 100%; text-align: center; box-shadow: var(--shadow-lg); transform: scale(0.9) translateY(20px); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
@@ -274,13 +259,11 @@ nav {
 .celebrate-btn:hover { opacity: 0.85; }
 .confetti-piece { position: fixed; pointer-events: none; z-index: 9600; border-radius: 2px; animation: cfFall linear forwards; }
 
-/* ══ FOOTER ══ */
 .app-footer { text-align: center; padding: 2.5rem 1rem 4rem; border-top: 1px solid var(--border); margin-top: 1rem; }
 .app-footer-made { font-size: 11.5px; color: var(--ink3); font-weight: 300; margin-bottom: 4px; }
 .app-footer-brand a { font-size: 12.5px; font-weight: 600; color: var(--ink2); text-decoration: none; letter-spacing: 0.02em; transition: color var(--transition); }
 .app-footer-brand a:hover { color: var(--ink); text-decoration: underline; }
 
-/* ══ INSTALL BANNER ══ */
 .install-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000; background: var(--surface); border-top: 1px solid var(--border); box-shadow: 0 -4px 24px rgba(28,25,23,0.10); padding: 1rem 1.25rem 1.25rem; display: none; animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1) both; }
 .install-banner.show { display: block; }
 .install-banner-inner { max-width: 480px; margin: 0 auto; }
@@ -294,11 +277,9 @@ nav {
 .install-banner-btn { width: 100%; padding: 12px; background: var(--ink); color: #fff; border: none; border-radius: var(--radius-md); font-family: var(--font); font-size: 13.5px; font-weight: 700; cursor: pointer; transition: opacity var(--transition); letter-spacing: 0.02em; -webkit-tap-highlight-color: transparent; }
 .install-banner-btn:hover { opacity: 0.87; }
 
-/* ══ TOAST ══ */
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--ink); color: var(--surface); padding: 11px 22px; border-radius: 99px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; z-index: 9999; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: var(--shadow-lg); white-space: nowrap; max-width: 88vw; text-align: center; letter-spacing: 0.01em; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ══ PRINT STYLES ══ */
 @media print {
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { background: #fff !important; color: #000 !important; font-family: 'Montserrat', sans-serif; }
@@ -312,7 +293,6 @@ nav {
   .habit-check.checked { background: #000 !important; color: #fff !important; }
 }
 
-/* ══ RESPONSIVE ══ */
 @media (max-width: 768px) {
   .wrap { padding: 1.25rem 1rem 2rem; }
   nav { padding: 0 1rem; }
@@ -341,7 +321,6 @@ nav {
 </head>
 <body>
 
-<!-- PASSWORD SCREEN -->
 <div class="pw-screen" id="pwScreen">
   <button class="pw-theme-btn" id="pwThemeBtn">☀️</button>
   <div class="pw-content">
@@ -361,7 +340,6 @@ nav {
   <div class="pw-footer-credit">made with ❤️ &nbsp;·&nbsp; <a href="https://morningflows.etsy.com" target="_blank" rel="noopener">Morning Flows</a></div>
 </div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-left">
     <span class="nav-brand">Habit Tracker</span>
@@ -398,7 +376,6 @@ nav {
     <div class="day-mini-row" id="dayMiniRow"></div>
   </div>
 
-  <!-- REMINDER -->
   <div class="notif-card fade-up d3" id="notifCard">
     <div class="notif-card-top">
       <div class="notif-card-title">🔔 Daily Reminder</div>
@@ -421,13 +398,11 @@ nav {
     <div class="notif-blocked" id="notifBlocked">⚠️ Notifications are blocked. Tap the 🔒 in your browser → Site settings → Notifications → Allow, then refresh.</div>
   </div>
 
-  <!-- VIEW TOGGLE -->
   <div class="view-toggle-row fade-up d3">
     <button class="view-tab active" id="tabToday" onclick="switchView('today')">Today</button>
     <button class="view-tab" id="tabWeek" onclick="switchView('week')">This Week</button>
   </div>
 
-  <!-- DESKTOP SECTIONS -->
   <div class="desktop-sections">
     <div class="section fade-up d4" id="sec-top">
       <div class="section-header" onclick="toggleSection('top')">
@@ -464,17 +439,14 @@ nav {
     </div>
   </div>
 
-  <!-- MOBILE TODAY VIEW -->
   <div class="today-sections" id="todaySections"></div>
 
-  <!-- FOOTER -->
   <footer class="app-footer">
     <div class="app-footer-made">made with ❤️</div>
     <div class="app-footer-brand"><a href="https://morningflows.etsy.com" target="_blank" rel="noopener">morningflows.etsy.com</a></div>
   </footer>
 </div>
 
-<!-- DELETE CONFIRM -->
 <div class="delete-confirm" id="deleteConfirm">
   <div class="delete-confirm-box">
     <div class="delete-confirm-title">Delete this habit?</div>
@@ -486,25 +458,23 @@ nav {
   </div>
 </div>
 
-<!-- PRINT MODAL -->
 <div class="print-modal" id="printModal">
   <div class="print-modal-box">
     <div class="print-modal-title">🖨️ Print Template</div>
-<div class="print-modal-sub">Download the printable version of your Weekly Habit Tracker — ready to print at home or at a print shop.</div>
-<div class="print-options">
-  <button class="print-option-btn" onclick="downloadTemplate()">
-    <span class="print-option-icon">📥</span>
-    <div>
-      <div class="print-option-label">Download File</div>
-      <div class="print-option-desc">Includes 4 sizes: A4, A5, Letter &amp; Half Letter</div>
+    <div class="print-modal-sub">Download the printable version of your Weekly Habit Tracker — ready to print at home or at a print shop.</div>
+    <div class="print-options">
+      <button class="print-option-btn" onclick="downloadTemplate()">
+        <span class="print-option-icon">📥</span>
+        <div>
+          <div class="print-option-label">Download File</div>
+          <div class="print-option-desc">Includes 4 sizes: A4, A5, Letter &amp; Half Letter</div>
+        </div>
+      </button>
     </div>
-  </button>
-</div>
-<button class="print-cancel" onclick="document.getElementById('printModal').classList.remove('open')">Cancel</button>
+    <button class="print-cancel" onclick="document.getElementById('printModal').classList.remove('open')">Cancel</button>
   </div>
 </div>
 
-<!-- CELEBRATION -->
 <div class="celebrate-overlay" id="celebrateOverlay">
   <div class="celebrate-box">
     <span class="celebrate-icon">🏆</span>
@@ -519,7 +489,6 @@ nav {
   </div>
 </div>
 
-<!-- INSTALL BANNER -->
 <div class="install-banner" id="installBanner">
   <div class="install-banner-inner">
     <div class="install-banner-top">
@@ -542,7 +511,7 @@ nav {
 /* ══ CONFIG ══ */
 const PRODUCT_PASSWORD = 'HABIT-2024';
 const PW_STORAGE_KEY   = 'mf_unlocked_habit';
-  
+
 /* ══ CONSTANTS ══ */
 const SK='mf_habit_v1', THEME_KEY='mf_theme', NOTIF_KEY='mf_notif_habit', CEL_KEY='mf_celebrated';
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -574,27 +543,42 @@ document.getElementById('pwThemeBtn').addEventListener('click',toggleTheme);
 function isUnlocked(){try{return localStorage.getItem(PW_STORAGE_KEY)==='1';}catch(e){return false;}}
 function setUnlocked(){try{localStorage.setItem(PW_STORAGE_KEY,'1');}catch(e){}}
 function hidePwScreen(){document.getElementById('pwScreen').classList.add('hidden');}
-document.getElementById('pwEye').addEventListener('click',()=>{
+
+document.getElementById('pwEye').addEventListener('click',function(){
   const inp=document.getElementById('pwInput');
   const show=inp.type==='password';
   inp.type=show?'text':'password';
   document.getElementById('pwEye').textContent=show?'🙈':'👁';
 });
-document.getElementById('pwInput').addEventListener('input',e=>{
+
+/* Auto-uppercase input — FIXED: properly closed, no nested function */
+document.getElementById('pwInput').addEventListener('input',function(e){
   const pos=e.target.selectionStart;
   e.target.value=e.target.value.toUpperCase();
   e.target.setSelectionRange(pos,pos);
-function attemptUnlock(){
-const val=document.getElementById('pwInput').value.trim().toUpperCase().replace(/\s/g,'');
-const correct=PRODUCT_PASSWORD.toUpperCase().replace(/\s/g,'');
-const inp=document.getElementById('pwInput'),err=document.getElementById('pwError');
-if(val===correct){setUnlocked();hidePwScreen();initApp();}
-else{inp.classList.add('error');err.classList.add('show');setTimeout(()=>inp.classList.remove('error'),500);inp.value='';inp.focus();}
-}
 });
+
+/* attemptUnlock now lives in global scope — FIXED */
+function attemptUnlock(){
+  const val=document.getElementById('pwInput').value.trim().toUpperCase().replace(/\s/g,'');
+  const correct=PRODUCT_PASSWORD.toUpperCase().replace(/\s/g,'');
+  const inp=document.getElementById('pwInput'),err=document.getElementById('pwError');
+  if(val===correct){
+    setUnlocked();
+    hidePwScreen();
+    initApp();
+  } else {
+    inp.classList.add('error');
+    err.classList.add('show');
+    setTimeout(()=>inp.classList.remove('error'),500);
+    inp.value='';
+    inp.focus();
+  }
 }
+
 document.getElementById('pwSubmit').addEventListener('click',attemptUnlock);
-document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')attemptUnlock();});
+document.getElementById('pwInput').addEventListener('keydown',function(e){if(e.key==='Enter')attemptUnlock();});
+
 if(isUnlocked())hidePwScreen();
 
 /* ══ WEEK UTILS ══ */
@@ -684,20 +668,19 @@ document.getElementById('deleteConfirm').addEventListener('click',e=>{
 
 function downloadTemplate(){
   document.getElementById('printModal').classList.remove('open');
-  const a = document.createElement('a');
-  a.href = 'https://drive.google.com/uc?export=download&id=1vKqiKDO3rKko4e-YRSUkUN1kkDq8QSjv';
-  a.download = 'weekly-habit-tracker-morningFlows.zip';
+  const a=document.createElement('a');
+  a.href='https://drive.google.com/uc?export=download&id=1vKqiKDO3rKko4e-YRSUkUN1kkDq8QSjv';
+  a.download='weekly-habit-tracker-morningFlows.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   toast('⬇️ Download started!');
 }
-  
+
 function attachLongPress(el,p,hi){
   el.addEventListener('touchstart',()=>{longPressTimer=setTimeout(()=>showDeleteConfirm(p,hi),600);},{passive:true});
   el.addEventListener('touchend',()=>clearTimeout(longPressTimer),{passive:true});
   el.addEventListener('touchmove',()=>clearTimeout(longPressTimer),{passive:true});
-  // Desktop: right-click
   el.addEventListener('contextmenu',e=>{e.preventDefault();showDeleteConfirm(p,hi);});
 }
 
@@ -709,82 +692,6 @@ document.getElementById('printModal').addEventListener('click',e=>{
   if(e.target===document.getElementById('printModal'))
     document.getElementById('printModal').classList.remove('open');
 });
-
-function printTemplate(size){
-  document.getElementById('printModal').classList.remove('open');
-  // Build print window
-  const w=window.open('','_blank');
-  const isA4=size==='A4';
-  const pageSize=isA4?'A4':'letter';
-  const html=`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"/>
-<title>Weekly Habit Tracker — Morning Flows</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-@page{size:${pageSize};margin:18mm 16mm;}
-body{font-family:'Montserrat',sans-serif;color:#1C1917;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-.page{max-width:100%;padding:0;}
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;border-bottom:2px solid #1C1917;padding-bottom:12px;}
-.title-block{}
-.main-title{font-size:28px;font-weight:700;letter-spacing:-0.04em;line-height:1;}
-.main-title span{font-weight:300;font-style:italic;}
-.week-box{text-align:right;}
-.week-label{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A8A59E;margin-bottom:4px;}
-.week-line{width:120px;height:1px;background:#1C1917;display:block;}
-.section{margin-bottom:14px;}
-.section-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.badge{font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:99px;}
-.badge-top{background:#E8E5DE;color:#1C1917;}
-.badge-mid{background:#F0EDE6;color:#6B6860;}
-.badge-low{background:#F7F5F0;color:#A8A59E;border:1px solid #E0DDD7;}
-.table{width:100%;border-collapse:collapse;}
-.table thead th{font-size:8.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#A8A59E;padding:5px 4px;text-align:center;border-bottom:1px solid #E0DDD7;}
-.table thead th.habit-col{text-align:left;width:55%;}
-.table tbody tr{border-bottom:1px solid #F0EDE6;}
-.table tbody tr:last-child{border-bottom:1px solid #E0DDD7;}
-.table tbody td{padding:8px 4px;text-align:center;vertical-align:middle;}
-.table tbody td.habit-cell{text-align:left;padding-left:2px;}
-.habit-line{display:block;width:100%;border-bottom:1px solid #D4D0C8;height:18px;}
-.circle{width:20px;height:20px;border-radius:50%;border:1.5px solid #C8C4BC;display:inline-block;margin:0 auto;}
-.footer{position:fixed;bottom:10mm;left:16mm;right:16mm;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E0DDD7;padding-top:8px;}
-.footer-brand{font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A8A59E;}
-.footer-url{font-size:8px;font-weight:500;color:#A8A59E;}
-</style></head>
-<body>
-<div class="page">
-  <div class="header">
-    <div class="title-block">
-      <div class="main-title">Weekly <span>Habit Tracker</span></div>
-    </div>
-    <div class="week-box">
-      <div class="week-label">Week of</div>
-      <span class="week-line"></span>
-    </div>
-  </div>
-
-  ${['Top Priority','Medium Priority','Low Priority'].map((label,si)=>{
-    const badgeClass=['badge-top','badge-mid','badge-low'][si];
-    const rows=Array(7).fill(0).map(()=>`<tr><td class="habit-cell"><span class="habit-line"></span></td>${Array(7).fill(0).map(()=>`<td><div class="circle"></div></td>`).join('')}</tr>`).join('');
-    return `<div class="section">
-      <div class="section-head"><span class="badge ${badgeClass}">${label}</span></div>
-      <table class="table">
-        <thead><tr><th class="habit-col">Habit</th><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-  }).join('')}
-
-  <div class="footer">
-    <span class="footer-brand">Morning Flows</span>
-    <span class="footer-url">morningflows.etsy.com</span>
-  </div>
-</div>
-<script>window.onload=()=>{window.print();}<\/script>
-</body></html>`;
-  w.document.write(html);
-  w.document.close();
-}
 
 /* ══ NOTIFICATIONS ══ */
 async function registerSW(){if(!('serviceWorker' in navigator))return;try{swReg=await navigator.serviceWorker.register('./sw.js',{scope:'./'});}catch(e){console.warn('SW:',e);}}
@@ -861,7 +768,6 @@ function renderDesktopSection(priority,habits,dates){
     const row=document.createElement('div');row.className='habit-row';
     row.innerHTML=`<div class="habit-name-wrap"><input class="habit-name-input" value="${esc(habit.name)}" placeholder="Habit name…" data-p="${priority}" data-hi="${hi}" /></div>`+
       dates.map((_,di)=>`<div class="habit-check${habit.days[di]?' checked':''}${isToday(dates[di])?' today-col':''}" data-p="${priority}" data-hi="${hi}" data-di="${di}">${habit.days[di]?'✓':''}</div>`).join('');
-    // Long press on desktop row
     attachLongPress(row,priority,hi);
     rows.appendChild(row);
   });
@@ -880,7 +786,6 @@ function renderMobile(){
       sec.innerHTML=`<div class="today-section-header"><div class="section-left"><span class="priority-badge badge-${p}">${PRIORITY_LABELS[p]}</span><span class="section-meta">${doneCount}/${habits.length}</span></div></div><div class="today-habit-list" id="m-list-${p}"></div><button class="today-add-btn" onclick="addHabit('${p}')">+ Add habit</button>`;
       container.appendChild(sec);
       const list=sec.querySelector(`#m-list-${p}`);
-
       habits.forEach((habit,hi)=>{
         const item=document.createElement('div');item.className='today-habit-item';
         const check=document.createElement('div');
@@ -902,14 +807,11 @@ function renderMobile(){
           const wk=weekKey(weekOffset);ensureWeek(wk);
           data[wk][p][hi].name=input.value.trim()||'';save();
         });
-        // Long press to delete
         attachLongPress(item,p,hi);
         item.appendChild(check);
         item.appendChild(input);
         list.appendChild(item);
       });
-
-      // Hint text
       if(habits.length>0){
         const hint=document.createElement('div');
         hint.className='habit-hint';
@@ -917,9 +819,7 @@ function renderMobile(){
         list.appendChild(hint);
       }
     });
-
   } else {
-    // Week view with horizontal scroll
     PRIORITIES.forEach(p=>{
       const habits=week[p];
       const sec=document.createElement('div');sec.className='today-section';
@@ -1037,13 +937,10 @@ document.getElementById('enableNotifBtn').addEventListener('click',enableNotific
 document.getElementById('disableNotifBtn').addEventListener('click',disableNotifications);
 document.getElementById('testNotifBtn').addEventListener('click',testNotification);
 document.getElementById('notifBtn').addEventListener('click',()=>document.getElementById('notifCard').scrollIntoView({behavior:'smooth',block:'center'}));
-let lastWidth = window.innerWidth;
-window.addEventListener('resize', () => {
-  // Hanya render ulang jika lebar layar berubah
-  if (window.innerWidth !== lastWidth) {
-    lastWidth = window.innerWidth;
-    render();
-  }
+
+let lastWidth=window.innerWidth;
+window.addEventListener('resize',()=>{
+  if(window.innerWidth!==lastWidth){lastWidth=window.innerWidth;render();}
 });
 
 /* ══ INSTALL BANNER ══ */
