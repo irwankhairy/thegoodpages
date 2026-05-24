@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="/morningflows-logo-192.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,6 +26,7 @@
   --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 28px;
   --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
   --font: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --top-color: #1C1917; --top-bg: #E8E5DE;
   --mid-color: #6B6860; --mid-bg: #F0EDE6;
   --low-color: #A8A59E; --low-bg: #F7F5F0;
@@ -74,7 +75,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--ink); min-h
 .pw-theme-btn:hover { background: var(--surface2); }
 .pw-content { width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
 .pw-brand { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink3); margin-bottom: 1.5rem; }
-.pw-product-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; text-align: center; margin-bottom: 0.4rem; }
+.pw-product-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; text-align: center; margin-bottom: 0.4rem; font-family: var(--font-display); }
 .pw-product-sub { font-size: 12.5px; color: var(--ink3); font-weight: 300; text-align: center; margin-bottom: 2.5rem; line-height: 1.5; }
 .pw-field { width: 100%; margin-bottom: 6px; }
 .pw-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
@@ -117,7 +118,7 @@ nav {
 
 /* ══ PAGE HEADER ══ */
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
-.page-title { font-size: clamp(1.5rem,4vw,2.2rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; }
+.page-title { font-size: clamp(1.5rem,4vw,2.2rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; font-family: var(--font-display); }
 .page-title span { font-weight: 300; font-style: italic; }
 .week-nav { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .week-nav-btn { width: 36px; height: 36px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition); -webkit-tap-highlight-color: transparent; }
@@ -128,13 +129,13 @@ nav {
 .summary-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
 .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.1rem 1.2rem; box-shadow: var(--shadow-sm); transition: background 0.3s, border-color 0.3s; }
 .summary-icon { font-size: 17px; margin-bottom: 8px; display: block; }
-.summary-val { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 3px; transition: all 0.4s; }
+.summary-val { font-size: 1.9rem; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 3px; transition: all 0.4s; font-family: var(--font-display); }
 .summary-lbl { font-size: 10.5px; color: var(--ink2); font-weight: 500; letter-spacing: 0.02em; line-height: 1.3; }
 
 /* ══ WEEK PROGRESS ══ */
 .week-progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); transition: background 0.3s, border-color 0.3s; }
 .wpc-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-.wpc-pct { font-size: 2.8rem; font-weight: 700; letter-spacing: -0.05em; line-height: 1; transition: all 0.4s; }
+.wpc-pct { font-size: 2.8rem; font-weight: 700; letter-spacing: -0.05em; line-height: 1; transition: all 0.4s; font-family: var(--font-display); }
 .wpc-sub { font-size: 11px; color: var(--ink2); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
 .progress-track { height: 5px; background: var(--surface2); border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
 .progress-fill { height: 100%; background: var(--ink); border-radius: 99px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
