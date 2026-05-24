@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -73,25 +73,24 @@ body { font-family: var(--font); background: var(--bg); color: var(--ink); min-h
   transition: all var(--transition); -webkit-tap-highlight-color: transparent;
 }
 .pw-theme-btn:hover { background: var(--surface2); }
-.pw-content { width: 100%; max-width: 320px; display: flex; flex-direction: column; align-items: center; animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
-.pw-brand { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink3); margin-bottom: 1rem; }
-.pw-product-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; text-align: center; margin-bottom: 0.3rem; }
-.pw-product-sub { font-size: 12px; color: var(--ink3); font-weight: 300; text-align: center; margin-bottom: 1.75rem; line-height: 1.5; }
-.pw-field { width: 100%; margin-bottom: 4px; }
-.pw-label { display: block; font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
+.pw-content { width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+.pw-product-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; text-align: center; margin-bottom: 0.4rem; }
+.pw-product-sub { font-size: 12.5px; color: var(--ink3); font-weight: 300; text-align: center; margin-bottom: 2.5rem; line-height: 1.5; }
+.pw-field { width: 100%; margin-bottom: 6px; }
+.pw-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
 .pw-input-wrap { position: relative; }
-.pw-input { width: 100%; font-family: var(--font); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.14em; text-align: center; color: var(--ink); background: transparent; border: none; border-bottom: 1.5px solid var(--border-strong); border-radius: 0; padding: 10px 36px 10px 8px; outline: none; text-transform: uppercase; transition: border-color var(--transition); }
-.pw-input:focus { border-bottom-color: var(--ink); }
-.pw-input.error { border-bottom-color: #B91C1C; animation: shake 0.4s ease; }
-.pw-input::placeholder { color: var(--ink3); font-weight: 300; letter-spacing: 0.05em; text-transform: none; font-size: 0.85rem; }
-.pw-eye { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 15px; color: var(--ink3); padding: 4px; }
-.pw-error { font-size: 11px; color: #B91C1C; text-align: center; min-height: 18px; margin-bottom: 4px; opacity: 0; transition: opacity 0.2s; }
+.pw-input { width: 100%; font-family: var(--font); font-size: 1rem; font-weight: 600; letter-spacing: 0.16em; text-align: center; color: var(--ink); background: var(--surface); border: 1.5px solid var(--border-strong); border-radius: var(--radius-md); padding: 14px 48px 14px 16px; outline: none; text-transform: uppercase; height: 52px; transition: border-color var(--transition), box-shadow var(--transition); }
+.pw-input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(28,25,23,0.07); }
+.pw-input.error { border-color: #B91C1C; animation: shake 0.4s ease; }
+.pw-input::placeholder { color: var(--ink3); font-weight: 300; letter-spacing: 0.05em; text-transform: none; font-size: 0.9rem; }
+.pw-eye { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--ink3); padding: 4px; }
+.pw-error { font-size: 12px; color: #B91C1C; text-align: center; min-height: 20px; margin-bottom: 4px; opacity: 0; transition: opacity 0.2s; }
 .pw-error.show { opacity: 1; }
-.pw-submit { width: 100%; height: 48px; margin-top: 8px; margin-bottom: 1rem; background: var(--ink); color: #fff; border: none; border-radius: var(--radius-md); font-family: var(--font); font-size: 13.5px; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; transition: opacity var(--transition); -webkit-tap-highlight-color: transparent; }
+.pw-submit { width: 100%; height: 52px; margin-bottom: 1.25rem; background: var(--ink); color: #fff; border: none; border-radius: var(--radius-md); font-family: var(--font); font-size: 14px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: opacity var(--transition); -webkit-tap-highlight-color: transparent; }
 .pw-submit:hover { opacity: 0.87; }
-.pw-buy-hint { font-size: 11.5px; color: var(--ink3); font-weight: 300; text-align: center; line-height: 1.6; }
-.pw-buy-hint a { color: var(--ink2); font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
-.pw-footer-credit { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 11px; color: var(--ink3); font-weight: 300; }
+.pw-buy-hint { font-size: 12.5px; color: var(--ink3); font-weight: 300; text-align: center; line-height: 1.65; }
+.pw-buy-hint a { color: var(--ink2); font-weight: 500; text-decoration: underline; }
+.pw-footer-credit { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 12px; color: var(--ink3); font-weight: 300; }
 .pw-footer-credit a { color: var(--ink2); font-weight: 500; text-decoration: none; }
 
 /* ══ NAV ══ */
@@ -157,7 +156,7 @@ nav {
 .notif-time-row { display: flex; align-items: flex-end; gap: 12px; margin-bottom: 1rem; flex-wrap: wrap; }
 .notif-time-block { flex: 1; min-width: 120px; }
 .notif-time-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; display: block; }
-.time-input { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--ink); background: var(--surface2); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 0 16px; outline: none; transition: border-color var(--transition); width: 100%; height: 56px; text-align: center; }
+.time-input { font-family: var(--font); font-size: 1.6rem; font-weight: 700; color: var(--ink); background: var(--surface2); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 0 16px; outline: none; transition: border-color var(--transition); width: 100%; height: 56px; text-align: center; -webkit-appearance: none; appearance: none; }
 .time-input:focus { border-color: var(--ink); }
 .time-input:disabled { opacity: 0.4; cursor: not-allowed; }
 .notif-btn-col { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
@@ -346,7 +345,6 @@ nav {
 <div class="pw-screen" id="pwScreen">
   <button class="pw-theme-btn" id="pwThemeBtn">☀️</button>
   <div class="pw-content">
-    <div class="pw-brand">Morning Flows</div>
     <div class="pw-product-title">Weekly Habit Tracker</div>
     <div class="pw-product-sub">Enter your access code to continue.</div>
     <div class="pw-field">
