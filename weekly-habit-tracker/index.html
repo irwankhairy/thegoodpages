@@ -488,6 +488,9 @@ nav {
 </div>
 
 <!-- PRINT MODAL -->
+<div class="print-modal" id="printModal">
+  <div class="print-modal-box">
+    <div class="print-modal-title">🖨️ Print Template</div>
 <div class="print-modal-sub">Download the printable version of your Weekly Habit Tracker — ready to print at home or at a print shop.</div>
 <div class="print-options">
   <button class="print-option-btn" onclick="downloadTemplate()">
@@ -497,6 +500,9 @@ nav {
       <div class="print-option-desc">Includes 4 sizes: A4, A5, Letter &amp; Half Letter</div>
     </div>
   </button>
+</div>
+<button class="print-cancel" onclick="document.getElementById('printModal').classList.remove('open')">Cancel</button>
+  </div>
 </div>
 
 <!-- CELEBRATION -->
