@@ -161,7 +161,7 @@ nav {
 .notif-time-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; display: block; }
 .time-input { font-family: var(--font); font-size: 1.1rem; font-weight: 700; color: var(--ink); background: var(--surface2); border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 0; outline: none; transition: border-color var(--transition); width: 100%; height: 56px; text-align: center; -webkit-appearance: none; appearance: none; position: relative; display: flex; align-items: center; justify-content: center; }
 .time-input::-webkit-datetime-edit { width: 100%; display: flex; justify-content: center; }
-.time-input::-webkit-calendar-picker-indicator { position: absolute; right: 16px; cursor: pointer; }
+.time-input::-webkit-calendar-picker-indicator { opacity: 0; position: absolute; right: 0; width: 100%; height: 100%; cursor: pointer; }
 .time-input:focus { border-color: var(--ink); }
 .time-input:disabled { opacity: 0.4; cursor: not-allowed; }
 .notif-btn-col { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
@@ -408,7 +408,7 @@ nav {
     <div class="notif-time-row">
       <div class="notif-time-block">
         <span class="notif-time-label">Remind me at</span>
-        <input type="time" class="time-input" id="reminderTime" value="20:00" />
+        <div style="position:relative;width:100%;">   <input type="time" class="time-input" id="reminderTime" value="20:00" />   <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;color:var(--ink3);">🕐</span> </div>
       </div>
       <div class="notif-btn-col">
         <button class="btn-enable" id="enableNotifBtn">Enable Reminder</button>
