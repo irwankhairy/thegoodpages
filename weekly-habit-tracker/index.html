@@ -540,33 +540,9 @@ nav {
 
 <script>
 /* ══ CONFIG ══ */
+const PRODUCT_PASSWORD = 'HABIT-2024';
 const PW_STORAGE_KEY   = 'mf_unlocked_habit';
-
-// Password disandikan menjadi angka. Angka di bawah ini adalah "MFHABIT_0892"
-const ENCODED_PW = "92,85,87,80,81,88,99,110,63,71,72,65"; 
-
-// Fungsi untuk menyandikan ketikan user agar bisa dicocokkan
-function encodeInput(str) {
-  return str.split('').map(char => char.charCodeAt(0) + 15).join(',');
-}
-
-function attemptUnlock(){
-  const val = document.getElementById('pwInput').value.trim().toUpperCase().replace(/\s/g,'');
-  const inp = document.getElementById('pwInput'), err = document.getElementById('pwError');
   
-  // Mencocokkan ketikan user yang disandikan dengan password tersimpan
-  if(encodeInput(val) === ENCODED_PW){
-    setUnlocked();
-    hidePwScreen();
-    initApp();
-  } else {
-    inp.classList.add('error');
-    err.classList.add('show');
-    setTimeout(()=>inp.classList.remove('error'), 500);
-    inp.value='';
-    inp.focus();
-  }
-}
 /* ══ CONSTANTS ══ */
 const SK='mf_habit_v1', THEME_KEY='mf_theme', NOTIF_KEY='mf_notif_habit', CEL_KEY='mf_celebrated';
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -608,6 +584,13 @@ document.getElementById('pwInput').addEventListener('input',e=>{
   const pos=e.target.selectionStart;
   e.target.value=e.target.value.toUpperCase();
   e.target.setSelectionRange(pos,pos);
+function attemptUnlock(){
+const val=document.getElementById('pwInput').value.trim().toUpperCase().replace(/\s/g,'');
+const correct=PRODUCT_PASSWORD.toUpperCase().replace(/\s/g,'');
+const inp=document.getElementById('pwInput'),err=document.getElementById('pwError');
+if(val===correct){setUnlocked();hidePwScreen();initApp();}
+else{inp.classList.add('error');err.classList.add('show');setTimeout(()=>inp.classList.remove('error'),500);inp.value='';inp.focus();}
+}
 });
 }
 document.getElementById('pwSubmit').addEventListener('click',attemptUnlock);
