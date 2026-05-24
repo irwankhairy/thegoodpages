@@ -488,28 +488,15 @@ nav {
 </div>
 
 <!-- PRINT MODAL -->
-<div class="print-modal" id="printModal">
-  <div class="print-modal-box">
-    <div class="print-modal-title">🖨️ Print Template</div>
-    <div class="print-modal-sub">Choose a paper size to print a blank habit tracker template.</div>
-    <div class="print-options">
-      <button class="print-option-btn" onclick="printTemplate('A4')">
-        <span class="print-option-icon">📄</span>
-        <div>
-          <div class="print-option-label">A4 Paper</div>
-          <div class="print-option-desc">210 × 297 mm — standard international</div>
-        </div>
-      </button>
-      <button class="print-option-btn" onclick="printTemplate('Letter')">
-        <span class="print-option-icon">📃</span>
-        <div>
-          <div class="print-option-label">Letter Paper</div>
-          <div class="print-option-desc">8.5 × 11 in — standard US</div>
-        </div>
-      </button>
+<div class="print-modal-sub">Download the printable version of your Weekly Habit Tracker — ready to print at home or at a print shop.</div>
+<div class="print-options">
+  <button class="print-option-btn" onclick="downloadTemplate()">
+    <span class="print-option-icon">📥</span>
+    <div>
+      <div class="print-option-label">Download File</div>
+      <div class="print-option-desc">Includes 4 sizes: A4, A5, Letter &amp; Half Letter</div>
     </div>
-    <button class="print-cancel" onclick="document.getElementById('printModal').classList.remove('open')">Cancel</button>
-  </div>
+  </button>
 </div>
 
 <!-- CELEBRATION -->
