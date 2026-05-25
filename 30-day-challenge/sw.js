@@ -1,4 +1,4 @@
-// The Good Pages — 30 Day Challenge Service Worker v1
+// Morning Flows — 30 Day Challenge Service Worker v1
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(clients.claim()));
@@ -30,8 +30,8 @@ self.addEventListener('message', e => {
         title = '🏆 Challenge complete! You did it!';
         body = `All ${totalDays} days done. You should be proud!`;
       } else if (doneDays === 0) {
-        title = `⏰ Don't forget your challenge today!`;
-        body = `${daysLeft} days left — start strong!`;
+        title = `⏰ You haven't started yet!`;
+        body = `${daysLeft} days left — start strong today!`;
       } else {
         const pct = Math.round((doneDays / totalDays) * 100);
         title = `⚡ ${daysLeft} day${daysLeft > 1 ? 's' : ''} left — you're ${pct}% there!`;
