@@ -572,15 +572,11 @@ nav {
 <div class="print-modal" id="printModal">
   <div class="print-modal-box">
     <div class="print-modal-title">🖨️ Print Template</div>
-    <div class="print-modal-sub">Choose a paper size to print a blank 30 Day Challenge tracker.</div>
+    <div class="print-modal-sub">Download the printable PDF to print your 30 Day Challenge tracker.</div>
     <div class="print-options">
-      <button class="print-option-btn" onclick="printTemplate('A4')">
-        <span class="print-option-icon">📄</span>
-        <div><div class="print-option-label">A4 Paper</div><div class="print-option-desc">210 × 297 mm — standard international</div></div>
-      </button>
-      <button class="print-option-btn" onclick="printTemplate('Letter')">
-        <span class="print-option-icon">📃</span>
-        <div><div class="print-option-label">Letter Paper</div><div class="print-option-desc">8.5 × 11 in — standard US</div></div>
+      <button class="print-option-btn" onclick="downloadPrintable()">
+        <span class="print-option-icon">📥</span>
+        <div><div class="print-option-label">Download File</div><div class="print-option-desc">Printable PDF — ready to print</div></div>
       </button>
     </div>
     <button class="print-cancel" onclick="document.getElementById('printModal').classList.remove('open')">Cancel</button>
@@ -833,65 +829,10 @@ async function restoreReminder(){
 document.getElementById('printBtn').addEventListener('click',()=>document.getElementById('printModal').classList.add('open'));
 document.getElementById('printModal').addEventListener('click',e=>{if(e.target===document.getElementById('printModal'))document.getElementById('printModal').classList.remove('open');});
 
-function printTemplate(size){
+function downloadPrintable() {
   document.getElementById('printModal').classList.remove('open');
-  const w=window.open('','_blank');
-  const pageSize=size==='A4'?'A4':'letter';
-  const html=`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"/>
-<title>30 Day Challenge — Morning Flows</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-@page{size:${pageSize};margin:18mm 16mm;}
-body{font-family:'Montserrat',sans-serif;color:#1C1917;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-.header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;border-bottom:2px solid #1C1917;padding-bottom:12px;}
-.main-title{font-size:30px;font-weight:700;letter-spacing:-0.04em;line-height:1;}
-.main-title span{font-weight:300;font-style:italic;}
-.header-right{text-align:right;}
-.challenge-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#A8A59E;margin-bottom:4px;}
-.challenge-line{width:160px;height:1px;background:#1C1917;display:block;margin-left:auto;}
-.meta-row{display:flex;justify-content:space-between;margin-bottom:24px;}
-.meta-item{display:flex;flex-direction:column;gap:4px;}
-.meta-label{font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A8A59E;}
-.meta-line{width:120px;height:1px;background:#C8C4BC;display:block;}
-.grid-title{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A8A59E;margin-bottom:12px;}
-.days-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
-.day-box{aspect-ratio:1;border:1.5px solid #D4D0C8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#A8A59E;}
-.reward-section{border-top:1px solid #E0DDD7;padding-top:14px;display:flex;justify-content:space-between;align-items:center;}
-.reward-label{font-size:8.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A8A59E;margin-bottom:5px;}
-.reward-line{width:280px;height:1px;background:#C8C4BC;display:block;}
-.footer{position:fixed;bottom:10mm;left:16mm;right:16mm;display:flex;justify-content:space-between;border-top:1px solid #E0DDD7;padding-top:8px;}
-.footer span{font-size:8px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A8A59E;}
-</style></head>
-<body>
-<div class="header">
-  <div class="main-title">30 Day <span>Challenge</span></div>
-  <div class="header-right">
-    <div class="challenge-label">Challenge</div>
-    <span class="challenge-line"></span>
-  </div>
-</div>
-<div class="meta-row">
-  <div class="meta-item"><span class="meta-label">Start Date</span><span class="meta-line"></span></div>
-  <div class="meta-item"><span class="meta-label">End Date</span><span class="meta-line"></span></div>
-  <div class="meta-item"><span class="meta-label">Goal</span><span class="meta-line" style="width:160px"></span></div>
-</div>
-<div class="grid-title">Track your 30 days</div>
-<div class="days-grid">
-  ${Array.from({length:30},(_,i)=>`<div class="day-box">${i+1}</div>`).join('')}
-</div>
-<div class="reward-section">
-  <div><div class="reward-label">🎁 Reward after 30 days</div><span class="reward-line"></span></div>
-</div>
-<div class="footer">
-  <span>Morning Flows</span>
-  <span>morningflows.etsy.com</span>
-</div>
-<script>window.onload=()=>{window.print();}<\/script>
-</body></html>`;
-  w.document.write(html);
-  w.document.close();
+  const fileId = '1BhPL0IFEzBRE8weaBdbe5npg98igpc3X';
+  window.open(`https://drive.google.com/uc?export=download&id=${fileId}`, '_blank');
 }
 
 /* ══ RENDER ══ */
